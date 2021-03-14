@@ -1,0 +1,86 @@
+package com.example.boroodat.database;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Activity18_DB extends RealmObject
+{
+    @PrimaryKey
+    private int id;
+
+    private String row,description,number,unitPrice,totalPrice;
+
+    public Activity18_DB()
+    {
+    }
+
+    public Activity18_DB(int id,String row, String description, String number, String unitPrice, String totalPrice)
+    {
+        this.id = id;
+        this.row = row;
+        this.description = description;
+        this.number = number;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+    }
+
+    public String getRow()
+    {
+        return row;
+    }
+
+    public void setRow(String row)
+    {
+        this.row = row;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    public String getNumber()
+    {
+        return number;
+    }
+
+    public void setNumber(String number)
+    {
+        this.number = number;
+    }
+
+    public String getUnitPrice()
+    {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(String unitPrice)
+    {
+        this.unitPrice = unitPrice;
+    }
+
+    public String getTotalPrice()
+    {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice)
+    {
+        this.totalPrice = totalPrice;
+    }
+}

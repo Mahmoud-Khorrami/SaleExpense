@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item><shape
+
+    android:thickness="0dp"
+    android:shape="rectangle">
+    <stroke android:width="3dp"
+
+        android:color="@color/boroodat1"/>
+
+
+    <corners android:radius="8dp"/>
+    <gradient
+
+        android:startColor="#FFFFFF"
+        android:centerColor="#FFFFFF"
+        android:endColor="#FFFFFF"
+        android:type="linear"
+        android:angle="90"/>
+
+</shape></item>
+
+
+
+
+</selector>

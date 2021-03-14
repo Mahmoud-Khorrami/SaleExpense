@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/company_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".1"
+        android:background="@color/boroodat2"
+        android:gravity="center"
+        android:text="برودت گستر"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".9"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/saleAccounts"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="1dp"
+            android:gravity="center|right"
+            android:paddingRight="10dp"
+            android:text="حساب های فروش"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/buyers"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="1dp"
+            android:gravity="center|right"
+            android:paddingRight="10dp"
+            android:text="خریدارها"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/drivers"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="1dp"
+            android:gravity="center|right"
+            android:paddingRight="10dp"
+            android:text="راننده ها"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

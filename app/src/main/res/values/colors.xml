@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#000000</color>
+    <color name="boroodat1">#7AC9E8</color>
+    <color name="boroodat2">#3DABF6</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="gray1">#959593</color>
+    <color name="gray2">#D8D8D6</color>
+    <color name="gray3">#EFEFED</color>
+    <color name="nav">#BADCF3</color>
+    <color name="test">#FF0000</color>
+    <color name="transparent">#00000000</color>
+    <color name="black2">#A1000000</color>
+</resources>
