@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/basket2"
         android:supportsRtl="false"
-        android:theme="@style/Theme.Fab_Bottom_app_bar"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
         <activity android:name=".activity.Activity24_AboutUs"

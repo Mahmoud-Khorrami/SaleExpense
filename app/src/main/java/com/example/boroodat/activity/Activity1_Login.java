@@ -1,13 +1,10 @@
 package com.example.boroodat.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,20 +14,14 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.boroodat.database.Activity14_DB;
-import com.example.boroodat.database.Activity7_DB;
-import com.example.boroodat.database.Activity8_DB;
-import com.example.boroodat.database.Activity9_DB;
-import com.example.boroodat.database.Fragment2_DB;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.R;
 import com.example.boroodat.databinding.Activity1LoginBinding;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.Prefs;
-import com.example.boroodat.general.Report;
 import com.example.boroodat.general.RuntimePermissionsActivity;
 import com.example.boroodat.general.SaveData;
-import com.example.boroodat.general.TodayDate;
 import com.example.boroodat.general.User_Info;
 
 import org.json.JSONArray;
@@ -75,6 +66,11 @@ public class Activity1_Login extends RuntimePermissionsActivity
 
         //-------------------------------------------------------------------------------------------------------
 
+        binding.password.addTextChangedListener(new ClearError(binding.passwordTil));
+        binding.phoneNumber.addTextChangedListener(new ClearError(binding.phonNumberTil));
+
+        //-------------------------------------------------------------------------------------------------------
+
         binding.login.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -82,10 +78,10 @@ public class Activity1_Login extends RuntimePermissionsActivity
             {
 
                 if (binding.phoneNumber.getText().toString().equals(""))
-                    binding.phoneNumber.setError("شماره همراه را وارد کنید.");
+                    binding.phonNumberTil.setError("شماره همراه را وارد کنید.");
 
                 else if (binding.password.getText().toString().equals(""))
-                    binding.password.setError("رمز عبور را وارد کنید.");
+                    binding.passwordTil.setError("رمز عبور را وارد کنید.");
 
                 else if (new Internet(context).check())
                     login(binding.phoneNumber.getText().toString(), binding.password.getText().toString());
@@ -94,6 +90,7 @@ public class Activity1_Login extends RuntimePermissionsActivity
 
             }
         });
+
     }
 
     public void login(String phone_number, String password)
