@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray3"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,225 +20,285 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/accounts"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
+                    android:id="@+id/accounts"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".1"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/left1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".1"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/left1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".75"
+                            android:gravity="center|right"
+                            android:paddingRight="10dp"
+                            android:text="حساب های بانکی"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".15"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/accounting" />
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".75"
-                        android:gravity="center|right"
-                        android:paddingRight="10dp"
-                        android:text="حساب های بانکی"
-                        android:textColor="@color/black" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/boroodat1" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".15"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/accounting" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/boroodat1" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/personnel"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
+                    android:id="@+id/personnel"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".1"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/left1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".1"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/left1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".75"
+                            android:gravity="center|right"
+                            android:paddingRight="10dp"
+                            android:text="پرسنل"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".15"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/personnel" />
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".75"
-                        android:gravity="center|right"
-                        android:paddingRight="10dp"
-                        android:text="پرسنل"
-                        android:textColor="@color/black" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/boroodat1" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".15"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/personnel" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/boroodat1" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/users"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
+                    android:id="@+id/users"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".1"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/left1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".1"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/left1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".75"
+                            android:gravity="center|right"
+                            android:paddingRight="10dp"
+                            android:text="کاربرها"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".15"
+                            android:padding="12dp"
+                            app:srcCompat="@drawable/users" />
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".75"
-                        android:gravity="center|right"
-                        android:paddingRight="10dp"
-                        android:text="کاربرها"
-                        android:textColor="@color/black" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/boroodat1" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".15"
-                        android:padding="12dp"
-                        app:srcCompat="@drawable/users" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/boroodat1" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/buyers"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
+                    android:id="@+id/buyers"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".1"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/left1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".1"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/left1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".75"
+                            android:gravity="center|right"
+                            android:paddingRight="10dp"
+                            android:text="خریدارها"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".15"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/buyer" />
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".75"
-                        android:gravity="center|right"
-                        android:paddingRight="10dp"
-                        android:text="خریدارها"
-                        android:textColor="@color/black" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/boroodat1" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".15"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/buyer" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/boroodat1" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/drivers"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
+                    android:id="@+id/drivers"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".1"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/left1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".1"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/left1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".75"
+                            android:gravity="center|right"
+                            android:paddingRight="10dp"
+                            android:text="راننده ها"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".15"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/driver" />
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".75"
-                        android:gravity="center|right"
-                        android:paddingRight="10dp"
-                        android:text="راننده ها"
-                        android:textColor="@color/black" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/boroodat1" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".15"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/driver" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/boroodat1" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="70dp" />
+
 
         </LinearLayout>
     </ScrollView>

@@ -21,291 +21,296 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/linearLayout4"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bkg124"
-                android:orientation="vertical">
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
+                    android:id="@+id/linearLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="15dp"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="15dp"
+                        android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/rFund"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".4"
-                            android:background="@android:color/transparent"
-                            android:ems="10"
-                            android:focusable="false"
-                            android:gravity="center"
-                            android:inputType="textPersonName"
-                            android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".45"
-                            android:gravity="center|right"
-                            android:paddingRight="10dp"
-                            android:text="سرمایه"
-                            android:textColor="@color/black" />
+                            <EditText
+                                android:id="@+id/rFund"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".4"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".15"
-                            android:padding="10dp"
-                            app:srcCompat="@drawable/funds" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".45"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="سرمایه"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".15"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/funds" />
+                        </LinearLayout>
+
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="20dp"
-                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/rBalance"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".4"
-                            android:background="@android:color/transparent"
-                            android:ems="10"
-                            android:focusable="false"
-                            android:gravity="center"
-                            android:inputType="textPersonName"
-                            android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/rBalance"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".4"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".45"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="موجودی حساب"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".15"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/balance" />
+                        </LinearLayout>
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".45"
-                            android:gravity="center|right"
-                            android:paddingRight="10dp"
-                            android:text="موجودی حساب"
-                            android:textColor="@color/black" />
+                            android:id="@+id/textView6"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/boroodat1" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".15"
-                            android:padding="10dp"
-                            app:srcCompat="@drawable/balance" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/boroodat1" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/rDemand"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".4"
-                            android:background="@android:color/transparent"
-                            android:ems="10"
-                            android:focusable="false"
-                            android:gravity="center"
-                            android:inputType="textPersonName"
-                            android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".45"
-                            android:gravity="center|right"
-                            android:paddingRight="10dp"
-                            android:text="مطالبات"
-                            android:textColor="@color/black" />
+                            <EditText
+                                android:id="@+id/rDemand"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".4"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".15"
-                            android:padding="10dp"
-                            app:srcCompat="@drawable/demand" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".45"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="مطالبات"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".15"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/demand" />
+                        </LinearLayout>
+
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/rDept"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".4"
-                            android:background="@android:color/transparent"
-                            android:ems="10"
-                            android:focusable="false"
-                            android:gravity="center"
-                            android:inputType="textPersonName"
-                            android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/rDept"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".4"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".45"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="بدهی ها"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".15"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/debt" />
+                        </LinearLayout>
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".45"
-                            android:gravity="center|right"
-                            android:paddingRight="10dp"
-                            android:text="بدهی ها"
-                            android:textColor="@color/black" />
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/boroodat1" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".15"
-                            android:padding="10dp"
-                            app:srcCompat="@drawable/debt" />
                     </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/boroodat1" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="15dp"
-                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="15dp"
+                        android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/rIncom"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".4"
-                            android:background="@android:color/transparent"
-                            android:ems="10"
-                            android:focusable="false"
-                            android:gravity="center"
-                            android:inputType="textPersonName"
-                            android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".45"
-                            android:gravity="center|right"
-                            android:paddingRight="10dp"
-                            android:text="جمع کل درآمدها"
-                            android:textColor="@color/black" />
+                            <EditText
+                                android:id="@+id/rIncom"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".4"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".15"
-                            android:padding="10dp"
-                            app:srcCompat="@drawable/income" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".45"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="جمع کل درآمدها"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".15"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/income" />
+                        </LinearLayout>
+
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/rCost"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".4"
-                            android:background="@android:color/transparent"
-                            android:ems="10"
-                            android:focusable="false"
-                            android:gravity="center"
-                            android:inputType="textPersonName"
-                            android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".45"
-                            android:gravity="center|right"
-                            android:paddingRight="10dp"
-                            android:text="جمع کل هزینه ها"
-                            android:textColor="@color/black" />
+                            <EditText
+                                android:id="@+id/rCost"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".4"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".15"
-                            android:padding="10dp"
-                            app:srcCompat="@drawable/cost" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".45"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="جمع کل هزینه ها"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".15"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/cost" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
-
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <Space
                 android:layout_width="match_parent"
