@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.Activity2_Manager">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/lnr1"
+        style="@style/Widget.Backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="100dp"
+        android:paddingBottom="100dp">
+
+        <include layout="@layout/backdrop" />
+    </LinearLayout>
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/boroodat2">
+        android:layout_height="wrap_content"
+        app:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/setting"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:layout_weight=".15"
-                app:srcCompat="@drawable/settings" />
-
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/Widget.Toolbar"
+            app:navigationIcon="@drawable/navigation_menu">
             <TextView
                 android:id="@+id/title"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".85"
                 android:gravity="center"
-                android:paddingRight="20dp"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-        </LinearLayout>
+                android:textSize="16sp"
+                android:textColor="@color/black" />
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.example.boroodat.general.CustomViewPager
         android:id="@+id/pager_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </com.example.boroodat.general.CustomViewPager>
 
@@ -49,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
-        app:backgroundTint="@color/boroodat2"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:fabAnimationMode="slide"
         app:fabAlignmentMode="end"
         app:fabCradleMargin="10dp"
@@ -72,8 +78,10 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:contentDescription="@string/app_name"
         android:src="@drawable/plus"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

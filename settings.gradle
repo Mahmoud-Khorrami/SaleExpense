@@ -1,2 +1,2 @@
-rootProject.name='Boroodat'
+rootProject.name='SaleExpense'
 include ':app'

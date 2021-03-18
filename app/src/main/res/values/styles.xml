@@ -13,7 +13,7 @@
     //------------------------------------------------------------------------------------------------
 
     <style name="Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:theme">@style/AppTheme</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
@@ -39,6 +39,18 @@
         <item name="android:stateListAnimator" tools:ignore="NewApi">
             @animator/button_anim
         </item>
+    </style>
+
+    //------------------------------------------------------------------------------------------------
+
+    <style name="Widget.Backdrop" parent="">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    //------------------------------------------------------------------------------------------------
+
+    <style name="Widget.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     //------------------------------------------------------------------------------------------------
