@@ -25,29 +25,25 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity6_Adapter;
-import com.example.boroodat.adapter.Activity7_Adapter;
 import com.example.boroodat.adapter.Activity8_Adapter;
 import com.example.boroodat.adapter.Activity9_Adapter;
 import com.example.boroodat.database.Activity6_DB;
-import com.example.boroodat.database.Activity7_DB;
 import com.example.boroodat.database.Activity8_DB;
 import com.example.boroodat.database.Activity9_DB;
 import com.example.boroodat.database.Fragment5_DB;
 import com.example.boroodat.databinding.A6Add1Binding;
-import com.example.boroodat.databinding.A7AddBinding;
 import com.example.boroodat.databinding.A8AddBinding;
 import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.databinding.Activity6SalesBinding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
 import com.example.boroodat.general.Report;
-import com.example.boroodat.general.TodayDate;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity6_Model;
-import com.example.boroodat.model.Activity7_Model;
 import com.example.boroodat.model.Activity8_Model;
 import com.example.boroodat.model.Activity9_Model;
 import com.google.android.material.textfield.TextInputEditText;
@@ -222,6 +218,14 @@ public class Activity10_EditSale extends AppCompatActivity
 
         //---------------------------------------------------------------------------------------------------
 
+        binding.factorNumber.addTextChangedListener(new ClearError(binding.factorNumberTil));
+        binding.date.addTextChangedListener(new ClearError(binding.dateTil));
+        binding.buyer.addTextChangedListener(new ClearError(binding.buyerTil));
+        binding.driver.addTextChangedListener(new ClearError(binding.driverTil));
+        binding.accountNumber.addTextChangedListener(new ClearError(binding.accountNumberTil));
+
+        //---------------------------------------------------------------------------------------------------
+
         binding.factorNumber.setText(factor_number);
         binding.date.setText(date);
         binding.buyer.setText(buyer_name);
@@ -283,28 +287,28 @@ public class Activity10_EditSale extends AppCompatActivity
                 {
                     if (binding.factorNumber.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr1.getTop());
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
                         binding.factorNumber.setError("شماره قبض را وارد کنید.");
                     }
                     else if (binding.date.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr1.getTop());
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
                         binding.date.setError("تاریخ را وارد کنید.");
                     }
                     else if (binding.buyer.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr2.getTop());
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
                         binding.buyer.setError("نام خریدار را وارد کنید.");
                     }
                     else if (binding.driver.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr2.getTop());
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
                         binding.driver.setError("نام راننده را وارد کنید.");
                     }
 
                     else if (binding.accountNumber.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr8.getTop());
+                        binding.scrollView.scrollTo(0, binding.crdv3.getTop());
                         binding.accountNumber.setError("حساب بانکی را مشخص کنید.");
                     }
 
