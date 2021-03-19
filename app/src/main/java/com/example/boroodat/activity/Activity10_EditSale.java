@@ -288,22 +288,22 @@ public class Activity10_EditSale extends AppCompatActivity
                     if (binding.factorNumber.getText().toString().equals(""))
                     {
                         binding.scrollView.scrollTo(0, binding.crdv1.getTop());
-                        binding.factorNumber.setError("شماره قبض را وارد کنید.");
+                        binding.factorNumberTil.setError("شماره قبض را وارد کنید.");
                     }
                     else if (binding.date.getText().toString().equals(""))
                     {
                         binding.scrollView.scrollTo(0, binding.crdv1.getTop());
-                        binding.date.setError("تاریخ را وارد کنید.");
+                        binding.dateTil.setError("تاریخ را وارد کنید.");
                     }
                     else if (binding.buyer.getText().toString().equals(""))
                     {
                         binding.scrollView.scrollTo(0, binding.crdv1.getTop());
-                        binding.buyer.setError("نام خریدار را وارد کنید.");
+                        binding.buyerTil.setError("نام خریدار را وارد کنید.");
                     }
                     else if (binding.driver.getText().toString().equals(""))
                     {
                         binding.scrollView.scrollTo(0, binding.crdv1.getTop());
-                        binding.driver.setError("نام راننده را وارد کنید.");
+                        binding.driverTil.setError("نام راننده را وارد کنید.");
                     }
 
                     else if (binding.accountNumber.getText().toString().equals(""))

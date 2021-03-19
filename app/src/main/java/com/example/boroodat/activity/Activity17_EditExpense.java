@@ -39,6 +39,7 @@ import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.databinding.Activity16RecordExpenseBinding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
@@ -188,6 +189,12 @@ public class Activity17_EditExpense extends AppCompatActivity
 
         //---------------------------------------------------------------------------------------------------
 
+        binding.factorNumber.addTextChangedListener(new ClearError(binding.factorNumberTil));
+        binding.date.addTextChangedListener(new ClearError(binding.dateTil));
+        binding.accountNumber.addTextChangedListener(new ClearError(binding.accountNumberTil));
+
+        //---------------------------------------------------------------------------------------------------
+
         binding.factorNumber.setText(factor_number);
         binding.date.setText(date);
         binding.sum.setText(last_sum);
@@ -245,20 +252,20 @@ public class Activity17_EditExpense extends AppCompatActivity
                 {
                     if (binding.factorNumber.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr1.getTop());
-                        binding.factorNumber.setError("شماره قبض را وارد کنید.");
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
+                        binding.factorNumberTil.setError("شماره قبض را وارد کنید.");
                     }
 
                     else if (binding.date.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr1.getTop());
-                        binding.date.setError("تاریخ را وارد کنید.");
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
+                        binding.dateTil.setError("تاریخ را وارد کنید.");
                     }
 
                     else if (binding.accountNumber.getText().toString().equals(""))
                     {
-                        binding.scrollView.scrollTo(0, binding.lnr8.getTop());
-                        binding.accountNumber.setError("حساب بانکی را مشخص کنید.");
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
+                        binding.accountNumberTil.setError("حساب بانکی را مشخص کنید.");
                     }
 
                     else
