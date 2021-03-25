@@ -61,136 +61,136 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til1"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="نام و نام خانوادگی"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/personnel_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/transparent"
                     android:focusable="false"
                     android:gravity="center|right"
-                    android:hint="نام و نام خانوادگی"
                     android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="حقوق"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/salary"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/transparent"
                     android:gravity="center|right"
-                    android:hint="حقوق"
                     android:inputType="number"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til4"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:focusable="false">
+                android:layout_margin="10dp"
+                android:focusable="false"
+                android:hint="بیعانه"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/earnest"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/transparent"
                     android:gravity="center|right"
-                    android:hint="بیعانه"
                     android:inputType="number"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="بیمه و مالیات"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/insurance_tax"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/transparent"
                     android:gravity="center|right"
-                    android:hint="بیمه و مالیات"
                     android:inputType="number"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til2"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="20dp">
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:hint="حساب بانکی"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/accountTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/transparent"
                     android:focusable="false"
                     android:gravity="center|right"
-                    android:hint="پرداخت از حساب"
                     android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til3"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="تاریخ پرداخت"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/transparent"
                     android:focusable="false"
                     android:gravity="center|right"
-                    android:hint="تاریخ پرداخت"
                     android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="توضیحات"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/transparent"
                     android:gravity="center|right"
-                    android:hint="توضیحات"
                     android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
