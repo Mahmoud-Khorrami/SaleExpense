@@ -29,6 +29,7 @@ import com.example.boroodat.database.Fragment7_DB;
 import com.example.boroodat.databinding.F1SalaryAddBinding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
@@ -207,6 +208,12 @@ public class Fragment7_Adapter extends RecyclerView.Adapter<Fragment7_Adapter.vi
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.personnelName.addTextChangedListener(new ClearError(binding1.til1));
+        binding1.accountTitle.addTextChangedListener(new ClearError(binding1.til2));
+        binding1.date.addTextChangedListener(new ClearError(binding1.til3));
+
+        //----------------------------------------------------------------------------------------------------------
+
         binding1.personnelId.setText(model.getPersonnel_id());
         binding1.personnelName.setText(model.getName());
         binding1.salary.setText(model.getSalary());
@@ -266,7 +273,7 @@ public class Fragment7_Adapter extends RecyclerView.Adapter<Fragment7_Adapter.vi
                         if (binding1.personnelName.getText().toString().equals(""))
                         {
                             binding1.scrollView.scrollTo(0,binding1.til1.getTop());
-                            binding1.personnelName.setError("نام و نام خانوادگی را وارد کنید.");
+                            binding1.til1.setError("نام و نام خانوادگی را وارد کنید.");
                         }
                         else if (binding1.salary.getText().toString().equals("") && binding1.earnest.getText().toString().equals("") && binding1.insuranceTax.getText().toString().equals(""))
                         {
@@ -276,12 +283,12 @@ public class Fragment7_Adapter extends RecyclerView.Adapter<Fragment7_Adapter.vi
                         else if (binding1.accountTitle.getText().toString().equals(""))
                         {
                             binding1.scrollView.scrollTo(0,binding1.til2.getTop());
-                            binding1.accountTitle.setError("حساب بانکی را مشخص کنید.");
+                            binding1.til2.setError("حساب بانکی را مشخص کنید.");
                         }
                         else if (binding1.date.getText().toString().equals(""))
                         {
                             binding1.scrollView.scrollTo(0,binding1.til3.getTop());
-                            binding1.date.setError("تاریخ پرداخت را وارد کنید.");
+                            binding1.til3.setError("تاریخ پرداخت را وارد کنید.");
                         }
 
                         else

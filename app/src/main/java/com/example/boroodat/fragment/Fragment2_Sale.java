@@ -33,6 +33,7 @@ import com.example.boroodat.databinding.F2DepositAddBinding;
 import com.example.boroodat.databinding.Fragment2Binding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
@@ -185,6 +186,13 @@ public class Fragment2_Sale extends Fragment
 
         //---------------------------------------------------------------------------------------------------
 
+        binding1.title.addTextChangedListener(new ClearError(binding1.til1));
+        binding1.amount.addTextChangedListener(new ClearError(binding1.til2));
+        binding1.account.addTextChangedListener(new ClearError(binding1.til3));
+        binding1.date.addTextChangedListener(new ClearError(binding1.til4));
+
+        //---------------------------------------------------------------------------------------------------
+
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
         {
             @Override
@@ -200,22 +208,28 @@ public class Fragment2_Sale extends Fragment
                     public void onClick(View v)
                     {
 
-                        if (binding1.amount.getText().toString().equals(""))
+                        if (binding1.title.getText().toString().equals(""))
                         {
-                            binding1.scrollview.scrollTo(0,binding1.til2.getTop());
-                            binding1.amount.setError("مبلغ را وارد کنید.");
+                            binding1.scrollview.scrollTo(0,binding1.til1.getTop());
+                            binding1.til1.setError("عنوان را وارد کنید.");
                         }
 
-                        else if (binding1.date.getText().toString().equals(""))
+                        else if (binding1.amount.getText().toString().equals(""))
                         {
-                            binding1.scrollview.scrollTo(0, binding1.til4.getTop());
-                            binding1.date.setError("تاریخ را وارد کنید.");
+                            binding1.scrollview.scrollTo(0,binding1.til2.getTop());
+                            binding1.til2.setError("مبلغ را وارد کنید.");
                         }
 
                         else if (binding1.account.getText().toString().equals(""))
                         {
                             binding1.scrollview.scrollTo(0, binding1.til3.getTop());
-                            binding1.account.setError("حساب بانکی را مشخص کنید.");
+                            binding1.til3.setError("حساب بانکی را مشخص کنید.");
+                        }
+
+                        else if (binding1.date.getText().toString().equals(""))
+                        {
+                            binding1.scrollview.scrollTo(0, binding1.til4.getTop());
+                            binding1.til4.setError("تاریخ را وارد کنید.");
                         }
 
                         else

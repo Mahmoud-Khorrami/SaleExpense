@@ -13,9 +13,9 @@
 
     <gradient
 
-        android:startColor="@color/boroodat2"
-        android:centerColor="@color/boroodat2"
-        android:endColor="@color/boroodat2"
+        android:startColor="@color/colorPrimaryDark"
+        android:centerColor="@color/colorPrimaryDark"
+        android:endColor="@color/colorPrimaryDark"
         android:type="linear"
         android:angle="90"/>
 
