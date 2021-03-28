@@ -33,6 +33,7 @@ import com.example.boroodat.databinding.A14AddBinding;
 import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.databinding.DeleteDialog1Binding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.SaveData;
@@ -226,6 +227,12 @@ public class Activity14_Adapter extends RecyclerView.Adapter<Activity14_Adapter.
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+        binding1.phoneNumber.addTextChangedListener(new ClearError(binding1.til2));
+        binding1.registerDate.addTextChangedListener(new ClearError(binding1.til3));
+
+        //----------------------------------------------------------------------------------------------------------
+
         binding1.registerDate.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -252,19 +259,19 @@ public class Activity14_Adapter extends RecyclerView.Adapter<Activity14_Adapter.
                         if (binding1.name.getText().toString().equals(""))
                         {
                             binding1.scrollView.scrollTo(0,binding1.til1.getTop());
-                            binding1.name.setError("نام و نام خانوادگی را وارد کنید.");
+                            binding1.til1.setError("نام و نام خانوادگی را وارد کنید.");
                         }
 
                         else if (binding1.phoneNumber.getText().toString().equals(""))
                         {
                             binding1.scrollView.scrollTo(0,binding1.til2.getTop());
-                            binding1.phoneNumber.setError("شماره همراه را وارد کنید.");
+                            binding1.til2.setError("شماره همراه را وارد کنید.");
                         }
 
                         else if (binding1.registerDate.getText().toString().equals(""))
                         {
                             binding1.scrollView.scrollTo(0, binding1.til3.getTop());
-                            binding1.registerDate.setError("تاریخ عضویت را وارد کنید.");
+                            binding1.til3.setError("تاریخ عضویت را وارد کنید.");
                         }
                         else
                         {

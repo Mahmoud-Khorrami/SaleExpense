@@ -161,7 +161,8 @@ public class Account
         //----------------------------------------------------------------------------------------------------------
 
         binding1.balance.addTextChangedListener(new NumberTextWatcherForThousand(binding1.balance));
-
+        binding1.title.addTextChangedListener(new ClearError(binding1.til1));
+        
         //----------------------------------------------------------------------------------------------------------
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
@@ -177,7 +178,7 @@ public class Account
                     public void onClick(View v)
                     {
                         if (binding1.title.getText().toString().equals(""))
-                            binding1.title.setError("عنوان حساب را وارد کنید.");
+                            binding1.til1.setError("عنوان حساب را وارد کنید.");
 
                         else
                         {

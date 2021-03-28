@@ -26,6 +26,7 @@ import com.example.boroodat.database.Activity8_DB;
 import com.example.boroodat.databinding.A8AddBinding;
 import com.example.boroodat.databinding.Activity8BuyerBinding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
 import com.example.boroodat.general.TodayDate;
@@ -113,6 +114,10 @@ public class Activity8_Buyer extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+
+        //----------------------------------------------------------------------------------------------------------
+
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
         {
             @Override
@@ -126,7 +131,7 @@ public class Activity8_Buyer extends AppCompatActivity
                     public void onClick(View v)
                     {
                         if (binding1.name.getText().toString().equals(""))
-                            binding1.name.setError("نام خریدار را وارد کنید.");
+                            binding1.til1.setError("نام خریدار را وارد کنید.");
 
                         else
                         {

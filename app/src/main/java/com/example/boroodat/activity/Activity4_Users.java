@@ -22,13 +22,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.adapter.Activity4_Adapter;
+import com.example.boroodat.databinding.A4AddBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity4_Model;
 import com.example.boroodat.R;
-import com.example.boroodat.databinding.A4UserAddBinding;
 import com.example.boroodat.databinding.Activity4UsersBinding;
 
 import org.json.JSONArray;
@@ -90,7 +90,7 @@ public class Activity4_Users extends AppCompatActivity
 
     private void dialog()
     {
-        final A4UserAddBinding binding1 = A4UserAddBinding.inflate(LayoutInflater.from(context));
+        final A4AddBinding binding1 = A4AddBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);

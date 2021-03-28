@@ -49,99 +49,89 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til1"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="نام و نام خانوادگی">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|right"
-                    android:hint="نام و ام خانوادگی"
-                    android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:gravity="right|center"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til2"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="شماره همراه">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneNumber"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|right"
-                    android:hint="شماره همراه"
-                    android:inputType="phone"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:gravity="right|center"
+                    android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til3"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:focusable="false">
+                android:layout_margin="10dp"
+                android:hint="تاریخ عضویت">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/registerDate"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:gravity="right|center"
                     android:focusable="false"
-                    android:gravity="center|right"
-                    android:hint="تاریخ عضویت"
-                    android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til4"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_margin="10dp"
+                android:hint="سمت">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/role"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|right"
-                    android:hint="سمت"
-                    android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:gravity="right|center"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til5"
+                style="@style/Widget.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="20dp">
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:hint="شماره کارت">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/creditCard"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|right"
-                    android:hint="شماره کارت"
-                    android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:theme="@style/TextLabel" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:gravity="right|center"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
     </ScrollView>
 

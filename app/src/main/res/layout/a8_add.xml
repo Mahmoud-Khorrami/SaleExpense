@@ -44,57 +44,57 @@
         app:layout_constraintTop_toBottomOf="@+id/title1">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til1"
+            style="@style/Widget.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp">
+            android:layout_margin="10dp"
+            android:hint="نام خریدار">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|right"
-                android:hint="نام خریدار"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:gravity="right|center"
                 android:inputType="text"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textColor="@color/black"
-                android:theme="@style/TextLabel" />
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til2"
+            style="@style/Widget.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp">
+            android:layout_margin="10dp"
+            android:hint="شماره همراه">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/phoneNumber"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|right"
-                android:hint="شماره همراه"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:gravity="right|center"
                 android:inputType="phone"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textColor="@color/black"
-                android:theme="@style/TextLabel" />
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til3"
+            style="@style/Widget.TextInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="20dp">
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:hint="مقصد">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/destination"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|right"
-                android:hint="مقصد"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:gravity="right|center"
                 android:inputType="text"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textColor="@color/black"
-                android:theme="@style/TextLabel" />
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

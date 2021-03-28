@@ -26,6 +26,7 @@ import com.example.boroodat.database.Activity9_DB;
 import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.databinding.Activity9DriverBinding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity9_Model;
@@ -111,6 +112,10 @@ public class Activity9_Driver extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+
+        //----------------------------------------------------------------------------------------------------------
+
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
         {
             @Override
@@ -124,7 +129,7 @@ public class Activity9_Driver extends AppCompatActivity
                     public void onClick(View v)
                     {
                         if (binding1.name.getText().toString().equals(""))
-                            binding1.name.setError("نام راننده را وارد کنید.");
+                            binding1.til1.setError("نام راننده را وارد کنید.");
 
                         else
                         {

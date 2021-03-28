@@ -26,6 +26,7 @@ import com.example.boroodat.database.Activity7_DB;
 import com.example.boroodat.databinding.A7AddBinding;
 import com.example.boroodat.databinding.Activity7AccountBinding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
 import com.example.boroodat.general.Report;
@@ -116,7 +117,7 @@ public class Activity7_Account extends AppCompatActivity
         //----------------------------------------------------------------------------------------------------------
 
         binding1.balance.addTextChangedListener(new NumberTextWatcherForThousand(binding1.balance));
-
+        binding1.title.addTextChangedListener(new ClearError(binding1.til1));
         //----------------------------------------------------------------------------------------------------------
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
@@ -132,7 +133,7 @@ public class Activity7_Account extends AppCompatActivity
                     public void onClick(View v)
                     {
                         if (binding1.title.getText().toString().equals(""))
-                            binding1.title.setError("عنوان حساب را وارد کنید.");
+                            binding1.til1.setError("عنوان حساب را وارد کنید.");
 
                         else
                         {

@@ -29,6 +29,7 @@ import com.example.boroodat.database.Activity9_DB;
 import com.example.boroodat.database.Fragment5_DB;
 import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
@@ -220,6 +221,10 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+
+        //----------------------------------------------------------------------------------------------------------
+
         binding1.name.setText(model.getName());
         binding1.phoneNumber.setText(model.getPhone_number());
         binding1.carType.setText(model.getCar_type());
@@ -240,7 +245,7 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
                     public void onClick(View v)
                     {
                         if (binding1.name.getText().toString().equals(""))
-                            binding1.name.setError("نام راننده را وارد کنید.");
+                            binding1.til1.setError("نام راننده را وارد کنید.");
 
                         else
                         {

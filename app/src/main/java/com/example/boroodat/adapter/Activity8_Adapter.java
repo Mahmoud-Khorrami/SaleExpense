@@ -29,6 +29,7 @@ import com.example.boroodat.database.Activity8_DB;
 import com.example.boroodat.databinding.A8AddBinding;
 import com.example.boroodat.databinding.DeleteDialog1Binding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
@@ -219,6 +220,10 @@ public class Activity8_Adapter extends RecyclerView.Adapter<Activity8_Adapter.vi
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+
+        //----------------------------------------------------------------------------------------------------------
+
         binding1.name.setText(model.getName());
         binding1.phoneNumber.setText(model.getPhone_number());
         binding1.destination.setText(model.getDestination());
@@ -238,7 +243,7 @@ public class Activity8_Adapter extends RecyclerView.Adapter<Activity8_Adapter.vi
                     public void onClick(View v)
                     {
                         if (binding1.name.getText().toString().equals(""))
-                            binding1.name.setError("نام خریدار را وارد کنید.");
+                            binding1.til1.setError("نام خریدار را وارد کنید.");
 
                         else
                         {
