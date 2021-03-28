@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.adapter.Activity4_Adapter;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity4_Model;
@@ -103,6 +104,12 @@ public class Activity4_Users extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+        binding1.password.addTextChangedListener(new ClearError(binding1.til2));
+        binding1.phone.addTextChangedListener(new ClearError(binding1.til3));
+
+        //----------------------------------------------------------------------------------------------------------
+
         ArrayList<String> roles=new ArrayList<>();
         roles.add("");
         roles.add("مدیر");
@@ -127,16 +134,28 @@ public class Activity4_Users extends AppCompatActivity
                     public void onClick(View v)
                     {
                         if (binding1.name.getText().toString().equals(""))
-                            binding1.name.setError("نام کاربر را وارد کنید.");
+                        {
+                            binding1.scrollView.scrollTo(0,binding1.til1.getTop());
+                            binding1.til1.setError("نام کاربر را وارد کنید.");
+                        }
 
                         else if (binding1.password.getText().toString().length() < 8)
-                            binding1.password.setError("رمز عبور باید حداقل 8 رقم باشد.");
+                        {
+                            binding1.scrollView.scrollTo(0,binding1.til2.getTop());
+                            binding1.til2.setError("رمز عبور باید حداقل 8 رقم باشد.");
+                        }
 
                         else if (binding1.phone.getText().toString().length() != 11)
-                            binding1.phone.setError("شماره همراه کاربر باید 11 رقم باشد.");
+                        {
+                            binding1.scrollView.scrollTo(0,binding1.til3.getTop());
+                            binding1.til3.setError("شماره همراه کاربر باید 11 رقم باشد.");
+                        }
 
                         else if (binding1.spinner.getSelectedItem().toString().equals(""))
-                            binding1.role.setError("سمت کاربر را انتخاب کنید.");
+                        {
+                            binding1.scrollView.scrollTo(0,binding1.role.getTop());
+                            Toast.makeText(getApplicationContext(),"سمت کاربر را انتخاب کنید.",Toast.LENGTH_LONG).show();
+                        }
 
                         else
                         {
