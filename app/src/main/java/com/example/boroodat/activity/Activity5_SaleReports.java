@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.boroodat.R;
-import com.example.boroodat.databinding.Activity5SaleReportsBinding;
+import com.example.boroodat.databinding.ReportsBinding;
 import com.example.boroodat.fragment.Fragment4_DepositReports;
 import com.example.boroodat.fragment.Fragment5_SaleReports;
 import com.example.boroodat.general.FragmentUtil;
@@ -19,7 +19,7 @@ import dmax.dialog.SpotsDialog;
 public class Activity5_SaleReports extends AppCompatActivity
 {
 
-    private Activity5SaleReportsBinding binding;
+    private ReportsBinding binding;
     private AlertDialog progressDialog;
     private Fragment4_DepositReports fragment4DepositReports;
     private Fragment5_SaleReports fragment5SaleReports;
@@ -28,7 +28,7 @@ public class Activity5_SaleReports extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        binding = Activity5SaleReportsBinding.inflate(getLayoutInflater());
+        binding = ReportsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

@@ -8,19 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.boroodat.R;
-import com.example.boroodat.database.Fragment5_DB;
-import com.example.boroodat.databinding.Activity12BuyerDetailsBinding;
 import com.example.boroodat.fragment.Fragment5_SaleReports;
 import com.example.boroodat.general.FragmentUtil;
-import com.example.boroodat.general.NumberTextWatcherForThousand;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Activity12_BuyerDetails extends AppCompatActivity
 {
-    Activity12BuyerDetailsBinding binding;
+    com.example.boroodat.databinding.ReportsBinding binding;
     private AlertDialog progressDialog;
     private String buyer_name =null;
     private Fragment5_SaleReports fragment5SaleReports;
@@ -30,7 +25,7 @@ public class Activity12_BuyerDetails extends AppCompatActivity
     {
 
         super.onCreate(savedInstanceState);
-        binding = Activity12BuyerDetailsBinding.inflate(getLayoutInflater());
+        binding = com.example.boroodat.databinding.ReportsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

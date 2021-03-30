@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.boroodat.R;
-import com.example.boroodat.databinding.Activity13DriverDetailsBinding;
 import com.example.boroodat.fragment.Fragment5_SaleReports;
 import com.example.boroodat.general.FragmentUtil;
 
@@ -16,7 +15,7 @@ import dmax.dialog.SpotsDialog;
 
 public class Activity13_DriverDetails extends AppCompatActivity
 {
-    Activity13DriverDetailsBinding binding;
+    com.example.boroodat.databinding.ReportsBinding binding;
     private AlertDialog progressDialog;
     private String driver_name =null;
     private Fragment5_SaleReports fragment5SaleReports;
@@ -26,7 +25,7 @@ public class Activity13_DriverDetails extends AppCompatActivity
     {
 
         super.onCreate(savedInstanceState);
-        binding = Activity13DriverDetailsBinding.inflate(getLayoutInflater());
+        binding = com.example.boroodat.databinding.ReportsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

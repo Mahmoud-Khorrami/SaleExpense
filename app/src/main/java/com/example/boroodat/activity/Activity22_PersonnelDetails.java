@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.boroodat.R;
-import com.example.boroodat.databinding.Activity22PersonnelDetailsBinding;
 import com.example.boroodat.fragment.Fragment7_SalaryReports;
 import com.example.boroodat.general.FragmentUtil;
 
@@ -16,7 +15,7 @@ import dmax.dialog.SpotsDialog;
 
 public class Activity22_PersonnelDetails extends AppCompatActivity
 {
-    Activity22PersonnelDetailsBinding binding;
+    com.example.boroodat.databinding.ReportsBinding binding;
     private AlertDialog progressDialog;
     private String personnel_name =null;
     private Fragment7_SalaryReports fragment7SalaryReports;
@@ -25,7 +24,7 @@ public class Activity22_PersonnelDetails extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        binding = Activity22PersonnelDetailsBinding.inflate(getLayoutInflater());
+        binding = com.example.boroodat.databinding.ReportsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

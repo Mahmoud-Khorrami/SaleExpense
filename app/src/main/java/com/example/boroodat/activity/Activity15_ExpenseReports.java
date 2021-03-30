@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.boroodat.R;
-import com.example.boroodat.databinding.Activity15ExpenseReportsBinding;
+import com.example.boroodat.databinding.ReportsBinding;
 import com.example.boroodat.fragment.Fragment7_SalaryReports;
 import com.example.boroodat.fragment.Fragment8_MaterialReports;
 import com.example.boroodat.fragment.Fragment9_OtherExpenseReports;
@@ -18,7 +18,7 @@ import dmax.dialog.SpotsDialog;
 
 public class Activity15_ExpenseReports extends AppCompatActivity
 {
-    Activity15ExpenseReportsBinding binding;
+    ReportsBinding binding;
     private AlertDialog progressDialog;
     private Fragment7_SalaryReports fragment7SalaryReport;
     private Fragment8_MaterialReports fragment8MaterialReports;
@@ -29,7 +29,7 @@ public class Activity15_ExpenseReports extends AppCompatActivity
     {
 
         super.onCreate(savedInstanceState);
-        binding = Activity15ExpenseReportsBinding.inflate(getLayoutInflater());
+        binding = ReportsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
