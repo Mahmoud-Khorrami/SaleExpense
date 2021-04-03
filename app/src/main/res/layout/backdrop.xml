@@ -4,45 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/about"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_margin="15dp"
-        app:cardBackgroundColor="@color/colorPrimary"
-        app:cardElevation="10dp"
-        app:cardPreventCornerOverlap="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".85"
-                android:gravity="center|right"
-                android:paddingRight="10dp"
-                android:text="درباه ما"
-                android:textColor="@color/black" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".15"
-                android:padding="10dp"
-                app:srcCompat="@drawable/about" />
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <com.google.android.material.card.MaterialCardView
         android:id="@+id/xls"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_margin="15dp"
-        app:cardBackgroundColor="@color/colorPrimary"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/white"
         app:cardElevation="10dp"
         app:cardPreventCornerOverlap="true">
 
@@ -66,6 +35,78 @@
                 android:layout_weight=".15"
                 android:padding="10dp"
                 app:srcCompat="@drawable/xls" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/deleteUserPass"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".85"
+                android:gravity="center|right"
+                android:paddingRight="10dp"
+                android:text="حذف نام کاربری رمز عبور"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".15"
+                android:padding="10dp"
+                app:srcCompat="@drawable/xls" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/about"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".85"
+                android:gravity="center|right"
+                android:paddingRight="10dp"
+                android:text="درباه ما"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".15"
+                android:padding="10dp"
+                app:srcCompat="@drawable/about" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

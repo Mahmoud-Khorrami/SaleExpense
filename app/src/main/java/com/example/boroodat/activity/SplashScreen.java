@@ -1,6 +1,13 @@
 package com.example.boroodat.activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,21 +15,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.boroodat.database.Activity7_DB;
-import com.example.boroodat.database.UserPass_DB;
-import com.example.boroodat.general.AppController;
 import com.example.boroodat.R;
-import com.example.boroodat.databinding.Activity1LoginBinding;
-import com.example.boroodat.general.ClearError;
-import com.example.boroodat.general.Internet;
+import com.example.boroodat.database.UserPass_DB;
+import com.example.boroodat.databinding.SplashScreenBinding;
+import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.Prefs;
 import com.example.boroodat.general.RuntimePermissionsActivity;
 import com.example.boroodat.general.SaveData;
@@ -39,22 +41,25 @@ import dmax.dialog.SpotsDialog;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class Activity1_Login extends AppCompatActivity
+public class SplashScreen extends RuntimePermissionsActivity
 {
-    private Activity1LoginBinding binding;
+
+    private SplashScreenBinding binding;
     private AlertDialog progressDialog;
     private Context context=this;
     private Realm realm;
+    private int code = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        binding = Activity1LoginBinding.inflate(getLayoutInflater());
+        binding = SplashScreenBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
+
         //-------------------------------------------------------------------------------------------------------
 
         progressDialog = new SpotsDialog(this,R.style.Custom);
@@ -62,53 +67,61 @@ public class Activity1_Login extends AppCompatActivity
 
         //-------------------------------------------------------------------------------------------------------
 
-        binding.password.addTextChangedListener(new ClearError(binding.passwordTil));
-        binding.phoneNumber.addTextChangedListener(new ClearError(binding.phonNumberTil));
+        if (Prefs.with ( this ).isFirstLoad ())
+        {
+            SplashScreen.super.requestAppPermissions ( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, code );
 
+            Prefs.with ( this ).firstLoadIsDone ();
+        }
         //-------------------------------------------------------------------------------------------------------
 
-        binding.login.setOnClickListener(new View.OnClickListener()
+        animation();
+    }
+
+    private void animation()
+    {
+
+        binding.appName.setVisibility(View.GONE);
+
+        binding.icon.animate().scaleX(1f).scaleY(1f).setDuration(2000).setListener(new AnimatorListenerAdapter()
         {
             @Override
-            public void onClick(View view)
+            public void onAnimationEnd(Animator animation)
             {
+                super.onAnimationEnd(animation);
 
-                if (binding.phoneNumber.getText().toString().equals(""))
-                    binding.phonNumberTil.setError("شماره همراه را وارد کنید.");
+                binding.appName.setVisibility(View.VISIBLE);
+                binding.appName.animate().rotationY(360).setDuration(2000);
+                binding.logo.animate().alpha(1f).setDuration(3000).setListener(new AnimatorListenerAdapter()
+                {
+                    @Override
+                    public void onAnimationEnd(Animator animation)
+                    {
+                        super.onAnimationEnd(animation);
 
-                else if (binding.password.getText().toString().equals(""))
-                    binding.passwordTil.setError("رمز عبور را وارد کنید.");
+                        getUserPass();
+                    }
+                });
 
-                else if (new Internet(context).check())
-                    login(binding.phoneNumber.getText().toString(), binding.password.getText().toString(),0);
-                else
-                    new Internet(context).enable();
-
-            }
-        });
-
-        //-------------------------------------------------------------------------------------------------------
-
-        binding.saveAndLogin.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (binding.phoneNumber.getText().toString().equals(""))
-                    binding.phonNumberTil.setError("شماره همراه را وارد کنید.");
-
-                else if (binding.password.getText().toString().equals(""))
-                    binding.passwordTil.setError("رمز عبور را وارد کنید.");
-
-                else if (new Internet(context).check())
-                    login(binding.phoneNumber.getText().toString(), binding.password.getText().toString(),1);
-                else
-                    new Internet(context).enable();
             }
         });
     }
 
-    public void login(final String phone_number, final String password, final int i)
+    private void getUserPass()
+    {
+        RealmResults<UserPass_DB> res = realm.where(UserPass_DB.class).findAll();
+
+        if (res.size() == 0)
+        {
+            startActivity(new Intent(SplashScreen.this, Activity1_Login.class));
+            finish();
+        }
+
+        else
+            login(res.get(0).getUsername(), res.get(0).getPassword());
+    }
+
+    public void login(String phone_number, String password)
     {
         String url = getString(R.string.domain) + "api/login";
         progressDialog.show();
@@ -136,21 +149,11 @@ public class Activity1_Login extends AppCompatActivity
 
                     if (code.equals("200"))
                     {
-                        if (i==1)
-                        {
-
-                            realm.beginTransaction();
-                            realm.copyToRealmOrUpdate(new UserPass_DB(0,phone_number,password));
-                            realm.commitTransaction();
-
-                            Toast.makeText(getApplicationContext(),"شماره همراه و رمز عبور ذخیره شد.", Toast.LENGTH_SHORT).show();
-                        }
-
                         new User_Info(response).save();
 
                         if (new User_Info().role().equals("Developer"))
                         {
-                            Intent intent = new Intent(Activity1_Login.this, Activity0_Developer.class);
+                            Intent intent = new Intent(SplashScreen.this, Activity0_Developer.class);
                             intent.putExtra("token", new User_Info().token());
                             intent.putExtra("token_id", new User_Info().token_id());
                             startActivity(intent);
@@ -169,7 +172,10 @@ public class Activity1_Login extends AppCompatActivity
                     }
 
                     else
-                        Toast.makeText(getApplicationContext(),"کد "+response.getString("code")+ ":" + response.getString("message"), Toast.LENGTH_SHORT).show();
+                    {
+                        startActivity(new Intent(SplashScreen.this, Activity1_Login.class));
+                        finish();
+                    }
 
                 } catch (JSONException e)
                 {
@@ -245,7 +251,7 @@ public class Activity1_Login extends AppCompatActivity
 
                     if (b1 & b2 & b3 & b4 & b5)
                     {
-                        Intent intent = new Intent(Activity1_Login.this, Activity2_Manager.class);
+                        Intent intent = new Intent(SplashScreen.this, Activity2_Manager.class);
                         intent.putExtra("token", new User_Info().token());
                         intent.putExtra("company_id", new User_Info().company_id());
                         intent.putExtra("company_name", new User_Info().company_name());
@@ -328,7 +334,7 @@ public class Activity1_Login extends AppCompatActivity
 
                     if (b1 & b2 & b3)
                     {
-                        Intent intent = new Intent(Activity1_Login.this, Activity20_User.class);
+                        Intent intent = new Intent(SplashScreen.this, Activity20_User.class);
                         intent.putExtra("token", new User_Info().token());
                         intent.putExtra("company_id", new User_Info().company_id());
                         intent.putExtra("company_name", new User_Info().company_name());
@@ -375,4 +381,18 @@ public class Activity1_Login extends AppCompatActivity
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    @Override
+    public void onPermissionsGranted(int requestCode)
+    {
+        if (requestCode == code)
+            Toast.makeText ( getApplicationContext (),
+                    "مجوز دسترسی به حافظه داده شد.", Toast.LENGTH_SHORT ).show ();
+    }
+
+    @Override
+    public void onPermissionsDeny(int requestCode)
+    {
+        Toast.makeText ( getApplicationContext (),
+                "مجوز دسترسی به حافظه داده نشد.", Toast.LENGTH_LONG ).show ();
+    }
 }

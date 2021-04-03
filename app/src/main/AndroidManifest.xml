@@ -18,78 +18,79 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".activity.Activity24_AboutUs"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity22_PersonnelDetails"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity21_UserReport"
+        <activity android:name=".activity.Activity1_Login"/>
+        <activity
+            android:name=".activity.Activity24_AboutUs"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity20_User"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity19_EditMaterial"
+        <activity
+            android:name=".activity.Activity22_PersonnelDetails"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity18_RawMaterial"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity17_EditExpense"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity16_RecordExpense"
+        <activity
+            android:name=".activity.Activity21_UserReport"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity15_ExpenseReports"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity14_Personnel"
+        <activity
+            android:name=".activity.Activity20_User"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity13_DriverDetails"
+        <activity
+            android:name=".activity.Activity19_EditMaterial"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity12_BuyerDetails"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity11_AccountDetails"
+        <activity
+            android:name=".activity.Activity18_RawMaterial"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity10_EditSale"
+        <activity
+            android:name=".activity.Activity17_EditExpense"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity9_Driver"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity8_Buyer"
+        <activity
+            android:name=".activity.Activity16_RecordExpense"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.Activity7_Account"
+        <activity
+            android:name=".activity.Activity15_ExpenseReports"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.Activity6_RecordSales"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity14_Personnel"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity13_DriverDetails"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity12_BuyerDetails"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity11_AccountDetails"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity10_EditSale"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity9_Driver"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity8_Buyer"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity7_Account"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.Activity6_RecordSales"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.Activity5_SaleReports"
             android:screenOrientation="portrait"
@@ -109,7 +110,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.Activity1_Login"
+            android:name=".activity.SplashScreen"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>

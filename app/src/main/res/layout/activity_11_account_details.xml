@@ -258,9 +258,11 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
 
-            android:background="@color/boroodat2"
+            android:background="@color/colorPrimary"
+            app:tabIndicatorColor="@color/black"
             app:tabMode="scrollable"
-            app:tabTextColor="@color/black">
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextColor="@color/black2">
 
         </com.google.android.material.tabs.TabLayout>
     </com.google.android.material.appbar.AppBarLayout>

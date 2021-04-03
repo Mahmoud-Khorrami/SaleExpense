@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.boroodat.database.UserPass_DB;
 import com.example.boroodat.fragment.Fragment0_Setting;
 import com.example.boroodat.fragment.Fragment1_Expense;
 import com.example.boroodat.fragment.Fragment2_Sale;
@@ -43,6 +44,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class Activity2_Manager extends RuntimePermissionsActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -55,6 +58,7 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
     private boolean doubleBackToExitPressedOnce=false;
     private Context context=this;
     private int code = 10;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -64,6 +68,7 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
         View view = binding.getRoot();
         setContentView(view);
 
+        realm = Realm.getDefaultInstance();
         //-------------------------------------------------------------------------------------------------------
 
         binding.appBar.setTitle("");
@@ -77,6 +82,7 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
         View view1 = binding.lnr1;
         MaterialCardView xls=view1.findViewById(R.id.xls);
         MaterialCardView about=view1.findViewById(R.id.about);
+        MaterialCardView deleteUserPass=view1.findViewById(R.id.deleteUserPass);
 
         xls.setOnClickListener(new View.OnClickListener()
         {
@@ -91,12 +97,43 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
             }
         });
 
+        //------------------------------------------------------------
+
         about.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
                 startActivity(new Intent(Activity2_Manager.this,Activity24_AboutUs.class));
+            }
+        });
+
+
+        //------------------------------------------------------------
+
+        deleteUserPass.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                realm.executeTransaction(new Realm.Transaction()
+                {
+                    @Override
+                    public void execute(Realm realm)
+                    {
+                        RealmResults<UserPass_DB> res = realm.where(UserPass_DB.class)
+                                .findAll();
+
+                        if (res.size() > 0)
+                        {
+                            res.deleteAllFromRealm();
+                            Toast.makeText(getApplicationContext(),"حذف نام کاربری رمز عبور از حافظه دستگاه اندرویدی شما با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
+                        }
+
+                        else
+                            Toast.makeText(getApplicationContext(),"نام کاربری و رمز عبور ذخیره نشده است.",Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
         //-------------------------------------------------------------------------------------------------------

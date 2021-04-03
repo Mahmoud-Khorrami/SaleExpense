@@ -51,7 +51,7 @@
     //------------------------------------------------------------------------------------------------
 
     <style name="Widget.Backdrop" parent="">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
     //------------------------------------------------------------------------------------------------
