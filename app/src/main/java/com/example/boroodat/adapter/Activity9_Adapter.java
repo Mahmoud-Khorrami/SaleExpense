@@ -39,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,6 +204,13 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
     public int getItemCount()
     {
         return models.size();
+    }
+
+    public void setFilter(List<Activity9_Model> filter)
+    {
+        models=new ArrayList<>();
+        models.addAll(filter);
+        notifyDataSetChanged();
     }
 
     private void editDialog(final Activity9_Model model)

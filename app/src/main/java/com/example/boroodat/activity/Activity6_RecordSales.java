@@ -12,8 +12,10 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -523,6 +525,80 @@ public class Activity6_RecordSales extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
+        ArrayList<String> searchItem=new ArrayList<>();
+        searchItem.add("نام و نام خانوادگی");
+        searchItem.add("شماره همراه");
+        searchItem.add("مقصد");
+
+        ArrayAdapter<String> adp = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, searchItem);
+        binding1.spinner.setAdapter(adp);
+        binding1.spinner.setSelection(0);
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding1.lnr2.setVisibility(View.GONE);
+
+        binding1.search.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                binding1.lnr1.setVisibility(View.GONE);
+                binding1.lnr2.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding1.searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s)
+            {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                newText = newText.toLowerCase();
+                List<Activity8_Model> newList = new ArrayList<>();
+
+                for (int i=0;i<models2.size();i++)
+                {
+                    if (binding1.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی")
+                            && models2.get(i).getName().toLowerCase().contains(newText))
+                        newList.add(models2.get(i));
+
+                    else if (binding1.spinner.getSelectedItem().toString().equals("شماره همراه")
+                            && models2.get(i).getPhone_number().toLowerCase().contains(newText))
+                        newList.add(models2.get(i));
+
+                    else if (binding1.spinner.getSelectedItem().toString().equals("مقصد")
+                            && models2.get(i).getDestination().toLowerCase().contains(newText))
+                        newList.add(models2.get(i));
+                }
+
+                adapter2.setFilter(newList);
+                return true;
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding1.searchView.setOnCloseListener(new SearchView.OnCloseListener()
+        {
+            @Override
+            public boolean onClose()
+            {
+                adapter2.setFilter(models2);
+                binding1.lnr1.setVisibility(View.VISIBLE);
+                binding1.lnr2.setVisibility(View.GONE);
+                return true;
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
         {
             @Override
@@ -599,11 +675,10 @@ public class Activity6_RecordSales extends AppCompatActivity
                     public void onClick(View v)
                     {
                         if (binding1.name.getText().toString().equals(""))
-                            binding1.name.setError("نام خریدار را وارد کنید.");
+                            binding1.til1.setError("نام خریدار را وارد کنید.");
 
                         else
                         {
-
                             String phone_number1="-";
                             String destination1="-";
 
@@ -770,6 +845,80 @@ public class Activity6_RecordSales extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
+        ArrayList<String> searchItem=new ArrayList<>();
+        searchItem.add("نام و نام خانوادگی");
+        searchItem.add("شماره همراه");
+        searchItem.add("مشخصات خودرو");
+
+        ArrayAdapter<String> adp = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, searchItem);
+        binding1.spinner.setAdapter(adp);
+        binding1.spinner.setSelection(0);
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding1.lnr2.setVisibility(View.GONE);
+
+        binding1.search.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                binding1.lnr1.setVisibility(View.GONE);
+                binding1.lnr2.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding1.searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s)
+            {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                newText = newText.toLowerCase();
+                List<Activity9_Model> newList = new ArrayList<>();
+
+                for (int i=0;i<models3.size();i++)
+                {
+                    if (binding1.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی")
+                            && models3.get(i).getName().toLowerCase().contains(newText))
+                        newList.add(models3.get(i));
+
+                    else if (binding1.spinner.getSelectedItem().toString().equals("شماره همراه")
+                            && models3.get(i).getPhone_number().toLowerCase().contains(newText))
+                        newList.add(models3.get(i));
+
+                    else if (binding1.spinner.getSelectedItem().toString().equals("مشخصات خودرو")
+                            && models3.get(i).getCar_type().toLowerCase().contains(newText))
+                        newList.add(models3.get(i));
+                }
+
+                adapter3.setFilter(newList);
+                return true;
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding1.searchView.setOnCloseListener(new SearchView.OnCloseListener()
+        {
+            @Override
+            public boolean onClose()
+            {
+                adapter3.setFilter(models3);
+                binding1.lnr1.setVisibility(View.VISIBLE);
+                binding1.lnr2.setVisibility(View.GONE);
+                return true;
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
         {
             @Override
@@ -846,7 +995,7 @@ public class Activity6_RecordSales extends AppCompatActivity
                     public void onClick(View v)
                     {
                         if (binding1.name.getText().toString().equals(""))
-                            binding1.name.setError("نام راننده را وارد کنید.");
+                            binding1.til1.setError("نام راننده را وارد کنید.");
 
                         else
                         {

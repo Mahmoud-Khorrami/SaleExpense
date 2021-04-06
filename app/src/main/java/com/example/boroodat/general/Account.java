@@ -88,6 +88,11 @@ public class Account
 
         //----------------------------------------------------------------------------------------------------------
 
+        binding1.lnr2.setVisibility(View.GONE);
+        binding1.search.setVisibility(View.GONE);
+
+        //----------------------------------------------------------------------------------------------------------
+
         progressDialog = new SpotsDialog(context, R.style.Custom);
         progressDialog.setCancelable(false);
 

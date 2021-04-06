@@ -190,9 +190,8 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
                         }
                     });
 
-                    //....................................................................................................
+                    //---------------------------------------------------------------------------------------------
 
-                   // alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
                     alertDialog.show();
                     DisplayMetrics display = context.getResources().getDisplayMetrics();
                     int width = display.widthPixels;
