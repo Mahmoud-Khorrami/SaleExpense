@@ -62,7 +62,7 @@
                 android:layout_weight=".85"
                 android:gravity="center|right"
                 android:paddingRight="10dp"
-                android:text="حذف نام کاربری رمز عبور"
+                android:text="حذف نام کاربری و رمز عبور"
                 android:textColor="@color/black" />
 
             <ImageView
@@ -70,7 +70,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".15"
                 android:padding="10dp"
-                app:srcCompat="@drawable/xls" />
+                app:srcCompat="@drawable/delete" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

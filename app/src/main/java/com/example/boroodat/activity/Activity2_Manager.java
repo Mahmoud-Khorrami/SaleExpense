@@ -1,18 +1,26 @@
 package com.example.boroodat.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.Settings;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,6 +30,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.database.UserPass_DB;
+import com.example.boroodat.databinding.Dialog1Binding;
+import com.example.boroodat.databinding.InternetBinding;
 import com.example.boroodat.fragment.Fragment0_Setting;
 import com.example.boroodat.fragment.Fragment1_Expense;
 import com.example.boroodat.fragment.Fragment2_Sale;
@@ -36,6 +46,7 @@ import com.example.boroodat.general.User_Info;
 import com.example.boroodat.general.WriteToExcel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +86,10 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
         binding.title.setText(new User_Info().company_name());
         setSupportActionBar(binding.appBar);
 
-        binding.appBar.setNavigationOnClickListener(new NavigationIconClickListener(context, view.findViewById(R.id.pager_1)));
+        binding.appBar.setNavigationOnClickListener(new NavigationIconClickListener(context, view.findViewById(R.id.pager_1),
+                new AccelerateDecelerateInterpolator(),
+                context.getResources().getDrawable(R.drawable.navigation_menu),
+                context.getResources().getDrawable(R.drawable.close)));
 
         //-------------------------------------------------------------------------------------------------------
 
@@ -116,24 +130,79 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
             @Override
             public void onClick(View view)
             {
-                realm.executeTransaction(new Realm.Transaction()
+                final RealmResults<UserPass_DB> res = realm.where(UserPass_DB.class)
+                        .findAll();
+                if (res.size()>0)
                 {
-                    @Override
-                    public void execute(Realm realm)
+                    final Dialog1Binding binding1 = Dialog1Binding.inflate(LayoutInflater.from(context));
+                    View view1 = binding1.getRoot();
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setView(view1);
+
+                    //-------------------------------------------------------------------------------------------------------
+
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setPositiveButton("تایید", null);
+                    alertDialogBuilder.setNeutralButton("لغو", null);
+                    final AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    //-------------------------------------------------------------------------------------------------------
+
+                    binding1.message.setText("آیا مایلید نام کاربری و رمز عبور را از حافظه حذف کنید؟");
+
+                    //-------------------------------------------------------------------------------------------------------
+
+                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
                     {
-                        RealmResults<UserPass_DB> res = realm.where(UserPass_DB.class)
-                                .findAll();
-
-                        if (res.size() > 0)
+                        @Override
+                        public void onShow(DialogInterface dialogInterface)
                         {
-                            res.deleteAllFromRealm();
-                            Toast.makeText(getApplicationContext(),"حذف نام کاربری رمز عبور از حافظه دستگاه اندرویدی شما با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
-                        }
+                            Button approve = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                            approve.setTextColor(context.getResources().getColor(R.color.black));
+                            approve.setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View view)
+                                {
+                                    realm.executeTransaction(new Realm.Transaction()
+                                    {
+                                        @Override
+                                        public void execute(Realm realm)
+                                        {
+                                            res.deleteAllFromRealm();
+                                            Toast.makeText(getApplicationContext(),"حذف نام کاربری رمز عبور از حافظه دستگاه اندرویدی شما با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                }
+                            });
 
-                        else
-                            Toast.makeText(getApplicationContext(),"نام کاربری و رمز عبور ذخیره نشده است.",Toast.LENGTH_LONG).show();
-                    }
-                });
+                            Button Cancel = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                            Cancel.setTextColor(context.getResources().getColor(R.color.black));
+                            Cancel.setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    alertDialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+
+                    //....................................................................................................
+
+                   // alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+                    alertDialog.show();
+                    DisplayMetrics display = context.getResources().getDisplayMetrics();
+                    int width = display.widthPixels;
+                    width = (int) ((width) * ((double) 4 / 5));
+                    alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                }
+
+                else
+                    Toast.makeText(getApplicationContext(),"نام کاربری و رمز عبور ذخیره نشده است.",Toast.LENGTH_LONG).show();
+
             }
         });
         //-------------------------------------------------------------------------------------------------------

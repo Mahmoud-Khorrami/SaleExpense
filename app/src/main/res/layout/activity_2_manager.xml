@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/Widget.Toolbar"
+            app:contentInsetStart="0dp"
             app:navigationIcon="@drawable/navigation_menu">
             <TextView
                 android:id="@+id/title"
