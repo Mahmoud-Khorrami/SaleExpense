@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -91,6 +93,81 @@ public class Activity8_Buyer extends AppCompatActivity
                 }
                 else
                     new Internet(context).enable();
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+
+        ArrayList<String> searchItem=new ArrayList<>();
+        searchItem.add("نام و نام خانوادگی");
+        searchItem.add("شماره همراه");
+        searchItem.add("مقصد");
+
+        ArrayAdapter<String> adp = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, searchItem);
+        binding.spinner.setAdapter(adp);
+        binding.spinner.setSelection(0);
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding.lnr2.setVisibility(View.GONE);
+
+        binding.search.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                binding.lnr1.setVisibility(View.GONE);
+                binding.lnr2.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding.searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s)
+            {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                newText = newText.toLowerCase();
+                List<Activity8_Model> newList = new ArrayList<>();
+
+                for (int i=0;i<models.size();i++)
+                {
+                    if (binding.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی")
+                            && models.get(i).getName().toLowerCase().contains(newText))
+                        newList.add(models.get(i));
+
+                    else if (binding.spinner.getSelectedItem().toString().equals("شماره همراه")
+                            && models.get(i).getPhone_number().toLowerCase().contains(newText))
+                        newList.add(models.get(i));
+
+                    else if (binding.spinner.getSelectedItem().toString().equals("مقصد")
+                            && models.get(i).getDestination().toLowerCase().contains(newText))
+                        newList.add(models.get(i));
+                }
+
+                adapter.setFilter(newList);
+                return true;
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding.searchView.setOnCloseListener(new SearchView.OnCloseListener()
+        {
+            @Override
+            public boolean onClose()
+            {
+                adapter.setFilter(models);
+                binding.lnr1.setVisibility(View.VISIBLE);
+                binding.lnr2.setVisibility(View.GONE);
+                return true;
             }
         });
 

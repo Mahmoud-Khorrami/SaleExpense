@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +91,76 @@ public class Personnel
         addPersonnel();
 
         //----------------------------------------------------------------------------------------------------------
+
+        ArrayList<String> searchItem=new ArrayList<>();
+        searchItem.add("نام و نام خانوادگی");
+        searchItem.add("شماره همراه");
+
+        ArrayAdapter<String> adp = new ArrayAdapter<String>(context, R.layout.spinner_item, searchItem);
+        binding1.spinner.setAdapter(adp);
+        binding1.spinner.setSelection(0);
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding1.lnr2.setVisibility(View.GONE);
+
+        binding1.search.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                binding1.lnr1.setVisibility(View.GONE);
+                binding1.lnr2.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding1.searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s)
+            {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                newText = newText.toLowerCase();
+                List<Activity14_Model> newList = new ArrayList<>();
+
+                for (int i=0;i<models.size();i++)
+                {
+                    if (binding1.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی")
+                            && models.get(i).getName().toLowerCase().contains(newText))
+                        newList.add(models.get(i));
+
+                    else if (binding1.spinner.getSelectedItem().toString().equals("شماره همراه")
+                            && models.get(i).getPhone_number().toLowerCase().contains(newText))
+                        newList.add(models.get(i));
+                }
+
+                adapter.setFilter(newList);
+                return true;
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding1.searchView.setOnCloseListener(new SearchView.OnCloseListener()
+        {
+            @Override
+            public boolean onClose()
+            {
+                adapter.setFilter(models);
+                binding1.lnr1.setVisibility(View.VISIBLE);
+                binding1.lnr2.setVisibility(View.GONE);
+                return true;
+            }
+        });
+
+        //----------------------------------------------------------------------------------------------------------
+
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
         {
             @Override
