@@ -41,7 +41,7 @@
                     android:layout_weight=".1"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
-                    app:srcCompat="@drawable/more" />
+                    app:srcCompat="@drawable/eye" />
 
                 <TextView
                     android:id="@+id/date"
@@ -86,41 +86,6 @@
                     android:text="TextView"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lnr2"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/delete"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight=".5"
-                    android:background="@drawable/bkg114"
-                    android:gravity="center"
-                    android:text="حذف"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/edit"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight=".5"
-                    android:background="@drawable/bkg114"
-                    android:gravity="center"
-                    android:text="ویرایش"
-                    android:textColor="@color/black" />
             </LinearLayout>
 
         </LinearLayout>
