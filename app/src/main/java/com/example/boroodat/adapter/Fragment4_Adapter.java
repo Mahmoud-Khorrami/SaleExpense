@@ -25,7 +25,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.database.Fragment4_DB;
+import com.example.boroodat.databinding.Dialog1Binding;
 import com.example.boroodat.databinding.F2DepositAddBinding;
+import com.example.boroodat.databinding.FragmentDetails3Binding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
@@ -68,20 +70,15 @@ public class Fragment4_Adapter extends RecyclerView.Adapter<Fragment4_Adapter.vi
     public static class viewHolder extends RecyclerView.ViewHolder
     {
 
-        TextView title,date,edit,delete;
+        TextView title,date;
         EditText amount;
-        LinearLayout lnr1,lnr2;
         ImageView more;
         public viewHolder(@NonNull View itemView)
         {
             super(itemView);
             title=itemView.findViewById(R.id.title);
             date=itemView.findViewById(R.id.date);
-            edit=itemView.findViewById(R.id.edit);
-            delete=itemView.findViewById(R.id.delete);
             amount=itemView.findViewById(R.id.amount);
-            lnr1=itemView.findViewById(R.id.lnr1);
-            lnr2=itemView.findViewById(R.id.lnr2);
             more=itemView.findViewById(R.id.more);
         }
     }
@@ -119,40 +116,13 @@ public class Fragment4_Adapter extends RecyclerView.Adapter<Fragment4_Adapter.vi
 
         //--------------------------------------------------------------
 
-        holder.lnr2.setVisibility(View.GONE);
-
         holder.more.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                if (holder.lnr2.getVisibility()==View.GONE)
-                    holder.lnr2.setVisibility(View.VISIBLE);
-                else
-                    holder.lnr2.setVisibility(View.GONE);
-            }
-        });
-        //--------------------------------------------------------------
-
-        holder.edit.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (alertDialogBuilder==null)
+                if (alertDialogBuilder == null)
                     getDeposit(model);
-            }
-        });
-
-        //--------------------------------------------------------------
-
-        holder.delete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (alertDialogBuilder==null)
-                    deleteDialog(model);
             }
         });
     }
@@ -198,7 +168,7 @@ public class Fragment4_Adapter extends RecyclerView.Adapter<Fragment4_Adapter.vi
                 {
                     if (response.getString("code").equals("200"))
                     {
-                        depositDialog(response,model);
+                        details(response,model);
                     }
                     else
                         Toast.makeText(context,"کد "+response.getString("code")+": "+response.getString("message"),Toast.LENGTH_LONG).show();
@@ -238,6 +208,100 @@ public class Fragment4_Adapter extends RecyclerView.Adapter<Fragment4_Adapter.vi
         request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
+    }
+
+    public void details(final JSONObject response, final Fragment4_Model model)
+    {
+        final FragmentDetails3Binding binding1 = FragmentDetails3Binding.inflate(LayoutInflater.from(context));
+        View view = binding1.getRoot();
+        alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setView(view);
+
+        //-------------------------------------------------------------------------------------------------------
+
+
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("ویرایش", null);
+        alertDialogBuilder.setNegativeButton("حذف",null);
+        alertDialogBuilder.setNeutralButton("لغو", null);
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding1.amount.addTextChangedListener(new NumberTextWatcherForThousand(binding1.amount));
+
+        //----------------------------------------------------------------------------------------------------------
+
+        try
+        {
+            JSONObject object=response.getJSONObject("deposit");
+
+            binding1.title.setText(object.getString("title"));
+            binding1.amount.setText(last_amount);
+            binding1.accountTitle.setText(response.getString("account_title"));
+            binding1.date.setText(object.getString("date"));
+            binding1.description.setText(object.getString("description"));
+
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        //-------------------------------------------------------------------------------------------------------
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
+        {
+            @Override
+            public void onShow(DialogInterface dialogInterface)
+            {
+                Button edit = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                edit.setTextColor(context.getResources().getColor(R.color.black));
+                edit.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        depositDialog(response,model);
+                        alertDialog.dismiss();
+                        alertDialogBuilder = null;
+                    }
+                });
+
+                final Button delete = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                delete.setTextColor(context.getResources().getColor(R.color.black));
+                delete.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        deleteDialog(model);
+                        alertDialog.dismiss();
+                        alertDialogBuilder = null;
+                    }
+                });
+
+                Button Cancel = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                Cancel.setTextColor(context.getResources().getColor(R.color.black));
+                Cancel.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        alertDialog.dismiss();
+                        alertDialogBuilder = null;
+                    }
+                });
+            }
+        });
+
+        //---------------------------------------------------------------------------------------------
+
+        alertDialog.getWindow().setBackgroundDrawableResource(R.color.blue1);
+        alertDialog.show();
+        DisplayMetrics display = context.getResources().getDisplayMetrics();
+        int width = display.widthPixels;
+        width = (int) ((width) * ((double) 9 / 10));
+        alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     public void depositDialog(final JSONObject response, final Fragment4_Model model)
@@ -484,34 +548,67 @@ public class Fragment4_Adapter extends RecyclerView.Adapter<Fragment4_Adapter.vi
 
     private void deleteDialog(final Fragment4_Model model)
     {
-        alertDialogBuilder = new AlertDialog.Builder ( context );
+        final Dialog1Binding binding1 = Dialog1Binding.inflate(LayoutInflater.from(context));
+        View view1 = binding1.getRoot();
+        alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setView(view1);
 
-        alertDialogBuilder.setMessage ( "آیا می خواهید این آیتم را حذف کنید؟" );
-        alertDialogBuilder.setCancelable ( false );
+        //-------------------------------------------------------------------------------------------------------
 
-        alertDialogBuilder.setPositiveButton ( "تایید", new DialogInterface.OnClickListener ()
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("تایید", null);
+        alertDialogBuilder.setNeutralButton("لغو", null);
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding1.message.setText("آیا می خواهید این آیتم را حذف کنید؟");
+
+        //-------------------------------------------------------------------------------------------------------
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
         {
             @Override
-            public void onClick(DialogInterface dialog, int which)
+            public void onShow(DialogInterface dialogInterface)
             {
-                if (new Internet(context).check())
-                    delete(model);
-                else
-                    new Internet(context).enable();
-            }
-        } );
+                Button approve = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                approve.setTextColor(context.getResources().getColor(R.color.black));
+                approve.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        alertDialogBuilder = null;
+                        alertDialog.dismiss();
 
-        alertDialogBuilder.setNeutralButton ( "لغو", new DialogInterface.OnClickListener ()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                alertDialogBuilder=null;
-                dialog.cancel ();
-            }
-        } );
+                        if (new Internet(context).check())
+                            delete(model);
+                        else
+                            new Internet(context).enable();
+                    }
+                });
 
-        alertDialogBuilder.create ().show ();
+                Button Cancel = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                Cancel.setTextColor(context.getResources().getColor(R.color.black));
+                Cancel.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        alertDialog.dismiss();
+                        alertDialogBuilder = null;
+                    }
+                });
+            }
+        });
+
+        //---------------------------------------------------------------------------------------------
+
+        alertDialog.show();
+        DisplayMetrics display = context.getResources().getDisplayMetrics();
+        int width = display.widthPixels;
+        width = (int) ((width) * ((double) 4 / 5));
+        alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
 
     }
 
