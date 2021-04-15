@@ -1070,7 +1070,7 @@ public class Activity10_EditSale extends AppCompatActivity
             }
         });
 
-        //....................................................................................................
+        //------------------------------------------------------------------------------------------------------
 
         alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
         alertDialog.show();
@@ -1109,7 +1109,7 @@ public class Activity10_EditSale extends AppCompatActivity
                 {
                     int id = Integer.parseInt(response.getString("id"));
                     realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(new Activity9_DB(id, name, phone_number, car_type,number_plate));
+                    realm.copyToRealmOrUpdate(new Activity9_DB(id, name, phone_number, car_type,number_plate,""));
                     realm.commitTransaction();
 
                     //----------------------------------------------------
@@ -1166,8 +1166,8 @@ public class Activity10_EditSale extends AppCompatActivity
 
         for (int i=0;i<res.size();i++)
         {
-            models3.add(new Activity9_Model(res.get(i).getId(),res.get(i).getName(),res.get(i).getPhone_number(),res.get(i).getCar_type()
-                    ,res.get(i).getNumber_plate()));
+            if (!res.get(i).getArchive().equals("done"))
+                models3.add(new Activity9_Model(res.get(i).getId(), res.get(i).getName(), res.get(i).getPhone_number(), res.get(i).getCar_type(), res.get(i).getNumber_plate(), res.get(i).getArchive()));
         }
 
         adapter3.notifyDataSetChanged();

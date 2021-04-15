@@ -3,15 +3,17 @@ package com.example.boroodat.model;
 public class Activity9_Model
 {
     private int id;
-    private String name,phone_number,car_type,number_plate;
+    private String name,phone_number,car_type,number_plate,archive;
+    private boolean isSelected = false;
 
-    public Activity9_Model(int id, String name, String phone_number, String car_type, String number_plate)
+    public Activity9_Model(int id, String name, String phone_number, String car_type, String number_plate,String archive)
     {
         this.id = id;
         this.name = name;
         this.phone_number = phone_number;
         this.car_type = car_type;
         this.number_plate = number_plate;
+        this.archive=archive;
     }
 
     public int getId()
@@ -62,5 +64,25 @@ public class Activity9_Model
     public void setNumber_plate(String number_plate)
     {
         this.number_plate = number_plate;
+    }
+
+    public boolean isSelected()
+    {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected)
+    {
+        isSelected = selected;
+    }
+
+    public String getArchive()
+    {
+        return archive;
+    }
+
+    public void setArchive(String archive)
+    {
+        this.archive = archive;
     }
 }

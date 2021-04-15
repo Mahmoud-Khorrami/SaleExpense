@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:id="@+id/lnr1"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="55dp"
         android:background="@color/colorPrimary"
         android:gravity="center"
@@ -87,7 +87,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
