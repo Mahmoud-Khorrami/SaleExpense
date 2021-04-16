@@ -126,10 +126,15 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
         holder.phone_number.setText(model.getPhone_number());
         holder.car_specs.setText(model.getCar_type() + "  " + model.getNumber_plate());
 
+        //-------------------------------------------------------------------------------------------------------
+
         if (model.isSelected())
             holder.fab.setVisibility(View.VISIBLE);
         else
             holder.fab.setVisibility(View.GONE);
+
+        if (model.getArchive().equals("done"))
+            holder.edit.setVisibility(View.GONE);
         //-------------------------------------------------------------------------------------------------------
 
         holder.lnr1.setOnLongClickListener(new View.OnLongClickListener()
@@ -148,8 +153,6 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
 
                     if (!model.getArchive().equals("done"))
                         ((Activity9_Driver) context).changeStatusLnr3();
-                    else
-                        ((Activity9_Driver) context).changeUnArchiveImgStatus();
 
                     model.setSelected(!model.isSelected());
 
@@ -202,6 +205,7 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
         });
 
         //-------------------------------------------------------------------------------------------------------
+
         holder.edit.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -211,15 +215,6 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
                     editDialog(model);
             }
         });
-        /*
-        if (from2.equals("user"))
-            holder.delete.setVisibility(View.GONE);
-
-        //-------------------------------------------------------------------------------------------------------
-
-
-*/
-
 
     }
 

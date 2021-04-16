@@ -785,7 +785,7 @@ public class Activity10_EditSale extends AppCompatActivity
                 {
                     int id = Integer.parseInt(response.getString("id"));
                     realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(new Activity8_DB(id, name, phone_number, destination));
+                    realm.copyToRealmOrUpdate(new Activity8_DB(id, name, phone_number, destination,""));
                     realm.commitTransaction();
 
                     //----------------------------------------------------
@@ -842,7 +842,8 @@ public class Activity10_EditSale extends AppCompatActivity
 
         for (int i=0;i<res.size();i++)
         {
-            models2.add(new Activity8_Model(res.get(i).getId(),res.get(i).getName(),res.get(i).getPhone_number(),res.get(i).getDestination()));
+            if (!res.get(i).getArchive().equals("done"))
+                models2.add(new Activity8_Model(res.get(i).getId(), res.get(i).getName(), res.get(i).getPhone_number(), res.get(i).getDestination(), res.get(i).getArchive()));
         }
 
         adapter2.notifyDataSetChanged();

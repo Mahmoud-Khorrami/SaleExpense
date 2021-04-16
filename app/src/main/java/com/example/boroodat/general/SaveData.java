@@ -90,7 +90,7 @@ public class SaveData
             {
                 JSONObject object1 = array.getJSONObject(i);
                 realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new Activity8_DB(Integer.parseInt(object1.getString("id")), object1.getString("name"), object1.getString("phone_number"), object1.getString("destination")));
+                realm.copyToRealmOrUpdate(new Activity8_DB(Integer.parseInt(object1.getString("id")), object1.getString("name"), object1.getString("phone_number"), object1.getString("destination"),object1.getString("archive")));
                 realm.commitTransaction();
             }
 

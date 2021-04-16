@@ -103,7 +103,6 @@ public class Activity9_Driver extends AppCompatActivity
         binding.lnr2.setVisibility(View.GONE);
         binding.lnr3.setVisibility(View.GONE);
         binding.lnr4.setVisibility(View.GONE);
-        binding.unArchiveImg.setVisibility(View.GONE);
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -203,7 +202,6 @@ public class Activity9_Driver extends AppCompatActivity
         {
             binding.toolbar.setVisibility(View.VISIBLE);
             binding.lnr4.setVisibility(View.GONE);
-            binding.unArchiveImg.setVisibility(View.GONE);
             binding.fab.setVisibility(View.VISIBLE);
             adapter.changeStatusS1();
             addUnArchiveDriver();
@@ -407,7 +405,7 @@ public class Activity9_Driver extends AppCompatActivity
                     ,res.get(i).getCar_type(),res.get(i).getNumber_plate(),res.get(i).getArchive()));
         }
 
-        adapter.notifyDataSetChanged();
+        adapter.setFilter(models);
     }
 
     public void addArchiveDriver()
@@ -423,7 +421,7 @@ public class Activity9_Driver extends AppCompatActivity
                         ,res.get(i).getCar_type(),res.get(i).getNumber_plate(),res.get(i).getArchive()));
         }
 
-        adapter.notifyDataSetChanged();
+        adapter.setFilter(models);
     }
 
     public void changeStatusLnr3()
@@ -452,61 +450,66 @@ public class Activity9_Driver extends AppCompatActivity
             }
         }
 
-        String url = getString(R.string.domain) + "api/driver/archive";
-        progressDialog.show();
-
-        JSONObject object = new JSONObject();
-        try
+        if (driver_ids.length()>0)
         {
-            object.put("driver_ids", driver_ids);
-            object.put("secret_key", getString(R.string.secret_key));
+            String url = getString(R.string.domain) + "api/driver/archive";
+            progressDialog.show();
+
+            JSONObject object = new JSONObject();
+            try
+            {
+                object.put("driver_ids", driver_ids);
+                object.put("secret_key", getString(R.string.secret_key));
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+            {
+                @Override
+                public void onResponse(JSONObject response)
+                {
+
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده در آرشیو قرار گرفت.", Toast.LENGTH_SHORT).show();
+                    binding.toolbar.setVisibility(View.VISIBLE);
+                    binding.lnr3.setVisibility(View.GONE);
+                    addUnArchiveDriver();
+                }
+            };
+
+            Response.ErrorListener errorListener = new Response.ErrorListener()
+            {
+                @Override
+                public void onErrorResponse(VolleyError error)
+                {
+
+                    Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+
+                }
+            };
+
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+            {
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError
+                {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Accept", "application/json");
+                    headers.put("Authorization", "Bearer " + new User_Info().token());
+                    return headers;
+                }
+            };
+            request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+            AppController.getInstance().addToRequestQueue(request);
         }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
 
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-
-                progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده در آرشیو قرار گرفت.", Toast.LENGTH_SHORT).show();
-                binding.toolbar.setVisibility(View.VISIBLE);
-                binding.lnr3.setVisibility(View.GONE);
-                addUnArchiveDriver();
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-
-                Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-
-            }
-        };
-
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
-        {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Accept", "application/json");
-                headers.put("Authorization", "Bearer "+ new User_Info().token());
-                return headers;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
-        AppController.getInstance().addToRequestQueue(request);
+        else
+            Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
     }
 
     public void unArchive()
@@ -528,69 +531,68 @@ public class Activity9_Driver extends AppCompatActivity
             }
         }
 
-        String url = getString(R.string.domain) + "api/driver/un-archive";
-        progressDialog.show();
-
-        JSONObject object = new JSONObject();
-        try
+        if (driver_ids.length()>0)
         {
-            object.put("driver_ids", driver_ids);
-            object.put("secret_key", getString(R.string.secret_key));
+            String url = getString(R.string.domain) + "api/driver/un-archive";
+            progressDialog.show();
+
+            JSONObject object = new JSONObject();
+            try
+            {
+                object.put("driver_ids", driver_ids);
+                object.put("secret_key", getString(R.string.secret_key));
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+            {
+                @Override
+                public void onResponse(JSONObject response)
+                {
+
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده از آرشیو خارج شد.", Toast.LENGTH_SHORT).show();
+                    binding.toolbar.setVisibility(View.VISIBLE);
+                    binding.lnr4.setVisibility(View.GONE);
+                    binding.fab.setVisibility(View.VISIBLE);
+                    adapter.changeStatusS1();
+                    addUnArchiveDriver();
+                }
+            };
+
+            Response.ErrorListener errorListener = new Response.ErrorListener()
+            {
+                @Override
+                public void onErrorResponse(VolleyError error)
+                {
+
+                    Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+
+                }
+            };
+
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+            {
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError
+                {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Accept", "application/json");
+                    headers.put("Authorization", "Bearer " + new User_Info().token());
+                    return headers;
+                }
+            };
+            request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+            AppController.getInstance().addToRequestQueue(request);
         }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
 
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-
-                progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده از ارشیو خارج شد.", Toast.LENGTH_SHORT).show();
-                binding.toolbar.setVisibility(View.VISIBLE);
-                binding.lnr4.setVisibility(View.GONE);
-                binding.unArchiveImg.setVisibility(View.GONE);
-                binding.fab.setVisibility(View.VISIBLE);
-                adapter.changeStatusS1();
-                addUnArchiveDriver();
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-
-                Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-
-            }
-        };
-
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
-        {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Accept", "application/json");
-                headers.put("Authorization", "Bearer "+ new User_Info().token());
-                return headers;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
-        AppController.getInstance().addToRequestQueue(request);
-    }
-
-    public void changeUnArchiveImgStatus()
-    {
-        binding.unArchiveImg.setVisibility(View.VISIBLE);
+        else
+            Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
     }
 
     private void deleteDialog()
