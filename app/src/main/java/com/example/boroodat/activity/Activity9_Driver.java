@@ -597,84 +597,91 @@ public class Activity9_Driver extends AppCompatActivity
 
     private void deleteDialog()
     {
-        final com.example.boroodat.databinding.DeleteDialog1Binding binding1 = com.example.boroodat.databinding.DeleteDialog1Binding.inflate(LayoutInflater.from(context));
-        View view = binding1.getRoot();
-        alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setView(view);
-
-        //----------------------------------------------------------------------------------------------------------
-
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.setPositiveButton("تایید", null);
-        alertDialogBuilder.setNeutralButton("لغو", null);
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-
-        //----------------------------------------------------------------------------------------------------------
-
-        binding1.text.setText(context.getString(R.string.driver_delete));
-
-        //----------------------------------------------------------------------------------------------------------
-
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
-        {
-            @Override
-            public void onShow(DialogInterface dialogInterface)
-            {
-                Button add = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                add.setTextColor(context.getResources().getColor(R.color.black));
-                add.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        if (binding1.password.getText().toString().equals(""))
-                            binding1.password.setError("رمز عبور را وارد کنید.");
-
-                        else
-                        {
-                            if (new Internet(context).check())
-                                delete(binding1.password.getText().toString(),alertDialog);
-                            else
-                                new Internet(context).enable();
-
-                        }
-                    }
-                });
-
-
-                Button cancel = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-                cancel.setTextColor(context.getResources().getColor(R.color.black));
-                cancel.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        alertDialog.dismiss();
-                        alertDialogBuilder = null;
-                    }
-                });
-            }
-        });
-
-        //---------------------------------------------------------------------------------------------------------
-
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
-        alertDialog.show();
-        DisplayMetrics display = context.getResources().getDisplayMetrics();
-        int width = display.widthPixels;
-        width = (int) ((width) * ((double) 4 / 5));
-        alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    }
-
-    public void delete( final String password, final AlertDialog alertDialog)
-    {
-        JSONArray driver_ids=new JSONArray();
+        final JSONArray driver_ids=new JSONArray();
 
         for (int i=0; i<models.size();i++)
         {
             if (models.get(i).isSelected())
                 driver_ids.put(models.get(i).getId());
         }
+
+        if(driver_ids.length()>0)
+        {
+            final com.example.boroodat.databinding.DeleteDialog1Binding binding1 = com.example.boroodat.databinding.DeleteDialog1Binding.inflate(LayoutInflater.from(context));
+            View view = binding1.getRoot();
+            alertDialogBuilder = new AlertDialog.Builder(context);
+            alertDialogBuilder.setView(view);
+
+            //----------------------------------------------------------------------------------------------------------
+
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton("تایید", null);
+            alertDialogBuilder.setNeutralButton("لغو", null);
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+
+            //----------------------------------------------------------------------------------------------------------
+
+            binding1.text.setText(context.getString(R.string.driver_delete));
+
+            //----------------------------------------------------------------------------------------------------------
+
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
+            {
+                @Override
+                public void onShow(DialogInterface dialogInterface)
+                {
+                    Button add = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    add.setTextColor(context.getResources().getColor(R.color.black));
+                    add.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            if (binding1.password.getText().toString().equals(""))
+                                binding1.password.setError("رمز عبور را وارد کنید.");
+
+                            else
+                            {
+                                if (new Internet(context).check())
+                                    delete(binding1.password.getText().toString(), alertDialog,driver_ids);
+                                else
+                                    new Internet(context).enable();
+
+                            }
+                        }
+                    });
+
+
+                    Button cancel = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                    cancel.setTextColor(context.getResources().getColor(R.color.black));
+                    cancel.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            alertDialog.dismiss();
+                            alertDialogBuilder = null;
+                        }
+                    });
+                }
+            });
+
+            //---------------------------------------------------------------------------------------------------------
+
+            alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+            alertDialog.show();
+            DisplayMetrics display = context.getResources().getDisplayMetrics();
+            int width = display.widthPixels;
+            width = (int) ((width) * ((double) 4 / 5));
+            alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
+
+        else
+            Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void delete( final String password, final AlertDialog alertDialog, JSONArray driver_ids)
+    {
 
         String url = context.getString(R.string.domain) + "api/driver/delete";
         progressDialog.show();
