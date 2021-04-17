@@ -40,7 +40,7 @@ public class WriteToExcel
         progressDialog.show();
         try
         {
-            String path = Environment.getExternalStorageDirectory() + "/فروش و هزینه";
+            String path = Environment.getExternalStorageDirectory() + context.getString(R.string.app_name) + "/";
             File file1 = new File(path);
 
             if (!file1.isDirectory())
