@@ -10,6 +10,7 @@ import com.example.boroodat.database.Fragment7_DB;
 import com.example.boroodat.database.Fragment8_DB;
 import com.example.boroodat.database.Fragment9_DB;
 import com.example.boroodat.database.Report_DB;
+import com.example.boroodat.database.SaleDetail_DB;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -226,7 +227,7 @@ public class SaveData
                 JSONObject object = array.getJSONObject(i);
 
                 realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new Fragment5_DB(Integer.parseInt(object.getString("id")), object.getString("factor_number"), object.getString("date"), object.getString("sum"), object.getString("payment"), object.getString("account_id")));
+                realm.copyToRealmOrUpdate(new Fragment5_DB(Integer.parseInt(object.getString("id")), object.getString("factor_number"), object.getString("date"), object.getString("sum"), object.getString("payment"), object.getString("account_id"),object.getString("buyer_id")));
                 realm.commitTransaction();
             }
 
@@ -383,5 +384,39 @@ public class SaveData
         {
             return false;
         }
+    }
+
+    public boolean toSaleDetailDB()
+    {
+        realm.executeTransaction(new Realm.Transaction()
+        {
+            @Override
+            public void execute(Realm realm)
+            {
+                RealmResults<SaleDetail_DB> res = realm.where(SaleDetail_DB.class).findAll();
+
+                if (res.size() > 0)
+                    res.deleteAllFromRealm();
+            }
+        });
+        //-------------------------------------------------------------------------
+
+        try
+        {
+            for (int i = 0; i < array.length(); i++)
+            {
+                JSONObject object = array.getJSONObject(i);
+
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(new SaleDetail_DB(Integer.parseInt(object.getString("id")), object.getString("description")));
+                realm.commitTransaction();
+            }
+
+            return true;
+        } catch (JSONException e)
+        {
+            return false;
+        }
+
     }
 }

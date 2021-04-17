@@ -4,9 +4,9 @@ public class Fragment5_Model
 {
     private int id;
 
-    private String factorNumber, date, sum,payment,account_id;
+    private String factorNumber, date, sum,payment,account_id,buyer_id;
 
-    public Fragment5_Model(int id, String factorNumber, String date, String sum, String payment, String account_id)
+    public Fragment5_Model(int id, String factorNumber, String date, String sum, String payment, String account_id,String buyer_id)
     {
         this.id = id;
         this.factorNumber = factorNumber;
@@ -14,6 +14,17 @@ public class Fragment5_Model
         this.sum = sum;
         this.payment = payment;
         this.account_id = account_id;
+        this.buyer_id = buyer_id;
+    }
+
+    public String getBuyer_id()
+    {
+        return buyer_id;
+    }
+
+    public void setBuyer_id(String buyer_id)
+    {
+        this.buyer_id = buyer_id;
     }
 
     public String getAccount_id()

@@ -33,6 +33,7 @@ import com.example.boroodat.database.Activity6_DB;
 import com.example.boroodat.database.Activity8_DB;
 import com.example.boroodat.database.Activity9_DB;
 import com.example.boroodat.database.Fragment5_DB;
+import com.example.boroodat.database.SaleDetail_DB;
 import com.example.boroodat.databinding.A6Add1Binding;
 import com.example.boroodat.databinding.A8AddBinding;
 import com.example.boroodat.databinding.A9AddBinding;
@@ -447,9 +448,11 @@ public class Activity10_EditSale extends AppCompatActivity
 
         Gson gson=new Gson();
         JSONArray details=new JSONArray();
+        String des = "";
         for (int i=0;i<models.size();i++)
         {
             details.put(gson.toJson(models.get(i)));
+            des = des + models.get(i).getDescription() + " " + models.get(i).getNumber() + " عدد، ";
         }
 
         final JSONObject object = new JSONObject();
@@ -474,6 +477,7 @@ public class Activity10_EditSale extends AppCompatActivity
             e.printStackTrace();
         }
 
+        final String finalDes = des;
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
         {
             @Override
@@ -481,7 +485,13 @@ public class Activity10_EditSale extends AppCompatActivity
             {
 
                 realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new Fragment5_DB(Integer.parseInt(sale_id), factor_number, date,sum,payment,account_id ));
+                realm.copyToRealmOrUpdate(new Fragment5_DB(Integer.parseInt(sale_id), factor_number, date,sum,payment,account_id, buyer_id ));
+                realm.commitTransaction();
+
+                //-------------------------------------------------------------------------------
+
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(new SaleDetail_DB(Integer.parseInt(sale_id), finalDes));
                 realm.commitTransaction();
 
                 //-------------------------------------------------------------------------------

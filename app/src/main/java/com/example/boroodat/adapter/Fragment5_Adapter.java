@@ -28,7 +28,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.activity.Activity10_EditSale;
 import com.example.boroodat.database.Activity6_DB;
+import com.example.boroodat.database.Activity8_DB;
 import com.example.boroodat.database.Fragment5_DB;
+import com.example.boroodat.database.SaleDetail_DB;
 import com.example.boroodat.databinding.Dialog1Binding;
 import com.example.boroodat.databinding.FragmentDetails1Binding;
 import com.example.boroodat.general.Account;
@@ -79,7 +81,7 @@ public class Fragment5_Adapter extends RecyclerView.Adapter<Fragment5_Adapter.vi
     public static class viewHolder extends RecyclerView.ViewHolder
     {
 
-        TextView factorNumber,date;
+        TextView factorNumber,date,buyer,detail;
         EditText totalPrice;
         ImageView more;
 
@@ -90,6 +92,8 @@ public class Fragment5_Adapter extends RecyclerView.Adapter<Fragment5_Adapter.vi
             date=itemView.findViewById(R.id.date);
             totalPrice=itemView.findViewById(R.id.totalPrice);
             more=itemView.findViewById(R.id.more);
+            buyer=itemView.findViewById(R.id.buyer);
+            detail=itemView.findViewById(R.id.detail);
         }
     }
 
@@ -123,6 +127,17 @@ public class Fragment5_Adapter extends RecyclerView.Adapter<Fragment5_Adapter.vi
         holder.totalPrice.setText(model.getSum());
         holder.date.setText(model.getDate());
 
+        RealmResults<Activity8_DB> res1 = realm.where(Activity8_DB.class)
+                .equalTo("id",Integer.parseInt(model.getBuyer_id()))
+                .findAll();
+
+        holder.buyer.setText(res1.get(0).getName());
+
+        RealmResults<SaleDetail_DB> res2 = realm.where(SaleDetail_DB.class)
+                .equalTo("id",model.getId())
+                .findAll();
+
+        holder.detail.setText(res2.get(0).getDescription());
         //--------------------------------------------------------------
 
         holder.more.setOnClickListener(new View.OnClickListener()

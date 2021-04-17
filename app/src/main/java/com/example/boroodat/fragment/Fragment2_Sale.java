@@ -375,12 +375,14 @@ public class Fragment2_Sale extends Fragment
                     JSONArray array1=response.getJSONArray("accounts");
                     JSONArray array2=response.getJSONArray("deposits");
                     JSONArray array3=response.getJSONArray("sales");
+                    JSONArray array4=response.getJSONArray("details");
 
                     boolean b1=new SaveData(array1).toActivity7DB();
                     boolean b2=new SaveData(array2).toFragment4DB();
                     boolean b3=new SaveData(array3).toFragment5DB();
+                    boolean b4=new SaveData(array4).toSaleDetailDB();
 
-                    if (b1 & b2 & b3)
+                    if (b1 & b2 & b3 & b4)
                     {
                         Intent intent=new Intent(getContext(), Activity5_SaleReports.class);
                         intent.putExtra("token",new User_Info().token());

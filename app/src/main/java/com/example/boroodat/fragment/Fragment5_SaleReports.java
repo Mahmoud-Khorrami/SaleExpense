@@ -211,8 +211,9 @@ public class Fragment5_SaleReports extends Fragment
             String sum=res.get(i).getSum();
             String payment=res.get(i).getPayment();
             String account_id=res.get(i).getAccount_id();
+            String buyer_id=res.get(i).getBuyer_id();
 
-            models.add(new Fragment5_Model(id,factorNumber,date,sum,payment,account_id));
+            models.add(new Fragment5_Model(id,factorNumber,date,sum,payment,account_id,buyer_id));
 
             tPrice=tPrice+Double.parseDouble(sum);
             payment1=payment1+Double.parseDouble(payment);
