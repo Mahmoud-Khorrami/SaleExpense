@@ -69,7 +69,7 @@ public class SplashScreen extends RuntimePermissionsActivity
 
         if (Prefs.with ( this ).isFirstLoad ())
         {
-            SplashScreen.super.requestAppPermissions ( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, code );
+            SplashScreen.super.requestAppPermissions ( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, code );
 
             Prefs.with ( this ).firstLoadIsDone ();
         }

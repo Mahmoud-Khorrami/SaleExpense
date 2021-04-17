@@ -40,7 +40,7 @@ public class WriteToExcel
         progressDialog.show();
         try
         {
-            String path = Environment.getExternalStorageDirectory() + context.getString(R.string.app_name) + "/";
+            String path = Environment.getExternalStorageDirectory() + "/"+context.getString(R.string.app_name) + "/";
             File file1 = new File(path);
 
             if (!file1.isDirectory())
@@ -109,15 +109,16 @@ public class WriteToExcel
             }
             catch (Exception e)
             {
-
-                Toast.makeText(context, "ناموفق", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                Toast.makeText(context, "ناموفق1", Toast.LENGTH_SHORT).show();
             }
 
             //---------------------------------------------------------------------------
 
         } catch (Exception e)
         {
-            e.printStackTrace();
+            progressDialog.dismiss();
+            Toast.makeText(context, "ناموفق2", Toast.LENGTH_SHORT).show();
         }
 
     }

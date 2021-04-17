@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -103,11 +104,11 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
             @Override
             public void onClick(View view)
             {
-                if (Environment.getExternalStorageDirectory().canWrite())
+                if (checkWriteExternalPermission())
                     getData14();
 
                 else
-                    Activity2_Manager.super.requestAppPermissions ( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, code );
+                    Activity2_Manager.super.requestAppPermissions ( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, code );
             }
         });
 
@@ -336,8 +337,17 @@ public class Activity2_Manager extends RuntimePermissionsActivity implements Bot
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    private boolean checkWriteExternalPermission()
+    {
+        String permission1 = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        String permission2 = Manifest.permission.READ_EXTERNAL_STORAGE;
+        int res1 = getApplicationContext().checkCallingOrSelfPermission(permission1);
+        int res2 = getApplicationContext().checkCallingOrSelfPermission(permission2);
+        return ((res1 == PackageManager.PERMISSION_GRANTED) && (res2 == PackageManager.PERMISSION_GRANTED));
     }
 
     @Override
