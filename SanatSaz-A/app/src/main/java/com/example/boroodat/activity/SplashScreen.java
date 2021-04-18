@@ -47,6 +47,7 @@ public class SplashScreen extends AppCompatActivity
     private SplashScreenBinding binding;
     private AlertDialog progressDialog;
     private Realm realm;
+    private int s=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -66,6 +67,20 @@ public class SplashScreen extends AppCompatActivity
         //-------------------------------------------------------------------------------------------------------
 
         animation();
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding.ConstraintLayout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (s == 1)
+                {
+                    getUserPass();
+                }
+            }
+        });
     }
 
     private void animation()
@@ -179,7 +194,7 @@ public class SplashScreen extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
+                s=1;
                 Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
 
