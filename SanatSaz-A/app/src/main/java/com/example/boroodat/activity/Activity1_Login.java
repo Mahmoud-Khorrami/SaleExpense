@@ -39,12 +39,13 @@ import dmax.dialog.SpotsDialog;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class Activity1_Login extends AppCompatActivity
+public class Activity1_Login extends RuntimePermissionsActivity
 {
     private Activity1LoginBinding binding;
     private AlertDialog progressDialog;
     private Context context=this;
     private Realm realm;
+    private int code = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +56,15 @@ public class Activity1_Login extends AppCompatActivity
         setContentView(view);
 
         realm=Realm.getDefaultInstance();
+        //-------------------------------------------------------------------------------------------------------
+
+        if (Prefs.with ( this ).isFirstLoad ())
+        {
+            Activity1_Login.super.requestAppPermissions ( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, code );
+
+            Prefs.with ( this ).firstLoadIsDone ();
+        }
+
         //-------------------------------------------------------------------------------------------------------
 
         progressDialog = new SpotsDialog(this,R.style.Custom);
@@ -375,4 +385,18 @@ public class Activity1_Login extends AppCompatActivity
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    @Override
+    public void onPermissionsGranted(int requestCode)
+    {
+        if (requestCode == code)
+            Toast.makeText ( getApplicationContext (),
+                    "مجوز دسترسی به حافظه داده شد.", Toast.LENGTH_SHORT ).show ();
+    }
+
+    @Override
+    public void onPermissionsDeny(int requestCode)
+    {
+        Toast.makeText ( getApplicationContext (),
+                "مجوز دسترسی به حافظه داده نشد.", Toast.LENGTH_LONG ).show ();
+    }
 }
