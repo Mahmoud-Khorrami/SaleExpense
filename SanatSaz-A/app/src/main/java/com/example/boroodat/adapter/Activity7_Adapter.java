@@ -513,6 +513,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                     JSONArray array4 = response.getJSONArray("salaries");
                     JSONArray array5 = response.getJSONArray("expenses");
                     JSONArray array6 = response.getJSONArray("materials");
+                    JSONArray array7=response.getJSONArray("details");
 
                     boolean b1 = new SaveData(array1).toActivity14DB();
                     boolean b2 = new SaveData(array2).toFragment5DB();
@@ -520,8 +521,9 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                     boolean b4 = new SaveData(array4).toFragment7DB();
                     boolean b5 = new SaveData(array5).toFragment9DB();
                     boolean b6 = new SaveData(array6).toFragment8DB();
+                    boolean b7=new SaveData(array7).toSaleDetailDB();
 
-                    if (b1 & b2 & b3 & b4 & b5 & b6)
+                    if (b1 & b2 & b3 & b4 & b5 & b6 & b7)
                     {
                         Intent intent=new Intent(context, Activity11_AccountDetails.class);
                         intent.putExtra("account_id",account_id);

@@ -445,11 +445,13 @@ public class Activity8_Adapter extends RecyclerView.Adapter<Activity8_Adapter.vi
 
                 try
                 {
-                    JSONArray array = response.getJSONArray("sales");
+                    JSONArray array1 = response.getJSONArray("sales");
+                    JSONArray array2=response.getJSONArray("details");
 
-                    boolean b1 = new SaveData(array).toFragment5DB();
+                    boolean b1 = new SaveData(array1).toFragment5DB();
+                    boolean b2=new SaveData(array2).toSaleDetailDB();
 
-                    if (b1)
+                    if (b1 & b2)
                     {
                         Intent intent=new Intent(context, Activity12_BuyerDetails.class);
                         intent.putExtra("buyer_name",model.getName());

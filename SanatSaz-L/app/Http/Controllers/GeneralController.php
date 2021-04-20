@@ -98,12 +98,35 @@ class GeneralController extends Controller
         $expenses = Expense::where('company_id', $request->company_id)->where('account_id', $request->account_id)->get();
         $materials = Material::where('company_id', $request->company_id)->where('account_id', $request->account_id)->get();
 
+        //-----------------------------------------------------------------------
+        $details = collect([]);
+
+        foreach ($sales as $sale)
+        {
+            $saleDetails = $sale->saleDetails;
+
+            $description = '';
+
+            foreach ($saleDetails as $saleDetail)
+            {
+                $description = $description . $saleDetail->description . ' ' . $saleDetail->number . ' عدد، ';
+            }
+
+            $details->push(
+                ["id"          => $sale->id,
+                 "description" => $description]
+            );
+        }
+
+        //-----------------------------------------------------------------------
+
         return ['personnel' => $personnel,
                 'sales'     => $sales,
                 'deposits'  => $deposits,
                 'salaries'  => $salaries,
                 'expenses'  => $expenses,
-                'materials' => $materials];
+                'materials' => $materials,
+                'details'   => $details];
     }
 
     public function data4(Request $request)
@@ -111,7 +134,30 @@ class GeneralController extends Controller
 
         $sales = Sale::where('company_id', $request->company_id)->where('buyer_id', $request->buyer_id)->get();
 
-        return ['sales' => $sales,];
+        //-----------------------------------------------------------------------
+        $details = collect([]);
+
+        foreach ($sales as $sale)
+        {
+            $saleDetails = $sale->saleDetails;
+
+            $description = '';
+
+            foreach ($saleDetails as $saleDetail)
+            {
+                $description = $description . $saleDetail->description . ' ' . $saleDetail->number . ' عدد، ';
+            }
+
+            $details->push(
+                ["id"          => $sale->id,
+                 "description" => $description]
+            );
+        }
+
+        //-----------------------------------------------------------------------
+
+        return ['sales'   => $sales,
+                'details' => $details];
     }
 
     public function data5(Request $request)
@@ -119,7 +165,29 @@ class GeneralController extends Controller
 
         $sales = Sale::where('company_id', $request->company_id)->where('driver_id', $request->driver_id)->get();
 
-        return ['sales' => $sales,];
+        //-----------------------------------------------------------------------
+        $details = collect([]);
+
+        foreach ($sales as $sale)
+        {
+            $saleDetails = $sale->saleDetails;
+
+            $description = '';
+
+            foreach ($saleDetails as $saleDetail)
+            {
+                $description = $description . $saleDetail->description . ' ' . $saleDetail->number . ' عدد، ';
+            }
+
+            $details->push(
+                ["id"          => $sale->id,
+                 "description" => $description]
+            );
+        }
+
+        //-----------------------------------------------------------------------
+        return ['sales'   => $sales,
+                'details' => $details];
     }
 
     public function data6(Request $request)
@@ -185,10 +253,32 @@ class GeneralController extends Controller
         $expenses = Expense::where('company_id', $request->company_id)->where('user_id', $user->id)->get();
         $sales = Sale::where('company_id', $request->company_id)->where('user_id', $user->id)->get();
 
+        //-----------------------------------------------------------------------
+        $details = collect([]);
+
+        foreach ($sales as $sale)
+        {
+            $saleDetails = $sale->saleDetails;
+
+            $description = '';
+
+            foreach ($saleDetails as $saleDetail)
+            {
+                $description = $description . $saleDetail->description . ' ' . $saleDetail->number . ' عدد، ';
+            }
+
+            $details->push(
+                ["id"          => $sale->id,
+                 "description" => $description]
+            );
+        }
+
+        //-----------------------------------------------------------------------
         return [
             'expenses' => $expenses,
             'sales'    => $sales,
-            'accounts' => $accounts];
+            'accounts' => $accounts,
+            'details'=>$details];
     }
 
     public function data9(Request $request)

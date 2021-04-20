@@ -249,12 +249,15 @@ public class Activity20_User extends AppCompatActivity
                     JSONArray array1=response.getJSONArray("accounts");
                     JSONArray array2=response.getJSONArray("expenses");
                     JSONArray array3=response.getJSONArray("sales");
+                    JSONArray array4=response.getJSONArray("details");
 
                     boolean b1=new SaveData(array1).toActivity7DB();
                     boolean b2=new SaveData(array2).toFragment9DB();
                     boolean b3=new SaveData(array3).toFragment5DB();
+                    boolean b4=new SaveData(array4).toSaleDetailDB();
 
-                    if (b1 & b2 & b3)
+
+                    if (b1 & b2 & b3 & b4)
                         startActivity(new Intent(getApplicationContext(), Activity21_UserReport.class));
 
                     else

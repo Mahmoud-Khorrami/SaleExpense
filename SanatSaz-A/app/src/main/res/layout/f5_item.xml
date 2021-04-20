@@ -165,6 +165,7 @@
                 android:id="@+id/detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingRight="8dp"
                 android:textSize="12sp" />
 
         </LinearLayout>
