@@ -29,13 +29,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity8_Adapter;
 import com.example.boroodat.database.Activity8_DB;
-import com.example.boroodat.database.Activity9_DB;
 import com.example.boroodat.databinding.A8AddBinding;
 import com.example.boroodat.databinding.Activity8BuyerBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
-import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity8_Model;
 
@@ -87,7 +85,7 @@ public class Activity8_Buyer extends AppCompatActivity
         adapter = new Activity8_Adapter(models, Activity8_Buyer.this,1,"manager");
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( Activity8_Buyer.this ) );
         binding.recyclerView.setAdapter (adapter);
-        addUnArchiveBuyer();
+        addBuyer();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -104,7 +102,6 @@ public class Activity8_Buyer extends AppCompatActivity
 
         binding.lnr2.setVisibility(View.GONE);
         binding.lnr3.setVisibility(View.GONE);
-        binding.lnr4.setVisibility(View.GONE);
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -157,7 +154,6 @@ public class Activity8_Buyer extends AppCompatActivity
 
     }
 
-
     public void onClick(View view)
     {
         if (view.getId() == R.id.search)
@@ -171,7 +167,7 @@ public class Activity8_Buyer extends AppCompatActivity
 
         if (view.getId() == R.id.delete)
         {
-            deleteDialog();
+            archiveDialog();
         }
 
         if (view.getId() == R.id.fab)
@@ -185,52 +181,12 @@ public class Activity8_Buyer extends AppCompatActivity
                 new Internet(context).enable();
         }
 
-        if (view.getId() == R.id.archive)
-        {
-            archive();
-        }
-
         if (view.getId() == R.id.closeLnr3)
         {
             binding.toolbar.setVisibility(View.VISIBLE);
             binding.lnr3.setVisibility(View.GONE);
             adapter.changeStatusS1();
         }
-
-        if (view.getId() == R.id.unArchive)
-        {
-            unArchive();
-        }
-
-        if (view.getId() == R.id.closeLnr4)
-        {
-            binding.toolbar.setVisibility(View.VISIBLE);
-            binding.lnr4.setVisibility(View.GONE);
-            binding.fab.setVisibility(View.VISIBLE);
-            adapter.changeStatusS1();
-            addUnArchiveBuyer();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater ();
-        inflater.inflate ( R.menu.menu_2, menu );
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
-        if (item.getItemId() == R.id.archive)
-        {
-            binding.toolbar.setVisibility(View.GONE);
-            binding.lnr4.setVisibility(View.VISIBLE);
-            binding.fab.setVisibility(View.GONE);
-            addArchiveBuyer();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void dialog()
@@ -354,7 +310,7 @@ public class Activity8_Buyer extends AppCompatActivity
                     alertDialog.dismiss();
                     alertDialogBuilder = null;
 
-                    addUnArchiveBuyer();
+                    addBuyer();
 
                 } catch (JSONException e)
                 {
@@ -393,7 +349,7 @@ public class Activity8_Buyer extends AppCompatActivity
 
     }
 
-    public void addUnArchiveBuyer()
+    public void addBuyer()
     {
         RealmResults<Activity8_DB> res = realm.where(Activity8_DB.class).findAll();
 
@@ -408,21 +364,6 @@ public class Activity8_Buyer extends AppCompatActivity
         adapter.setFilter(models);
     }
 
-    public void addArchiveBuyer()
-    {
-        RealmResults<Activity8_DB> res = realm.where(Activity8_DB.class).findAll();
-
-        models.clear();
-
-        for (int i=0;i<res.size();i++)
-        {
-            if (res.get(i).getArchive().equals("done"))
-                models.add(new Activity8_Model(res.get(i).getId(), res.get(i).getName(), res.get(i).getPhone_number(), res.get(i).getDestination(), res.get(i).getArchive()));
-        }
-
-        adapter.setFilter(models);
-    }
-
     public void changeStatusLnr3()
     {
         binding.toolbar.setVisibility(View.GONE);
@@ -430,7 +371,7 @@ public class Activity8_Buyer extends AppCompatActivity
         binding.lnr3.setVisibility(View.VISIBLE);
     }
 
-    public void archive()
+    public void archive(final AlertDialog alertDialog)
     {
 
         JSONArray buyer_ids=new JSONArray();
@@ -471,10 +412,11 @@ public class Activity8_Buyer extends AppCompatActivity
                 {
 
                     progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده در آرشیو قرار گرفت.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده از لیست حذف شدند.", Toast.LENGTH_SHORT).show();
                     binding.toolbar.setVisibility(View.VISIBLE);
                     binding.lnr3.setVisibility(View.GONE);
-                    addUnArchiveBuyer();
+                    alertDialog.dismiss();
+                    addBuyer();
                 }
             };
 
@@ -511,90 +453,7 @@ public class Activity8_Buyer extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
     }
 
-    public void unArchive()
-    {
-
-        JSONArray buyer_ids=new JSONArray();
-
-        for (int i=0; i<models.size();i++)
-        {
-            if (models.get(i).isSelected())
-            {
-                buyer_ids.put(models.get(i).getId());
-
-                RealmResults<Activity8_DB> res = realm.where(Activity8_DB.class).equalTo("id",models.get(i).getId()).findAll();
-
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new Activity8_DB(models.get(i).getId(), res.get(0).getName(), res.get(0).getPhone_number(), res.get(0).getDestination(),""));
-                realm.commitTransaction();
-            }
-        }
-
-        if (buyer_ids.length() > 0)
-        {
-            String url = getString(R.string.domain) + "api/buyer/un-archive";
-            progressDialog.show();
-
-            JSONObject object = new JSONObject();
-            try
-            {
-                object.put("buyer_ids", buyer_ids);
-                object.put("secret_key", getString(R.string.secret_key));
-            } catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-
-            Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
-            {
-                @Override
-                public void onResponse(JSONObject response)
-                {
-
-                    progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده از آرشیو خارج شد.", Toast.LENGTH_SHORT).show();
-                    binding.toolbar.setVisibility(View.VISIBLE);
-                    binding.lnr4.setVisibility(View.GONE);
-                    binding.fab.setVisibility(View.VISIBLE);
-                    adapter.changeStatusS1();
-                    addUnArchiveBuyer();
-                }
-            };
-
-            Response.ErrorListener errorListener = new Response.ErrorListener()
-            {
-                @Override
-                public void onErrorResponse(VolleyError error)
-                {
-
-                    Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-                    progressDialog.dismiss();
-
-                }
-            };
-
-
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
-            {
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError
-                {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Accept", "application/json");
-                    headers.put("Authorization", "Bearer " + new User_Info().token());
-                    return headers;
-                }
-            };
-            request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
-            AppController.getInstance().addToRequestQueue(request);
-        }
-
-        else
-            Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
-    }
-
-    private void deleteDialog()
+    private void archiveDialog()
     {
         final JSONArray buyer_ids=new JSONArray();
 
@@ -619,10 +478,6 @@ public class Activity8_Buyer extends AppCompatActivity
 
             //----------------------------------------------------------------------------------------------------------
 
-            binding1.text.setText(context.getString(R.string.buyer_delete));
-
-            //----------------------------------------------------------------------------------------------------------
-
             alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
             {
                 @Override
@@ -635,17 +490,10 @@ public class Activity8_Buyer extends AppCompatActivity
                         @Override
                         public void onClick(View v)
                         {
-                            if (binding1.password.getText().toString().equals(""))
-                                binding1.password.setError("رمز عبور را وارد کنید.");
-
+                            if (new Internet(context).check())
+                                archive(alertDialog);
                             else
-                            {
-                                if (new Internet(context).check())
-                                    delete(binding1.password.getText().toString(), alertDialog,buyer_ids);
-                                else
-                                    new Internet(context).enable();
-
-                            }
+                                new Internet(context).enable();
                         }
                     });
 
@@ -666,7 +514,7 @@ public class Activity8_Buyer extends AppCompatActivity
 
             //---------------------------------------------------------------------------------------------------------
 
-            alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+            alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
             alertDialog.show();
             DisplayMetrics display = context.getResources().getDisplayMetrics();
             int width = display.widthPixels;
@@ -676,153 +524,5 @@ public class Activity8_Buyer extends AppCompatActivity
 
         else
             Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
-    }
-
-    public void delete( final String password, final AlertDialog alertDialog, JSONArray buyer_ids)
-    {
-
-        String url = context.getString(R.string.domain) + "api/buyer/delete";
-        progressDialog.show();
-
-        JSONObject object = new JSONObject();
-        try
-        {
-            object.put("buyer_ids",buyer_ids);
-            object.put("password", password);
-            object.put("secret_key", context.getString(R.string.secret_key));
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-
-                progressDialog.dismiss();
-
-                try
-                {
-                    if (response.getString("code").equals("200"))
-                    {
-                        alertDialog.dismiss();
-                        alertDialogBuilder = null;
-                        Toast.makeText(context,"حذف خریدارها با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
-                        binding.toolbar.setVisibility(View.VISIBLE);
-                        binding.lnr3.setVisibility(View.GONE);
-                        adapter.changeStatusS1();
-                        getData12();
-                    }
-
-                    else
-                    {
-                        Toast.makeText(context, "کد " + response.getString("code") + ":" + response.getString("message"), Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-
-                Toast.makeText(context, "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-
-            }
-        };
-
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
-        {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Accept", "application/json");
-                headers.put("Authorization", "Bearer "+ new User_Info().token());
-                return headers;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
-        AppController.getInstance().addToRequestQueue(request);
-
-    }
-
-    public void getData12()
-    {
-        String url = context.getString(R.string.domain) + "api/general/data12";
-
-        JSONObject object = new JSONObject();
-        try
-        {
-            object.put("company_id", new User_Info().company_id());
-            object.put("secret_key", context.getString(R.string.secret_key));
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                try
-                {
-                    JSONArray array1 = response.getJSONArray("accounts");
-                    JSONArray array2 = response.getJSONArray("reports");
-                    JSONArray array3 = response.getJSONArray("buyers");
-
-                    new SaveData(array1).toActivity7DB();
-                    new SaveData(array2).toReportDB();
-                    new SaveData(array3).toActivity8DB();
-
-                    addUnArchiveBuyer();
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-
-                Toast.makeText(context, "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-
-            }
-        };
-
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
-        {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Accept", "application/json");
-                headers.put("Authorization", "Bearer "+ new User_Info().token());
-                return headers;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
-        AppController.getInstance().addToRequestQueue(request);
     }
 }

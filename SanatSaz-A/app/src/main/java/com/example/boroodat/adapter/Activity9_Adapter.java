@@ -33,6 +33,7 @@ import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity9_Model;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -85,6 +86,7 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
         public FloatingActionButton fab;
         public LinearLayout lnr1;
         public LinearLayout edit;
+        public MaterialCardView cardView;
 
         public viewHolder(@NonNull View itemView)
         {
@@ -96,6 +98,7 @@ public class Activity9_Adapter extends RecyclerView.Adapter<Activity9_Adapter.vi
             fab =itemView.findViewById(R.id.fab);
             lnr1 =itemView.findViewById(R.id.lnr1);
             edit =itemView.findViewById(R.id.edit);
+            cardView = itemView.findViewById(R.id.cardView);
         }
     }
 
