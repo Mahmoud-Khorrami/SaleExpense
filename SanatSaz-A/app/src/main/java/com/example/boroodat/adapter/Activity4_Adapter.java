@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,13 +23,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.databinding.A4AddBinding;
-import com.example.boroodat.databinding.DeleteDialog1Binding;
+import com.example.boroodat.databinding.A4ItemBinding;
+import com.example.boroodat.databinding.LoadingBinding;
+import com.example.boroodat.databinding.NotFoundBinding;
+import com.example.boroodat.databinding.RetryBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
-import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity4_Model;
+import com.example.boroodat.model.Activity4_LoadingModel;
+import com.example.boroodat.model.Activity4_MainModel;
+import com.example.boroodat.model.Activity4_ParentModel;
+import com.example.boroodat.model.Activity4_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,111 +47,189 @@ import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 
-public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.viewHolder>
+public class Activity4_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    private List<Activity4_Model> models;
+    private List<Activity4_ParentModel> models;
     private Context context;
     private AlertDialog progressDialog;
     private androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder=null;
 
-    public Activity4_Adapter(List<Activity4_Model> models, Context context)
+    public Activity4_Adapter(List<Activity4_ParentModel> models, Context context)
     {
         this.models = models;
         this.context = context;
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder
+    public class mainViewHolder extends RecyclerView.ViewHolder
     {
-        public TextView name,phoneNumber,role,edit,delete;
-        public ImageView more;
-        public LinearLayout lnr1,lnr2;
+        A4ItemBinding binding;
 
-        public viewHolder(@NonNull View itemView)
+        public mainViewHolder(A4ItemBinding binding)
         {
-            super(itemView);
-
-            name=itemView.findViewById(R.id.name);
-            phoneNumber=itemView.findViewById(R.id.phoneNumber);
-            role=itemView.findViewById(R.id.role);
-            more=itemView.findViewById(R.id.more);
-            lnr1=itemView.findViewById(R.id.lnr1);
-            lnr2=itemView.findViewById(R.id.lnr2);
-            edit=itemView.findViewById(R.id.edit);
-            delete=itemView.findViewById(R.id.delete);
+            super(binding.getRoot());
+            this.binding=binding;
         }
+    }
+
+    public class loadingViewHolder extends RecyclerView.ViewHolder
+    {
+        private LoadingBinding binding;
+
+        public loadingViewHolder(LoadingBinding binding)
+        {
+            super(binding.getRoot());
+            this.binding=binding;
+        }
+    }
+
+    public class retryViewHolder extends RecyclerView.ViewHolder
+    {
+        private RetryBinding binding;
+
+        public retryViewHolder(RetryBinding binding)
+        {
+            super(binding.getRoot());
+            this.binding=binding;
+        }
+    }
+
+    public class notFoundViewHolder extends RecyclerView.ViewHolder
+    {
+        private NotFoundBinding binding;
+
+        public notFoundViewHolder(NotFoundBinding binding)
+        {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position)
+    {
+        return models.get(position).getCurrentType();
     }
 
     @NonNull
     @Override
-    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from ( parent.getContext () ).inflate ( R.layout.a4_item, parent, false );
+        if (viewType == Activity4_ParentModel.Main)
+        {
+            A4ItemBinding binding = A4ItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new mainViewHolder(binding);
+        }
 
-        return new viewHolder(view);
+        else if (viewType == Activity4_ParentModel.Loading)
+        {
+            LoadingBinding binding = LoadingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new loadingViewHolder(binding);
+        }
+
+        else if (viewType == Activity4_ParentModel.Retry)
+        {
+            RetryBinding binding = RetryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new retryViewHolder(binding);
+        }
+
+        else if (viewType == Activity4_ParentModel.NotFound)
+        {
+            NotFoundBinding binding = NotFoundBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new notFoundViewHolder(binding);
+        }
+
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final viewHolder holder, int position)
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
     {
         holder.setIsRecyclable(false);
-        final Activity4_Model model = models.get(position);
-        holder.itemView.setTag(model);
 
-        //-------------------------------------------------------------------------------------------------------
-
-        progressDialog = new SpotsDialog(context, R.style.Custom);
-        progressDialog.setCancelable(false);
-
-        //----------------------------------------------------------------------------------------------------------
-
-        holder.name.setText(model.getName());
-        holder.phoneNumber.setText(model.getPhone());
-        holder.role.setText(model.getRole());
-
-        //-------------------------------------------------------------------------------------------------------
-
-        if (new User_Info().user_id().equals(model.getId()+""))
-            holder.delete.setVisibility(View.GONE);
-
-        //-------------------------------------------------------------------------------------------------------
-
-        holder.lnr2.setVisibility(View.GONE);
-
-        holder.more.setOnClickListener(new View.OnClickListener()
+        if (holder instanceof mainViewHolder)
         {
-            @Override
-            public void onClick(View view)
+            final Activity4_MainModel model = (Activity4_MainModel) models.get(position);
+            final mainViewHolder holder1 = (mainViewHolder) holder;
+            holder1.itemView.setTag(model);
+
+            //-------------------------------------------------------------------------------------------------------
+
+            progressDialog = new SpotsDialog(context, R.style.Custom);
+            progressDialog.setCancelable(false);
+
+            //-------------------------------------------------------------------------------------------------------
+            holder1.binding.name.setText(model.getName());
+            holder1.binding.phoneNumber.setText(model.getPhone());
+            holder1.binding.role.setText(model.getRole());
+
+            //-------------------------------------------------------------------------------------------------------
+
+            if (new User_Info().user_id().equals(model.getId()+""))
+                holder1.binding.delete.setVisibility(View.GONE);
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.lnr2.setVisibility(View.GONE);
+
+            holder1.binding.more.setOnClickListener(new View.OnClickListener()
             {
-                if (holder.lnr2.getVisibility()==View.VISIBLE)
-                    holder.lnr2.setVisibility(View.GONE);
-                else
-                    holder.lnr2.setVisibility(View.VISIBLE);
-            }
-        });
+                @Override
+                public void onClick(View view)
+                {
+                    if (holder1.binding.lnr2.getVisibility()==View.VISIBLE)
+                        holder1.binding.lnr2.setVisibility(View.GONE);
+                    else
+                        holder1.binding.lnr2.setVisibility(View.VISIBLE);
+                }
+            });
 
-        //-------------------------------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------------------------------
 
-        holder.edit.setOnClickListener(new View.OnClickListener()
+            holder1.binding.edit.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (alertDialogBuilder==null)
+                        editDialog(model);
+                }
+            });
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.delete.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (alertDialogBuilder==null)
+                        archiveDialog(model);
+                }
+            });
+
+        }
+
+        if (holder instanceof loadingViewHolder)
         {
-            @Override
-            public void onClick(View view)
-            {
-                if (alertDialogBuilder==null)
-                    editDialog(model);
-            }
-        });
+            loadingViewHolder holder1 = (loadingViewHolder) holder;
+            holder1.itemView.setTag(null);
+            holder1.binding.progressbar.setIndeterminate(true );
+        }
 
-        //-------------------------------------------------------------------------------------------------------
-
-        holder.delete.setOnClickListener(new View.OnClickListener()
+        if (holder instanceof retryViewHolder)
         {
-            @Override
-            public void onClick(View view)
+            retryViewHolder holder1 = (retryViewHolder) holder;
+
+            holder1.binding.retry.setOnClickListener(new View.OnClickListener()
             {
-                if (alertDialogBuilder==null)
-                    deleteDialog(model);
-            }
-        });
+                @Override
+                public void onClick(View view)
+                {
+                    getUser();
+                }
+            });
+        }
+
     }
 
     @Override
@@ -157,7 +238,7 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
         return models.size();
     }
 
-    private void editDialog(final Activity4_Model model)
+    private void editDialog(final Activity4_MainModel model)
     {
         final A4AddBinding binding1 = A4AddBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
@@ -257,9 +338,9 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
             }
         });
 
-        //....................................................................................................
+        //------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -267,7 +348,7 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void edit(final Activity4_Model model, final String name, final String password, final String phone_number, final String role, final androidx.appcompat.app.AlertDialog alertDialog)
+    public void edit(final Activity4_MainModel model, final String name, final String password, final String phone_number, final String role, final androidx.appcompat.app.AlertDialog alertDialog)
     {
         String url = context.getString(R.string.domain) + "api/user/edit";
         progressDialog.show();
@@ -347,14 +428,14 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    private void deleteDialog(final Activity4_Model model)
+    private void archiveDialog(final Activity4_MainModel model)
     {
-        final DeleteDialog1Binding binding1 = DeleteDialog1Binding.inflate(LayoutInflater.from(context));
+        final com.example.boroodat.databinding.DeleteDialog2Binding binding1 = com.example.boroodat.databinding.DeleteDialog2Binding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         alertDialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
@@ -365,10 +446,6 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
         alertDialogBuilder.setPositiveButton("تایید", null);
         alertDialogBuilder.setNeutralButton("لغو", null);
         final androidx.appcompat.app.AlertDialog alertDialog = alertDialogBuilder.create();
-
-        //----------------------------------------------------------------------------------------------------------
-
-        binding1.text.setText(context.getString(R.string.user_delete));
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -384,17 +461,13 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
                     @Override
                     public void onClick(View v)
                     {
-                        if (binding1.password.getText().toString().equals(""))
-                            binding1.password.setError("رمز عبور را وارد کنید.");
 
+                        if (new Internet(context).check())
+                            archive(model, alertDialog);
                         else
-                        {
-                            if (new Internet(context).check())
-                                delete(model,binding1.password.getText().toString(),alertDialog);
-                            else
-                                new Internet(context).enable();
+                            new Internet(context).enable();
 
-                        }
+
                     }
                 });
 
@@ -413,9 +486,9 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
             }
         });
 
-        //....................................................................................................
+        //------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg129));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -423,16 +496,15 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void delete(final Activity4_Model model, final String password, final androidx.appcompat.app.AlertDialog alertDialog)
+    public void archive(final Activity4_MainModel model, final androidx.appcompat.app.AlertDialog alertDialog)
     {
-        String url = context.getString(R.string.domain) + "api/user/delete";
+        String url = context.getString(R.string.domain) + "api/user/archive";
         progressDialog.show();
 
         JSONObject object = new JSONObject();
         try
         {
             object.put("user_id",model.getId());
-            object.put("password", password);
             object.put("secret_key", context.getString(R.string.secret_key));
         }
         catch (JSONException e)
@@ -459,7 +531,6 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
                         alertDialog.dismiss();
                         alertDialogBuilder = null;
                         Toast.makeText(context,"حذف این کاربر با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
-                        getData10();
                     }
 
                     else
@@ -499,19 +570,23 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void getData10()
+    public void getUser()
     {
-        String url = context.getString(R.string.domain) + "api/general/data10";
+        models.clear();
+        models.add(new Activity4_LoadingModel());
+        notifyDataSetChanged();
 
-        JSONObject object = new JSONObject();
+        String url = context.getString(R.string.domain) + "api/user/show";
+
+        final JSONObject object = new JSONObject();
         try
         {
-            object.put("company_id", new User_Info().company_id());
+            object.put("company_id",new User_Info().company_id());
             object.put("secret_key", context.getString(R.string.secret_key));
         }
         catch (JSONException e)
@@ -524,18 +599,33 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
             @Override
             public void onResponse(JSONObject response)
             {
+                models.clear();
                 try
                 {
-                    JSONArray array1 = response.getJSONArray("accounts");
-                    JSONArray array2 = response.getJSONArray("reports");
+                    JSONArray array = response.getJSONArray("users");
 
-                    new SaveData(array1).toActivity7DB();
-                    new SaveData(array2).toReportDB();
+                    for (int i = array.length() - 1; i >= 0; i--)
+                    {
+                        JSONObject object1 = array.getJSONObject(i);
 
-                } catch (JSONException e)
+                        String id = object1.getString("id");
+                        String name = object1.getString("name");
+                        String phone = object1.getString("phone_number");
+                        String role = object1.getString("role");
+
+
+                        models.add(new Activity4_MainModel(id, name, phone, role));
+
+                    }
+
+                    notifyDataSetChanged();
+
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
+
             }
         };
 
@@ -545,7 +635,9 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
             public void onErrorResponse(VolleyError error)
             {
 
-                Toast.makeText(context, "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
+                models.clear();
+                models.add(new Activity4_RetryModel());
+                notifyDataSetChanged();
 
             }
         };
@@ -563,7 +655,8 @@ public class Activity4_Adapter extends RecyclerView.Adapter<Activity4_Adapter.vi
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ExpenseResource1;
+use App\Http\Resources\ExpenseResource2;
 use App\Models\Expense;
 use App\Models\ExpenseDetail;
 use Illuminate\Http\Request;
@@ -57,9 +59,7 @@ class ExpenseController extends Controller
         if ($expense)
         {
             return ['code'          => '200',
-                    'expense'          => $expense,
-                    'account_title' => $expense->account->title,
-                    'expense_details'  => $expense->expenseDetails,
+                    'expense_details'  => ExpenseResource2::collection($expense->expenseDetails),
             ];
         }
         else
@@ -67,6 +67,105 @@ class ExpenseController extends Controller
                 'code'    => '202',
                 'message' => trans('message1.202')
             ];
+    }
+
+    public function getExpensesCount(Request $request)
+    {
+
+        $user = auth()->user();
+        $expenses = null;
+
+        if ($user->role == "مدیر" || $user->role == "Developer")
+            $expenses = Expense::where('company_id', $request->company_id);
+
+        else if ($user->role == "کارمند")
+            $expenses = Expense::where('company_id', $request->company_id)->where("user_id", $user->id);
+
+        $count = 0;
+        if ($expenses)
+            $count = $expenses->count();
+
+        return ["code"  => "200",
+                "count" => $count];
+    }
+
+    public function getAllExpenses(Request $request)
+    {
+        $user = auth()->user();
+        $expenses = null;
+
+        if ($user->role == "مدیر" || $user->role == "Developer")
+            $expenses = Expense::where('company_id', $request->company_id);
+
+        else if ($user->role == "کارمند")
+            $expenses = Expense::where('company_id', $request->company_id)->where("user_id", $user->id);
+
+        //-----------------------------------------------------------------------
+
+        if ($expenses)
+        {
+            $expenses = $expenses->simplePaginate($request->paginate);
+
+            $result = collect([]);
+
+            $expenses = ExpenseResource1::collection($expenses);
+            foreach ($expenses as $expens)
+            {
+                $result->push(
+                    [
+                        'expense'         => $expens,
+                        'account_title'   => $expens->account->title,
+                        'expense_details' => ExpenseResource2::collection($expens->expenseDetails)]
+                );
+            }
+            return ["code"   => "200",
+                    "result" => $result];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+    }
+
+    public function searchQuery(Request $request)
+    {
+        $user = auth()->user();
+        $expenses = null;
+
+        if ($user->role == "مدیر" || $user->role == "Developer")
+            $expenses = Expense::where('company_id', $request->company_id)
+                               ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                               ->get();
+
+
+        else if ($user->role == "کارمند")
+            $expenses = Expense::where('company_id', $request->company_id)
+                               ->where('user_id', $user->id)
+                               ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                               ->get();
+
+        //------------------------------------------------
+        if ($expenses)
+        {
+
+            $result = collect([]);
+
+            $expenses = ExpenseResource1::collection($expenses);
+            foreach ($expenses as $expens)
+            {
+                $result->push(
+                    [
+                        'expense'          => $expens,
+                        'account_title' => $expens->account->title,
+                        'expense_details' => ExpenseResource2::collection($expens->expenseDetails)]
+                );
+            }
+            return ["code"   => "200",
+                    "result" => $result];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+
     }
 
     public function edit(Request $request)

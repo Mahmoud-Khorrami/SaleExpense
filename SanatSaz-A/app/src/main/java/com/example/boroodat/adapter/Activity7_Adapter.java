@@ -2,14 +2,11 @@ package com.example.boroodat.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,19 +22,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
-import com.example.boroodat.activity.Activity11_AccountDetails;
-import com.example.boroodat.database.Activity7_DB;
-import com.example.boroodat.database.Fragment4_DB;
 import com.example.boroodat.databinding.A7AddBinding;
-import com.example.boroodat.databinding.DeleteDialog1Binding;
+import com.example.boroodat.databinding.A7ItemBinding;
+import com.example.boroodat.databinding.DeleteDialog2Binding;
+import com.example.boroodat.databinding.LoadingBinding;
+import com.example.boroodat.databinding.NotFoundBinding;
+import com.example.boroodat.databinding.RetryBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
-import com.example.boroodat.general.Report;
-import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity7_Model;
+import com.example.boroodat.model.Activity7_LoadingModel;
+import com.example.boroodat.model.Activity7_MainModel;
+import com.example.boroodat.model.Activity7_NotFoundModel;
+import com.example.boroodat.model.Activity7_ParentModel;
+import com.example.boroodat.model.Activity7_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,22 +48,19 @@ import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
-public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.viewHolder>
+public class Activity7_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    private List<Activity7_Model> models;
+    private List<Activity7_ParentModel> models;
     private Context context;
     private int from;
     private TextView txtTitle,txtId;
     private androidx.appcompat.app.AlertDialog alertDialog;
     private AlertDialog.Builder alertDialogBuilder=null;
     private android.app.AlertDialog progressDialog;
-    private Realm realm;
     private String from2;
 
-    public Activity7_Adapter(List<Activity7_Model> models, Context context, int from, TextView txtTitle, TextView txtId, AlertDialog alertDialog,String from2)
+    public Activity7_Adapter(List<Activity7_ParentModel> models, Context context, int from, TextView txtTitle, TextView txtId, AlertDialog alertDialog, String from2)
     {
         this.models = models;
         this.context = context;
@@ -74,7 +71,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
         this.from2=from2;
     }
 
-    public Activity7_Adapter(List<Activity7_Model> models, Context context, int from,String from2)
+    public Activity7_Adapter(List<Activity7_ParentModel> models, Context context, int from, String from2)
     {
         this.models = models;
         this.context = context;
@@ -82,132 +79,202 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
         this.from2=from2;
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder
+    public class mainViewHolder extends RecyclerView.ViewHolder
     {
-        public TextView title,accountNumber,edit,delete;
-        public EditText balance;
-        public ImageView more;
-        public LinearLayout lnr1,lnr2,lnr3;
+        A7ItemBinding binding;
 
-        public viewHolder(@NonNull View itemView)
+        public mainViewHolder(A7ItemBinding binding)
         {
-            super(itemView);
-
-            title=itemView.findViewById(R.id.title);
-            accountNumber=itemView.findViewById(R.id.accountNumber);
-            balance=itemView.findViewById(R.id.balance);
-            more=itemView.findViewById(R.id.more);
-            lnr1=itemView.findViewById(R.id.lnr1);
-            lnr2=itemView.findViewById(R.id.lnr2);
-            lnr3=itemView.findViewById(R.id.lnr3);
-            edit=itemView.findViewById(R.id.edit);
-            delete=itemView.findViewById(R.id.delete);
+            super(binding.getRoot());
+            this.binding=binding;
         }
+    }
+
+    public class loadingViewHolder extends RecyclerView.ViewHolder
+    {
+        private LoadingBinding binding;
+
+        public loadingViewHolder(LoadingBinding binding)
+        {
+            super(binding.getRoot());
+            this.binding=binding;
+        }
+    }
+
+    public class retryViewHolder extends RecyclerView.ViewHolder
+    {
+        private RetryBinding binding;
+
+        public retryViewHolder(RetryBinding binding)
+        {
+            super(binding.getRoot());
+            this.binding=binding;
+        }
+    }
+
+    public class notFoundViewHolder extends RecyclerView.ViewHolder
+    {
+        private NotFoundBinding binding;
+
+        public notFoundViewHolder(NotFoundBinding binding)
+        {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position)
+    {
+        return models.get(position).getCurrentType();
     }
 
     @NonNull
     @Override
-    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from ( parent.getContext () ).inflate ( R.layout.a7_item, parent, false );
+        if (viewType == Activity7_ParentModel.Main)
+        {
+            A7ItemBinding binding = A7ItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new mainViewHolder(binding);
+        }
 
-        return new viewHolder(view);
+        else if (viewType == Activity7_ParentModel.Loading)
+        {
+            LoadingBinding binding = LoadingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new loadingViewHolder(binding);
+        }
+
+        else if (viewType == Activity7_ParentModel.Retry)
+        {
+            RetryBinding binding = RetryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new retryViewHolder(binding);
+        }
+
+        else if (viewType == Activity7_ParentModel.NotFound)
+        {
+            NotFoundBinding binding = NotFoundBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new notFoundViewHolder(binding);
+        }
+
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final viewHolder holder, int position)
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
     {
         holder.setIsRecyclable(false);
-        final Activity7_Model model = models.get(position);
-        holder.itemView.setTag(model);
 
-        realm=Realm.getDefaultInstance();
-        //-------------------------------------------------------------------------------------------------------
-
-        progressDialog = new SpotsDialog(context, R.style.Custom);
-        progressDialog.setCancelable(false);
-
-        //----------------------------------------------------------------------------------------------------------
-
-        holder.balance.addTextChangedListener(new NumberTextWatcherForThousand(holder.balance));
-
-        //-------------------------------------------------------------------------------------------------------
-
-        holder.title.setText(model.getTitle());
-        holder.accountNumber.setText(model.getAccountNumber());
-        holder.balance.setText(model.getBalance());
-
-        if (from2.equals("user"))
+        if (holder instanceof mainViewHolder)
         {
-            holder.lnr3.setVisibility(View.GONE);
-            holder.more.setVisibility(View.GONE);
+            final Activity7_MainModel model = (Activity7_MainModel) models.get(position);
+            final mainViewHolder holder1 = (mainViewHolder) holder;
+            holder1.itemView.setTag(model);
+
+            //-------------------------------------------------------------------------------------------------------
+
+            progressDialog = new SpotsDialog(context, R.style.Custom);
+            progressDialog.setCancelable(false);
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.balance.addTextChangedListener(new NumberTextWatcherForThousand(holder1.binding.balance));
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.title.setText(model.getTitle());
+            holder1.binding.accountNumber.setText(model.getAccountNumber());
+            holder1.binding.balance.setText(model.getBalance());
+
+            if (from2.equals("user"))
+            {
+                holder1.binding.lnr3.setVisibility(View.GONE);
+                holder1.binding.more.setVisibility(View.GONE);
+            }
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.lnr2.setVisibility(View.GONE);
+
+            holder1.binding.more.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (holder1.binding.lnr2.getVisibility()==View.VISIBLE)
+                        holder1.binding.lnr2.setVisibility(View.GONE);
+                    else
+                        holder1.binding.lnr2.setVisibility(View.VISIBLE);
+                }
+            });
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.lnr1.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (from==1)
+                    {
+                    }
+
+                    if (from==2)
+                    {
+                        txtTitle.setText(model.getTitle());
+                        txtId.setText(model.getId()+"");
+                        alertDialog.dismiss();
+                    }
+
+                }
+            });
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.edit.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (alertDialogBuilder==null)
+                        initialBalance(model);
+                }
+            });
+
+
+            //-------------------------------------------------------------------------------------------------------
+
+            holder1.binding.delete.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (alertDialogBuilder==null)
+                        archiveDialog(model);
+                }
+            });
         }
 
-        //-------------------------------------------------------------------------------------------------------
-
-        holder.lnr2.setVisibility(View.GONE);
-
-        holder.more.setOnClickListener(new View.OnClickListener()
+        if (holder instanceof loadingViewHolder)
         {
-            @Override
-            public void onClick(View view)
-            {
-                if (holder.lnr2.getVisibility()==View.VISIBLE)
-                    holder.lnr2.setVisibility(View.GONE);
-                else
-                    holder.lnr2.setVisibility(View.VISIBLE);
-            }
-        });
+            loadingViewHolder holder1 = (loadingViewHolder) holder;
+            holder1.itemView.setTag(null);
+            holder1.binding.progressbar.setIndeterminate(true );
+        }
 
-        //-------------------------------------------------------------------------------------------------------
-
-        holder.lnr1.setOnClickListener(new View.OnClickListener()
+        if (holder instanceof retryViewHolder)
         {
-            @Override
-            public void onClick(View view)
+            retryViewHolder holder1 = (retryViewHolder) holder;
+
+            holder1.binding.retry.setOnClickListener(new View.OnClickListener()
             {
-                if (from==1)
+                @Override
+                public void onClick(View view)
                 {
-                    if (new Internet(context).check())
-                        getData3(model.getId()+"");
-                    else
-                        new Internet(context).enable();
+                    getAccount();
                 }
-
-                if (from==2)
-                {
-                    txtTitle.setText(model.getTitle());
-                    txtId.setText(model.getId()+"");
-                    alertDialog.dismiss();
-                }
-
-            }
-        });
-
-        //-------------------------------------------------------------------------------------------------------
-
-        holder.edit.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (alertDialogBuilder==null)
-                    initialBalance(model);
-            }
-        });
-
-
-        //-------------------------------------------------------------------------------------------------------
-
-        holder.delete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (alertDialogBuilder==null)
-                    deleteDialog(model);
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -216,7 +283,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
         return models.size();
     }
 
-    public void initialBalance(final Activity7_Model model)
+    public void initialBalance(final Activity7_MainModel model)
     {
         String url = context.getString(R.string.domain) + "api/deposit/initial-balance";
         progressDialog.show();
@@ -280,7 +347,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
 
     }
 
-    private void editDialog(final Activity7_Model model, final String initial_balance)
+    private void editDialog(final Activity7_MainModel model, final String initial_balance)
     {
         final A7AddBinding binding1 = A7AddBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
@@ -335,7 +402,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
 
                             if (new Internet(context).check())
                             {
-                                edit(model,binding1.title.getText().toString(),accountNumber1,balance1,alertDialog,initial_balance);
+                                edit(model,binding1.title.getText().toString(),accountNumber1,balance1,alertDialog);
                             }
                             else
                                 new Internet(context).enable();
@@ -359,9 +426,9 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
             }
         });
 
-        //....................................................................................................
+        //-----------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -369,7 +436,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void edit(final Activity7_Model model, final String title, final String account_number, final String balance, final AlertDialog alertDialog, final String initial_balance)
+    public void edit(final Activity7_MainModel model, final String title, final String account_number, final String balance, final AlertDialog alertDialog)
     {
         String url = context.getString(R.string.domain) + "api/account/edit";
         progressDialog.show();
@@ -398,32 +465,6 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                 {
                     if (response.getString("code").equals("200"))
                     {
-
-                        realm.beginTransaction();
-                        realm.copyToRealmOrUpdate(new Activity7_DB(model.getId(), title, account_number, response.getString("balance")));
-                        realm.commitTransaction();
-
-                        new Report().deposit(initial_balance,"d");
-                        new Report().deposit(balance,"i");
-                        //----------------------------------------------------
-
-                        RealmResults<Fragment4_DB> results=realm.where(Fragment4_DB.class)
-                                .beginGroup()
-                                .equalTo("account_id",model.getId()+"")
-                                .and()
-                                .equalTo("title","موجودی اولیه")
-                                .endGroup()
-                                .findAll();
-
-                        if (results.size()>0)
-                        {
-                            realm.beginTransaction();
-                            realm.copyToRealmOrUpdate(new Fragment4_DB(results.get(0).getId(),results.get(0).getTitle(),balance, results.get(0).getDate(),results.get(0).getAccount_id()));
-                            realm.commitTransaction();
-                        }
-
-                        //----------------------------------------------------
-
                         model.setTitle(title);
                         model.setAccountNumber(account_number);
                         model.setBalance(response.getString("balance"));
@@ -475,104 +516,14 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void getData3(final String account_id)
+    private void archiveDialog(final Activity7_MainModel model)
     {
-        String url = context.getString(R.string.domain) + "api/general/data3";
-        progressDialog.show();
-
-        final JSONObject object = new JSONObject();
-        try
-        {
-            object.put("company_id", new User_Info().company_id());
-            object.put("account_id",account_id);
-            object.put("secret_key", context.getString(R.string.secret_key));
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                progressDialog.dismiss();
-
-                try
-                {
-
-                    JSONArray array1 = response.getJSONArray("personnel");
-                    JSONArray array2 = response.getJSONArray("sales");
-                    JSONArray array3 = response.getJSONArray("deposits");
-                    JSONArray array4 = response.getJSONArray("salaries");
-                    JSONArray array5 = response.getJSONArray("expenses");
-                    JSONArray array6 = response.getJSONArray("materials");
-                    JSONArray array7=response.getJSONArray("details");
-
-                    boolean b1 = new SaveData(array1).toActivity14DB();
-                    boolean b2 = new SaveData(array2).toFragment5DB();
-                    boolean b3 = new SaveData(array3).toFragment4DB();
-                    boolean b4 = new SaveData(array4).toFragment7DB();
-                    boolean b5 = new SaveData(array5).toFragment9DB();
-                    boolean b6 = new SaveData(array6).toFragment8DB();
-                    boolean b7=new SaveData(array7).toSaleDetailDB();
-
-                    if (b1 & b2 & b3 & b4 & b5 & b6 & b7)
-                    {
-                        Intent intent=new Intent(context, Activity11_AccountDetails.class);
-                        intent.putExtra("account_id",account_id);
-                        context.startActivity(intent);
-                    }
-
-                    else
-                        Toast.makeText(context, "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-
-                Toast.makeText(context, "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-
-            }
-        };
-
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
-        {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Accept", "application/json");
-                headers.put("Authorization", "Bearer "+ new User_Info().token());
-                return headers;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
-        AppController.getInstance().addToRequestQueue(request);
-
-    }
-
-    private void deleteDialog(final Activity7_Model model)
-    {
-        final DeleteDialog1Binding binding1 = DeleteDialog1Binding.inflate(LayoutInflater.from(context));
+        final DeleteDialog2Binding binding1 = DeleteDialog2Binding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
@@ -583,10 +534,6 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
         alertDialogBuilder.setPositiveButton("تایید", null);
         alertDialogBuilder.setNeutralButton("لغو", null);
         final AlertDialog alertDialog = alertDialogBuilder.create();
-
-        //----------------------------------------------------------------------------------------------------------
-
-        binding1.text.setText(context.getString(R.string.account_delete));
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -602,17 +549,13 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                     @Override
                     public void onClick(View v)
                     {
-                        if (binding1.password.getText().toString().equals(""))
-                            binding1.password.setError("رمز عبور را وارد کنید.");
 
+                        if (new Internet(context).check())
+                            archive(model, alertDialog);
                         else
-                        {
-                            if (new Internet(context).check())
-                                delete(model,binding1.password.getText().toString(),alertDialog);
-                            else
-                                new Internet(context).enable();
+                            new Internet(context).enable();
 
-                        }
+
                     }
                 });
 
@@ -631,9 +574,9 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
             }
         });
 
-        //....................................................................................................
+        //------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg129));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -641,16 +584,15 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void delete(final Activity7_Model model, final String password, final AlertDialog alertDialog)
+    public void archive(final Activity7_MainModel model, final AlertDialog alertDialog)
     {
-        String url = context.getString(R.string.domain) + "api/account/delete";
+        String url = context.getString(R.string.domain) + "api/account/archive";
         progressDialog.show();
 
         JSONObject object = new JSONObject();
         try
         {
             object.put("account_id",model.getId());
-            object.put("password", password);
             object.put("secret_key", context.getString(R.string.secret_key));
         }
         catch (JSONException e)
@@ -666,6 +608,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
 
                 progressDialog.dismiss();
 
+
                 try
                 {
                     if (response.getString("code").equals("200"))
@@ -677,7 +620,6 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                         alertDialog.dismiss();
                         alertDialogBuilder = null;
                         Toast.makeText(context,"حذف حساب بانکی با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
-                        getData10();
                     }
 
                     else
@@ -717,14 +659,18 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void getData10()
+    public void getAccount()
     {
-        String url = context.getString(R.string.domain) + "api/general/data10";
+        models.clear();
+        models.add(new Activity7_LoadingModel());
+        notifyDataSetChanged();
+
+        String url = context.getString(R.string.domain) + "api/account/account-query1";
 
         JSONObject object = new JSONObject();
         try
@@ -744,11 +690,30 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
             {
                 try
                 {
-                    JSONArray array1 = response.getJSONArray("accounts");
-                    JSONArray array2 = response.getJSONArray("reports");
+                    String code = response.getString("code");
 
-                    new SaveData(array1).toActivity7DB();
-                    new SaveData(array2).toReportDB();
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONObject message = response.getJSONObject("message");
+                        JSONArray result = message.getJSONArray("result");
+
+                        for (int i=0; i<result.length(); i++)
+                        {
+                            JSONObject object1 = result.getJSONObject(i);
+
+                            models.add(new Activity7_MainModel(object1.getString("id"),object1.getString("title"),object1.getString("account_number"),object1.getString("balance")));
+                        }
+
+                        notifyDataSetChanged();
+                    }
+
+                    else if (code.equals("207"))
+                    {
+                        models.add(new Activity7_NotFoundModel());
+                        notifyDataSetChanged();
+                    }
 
                 } catch (JSONException e)
                 {
@@ -763,7 +728,9 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
             public void onErrorResponse(VolleyError error)
             {
 
-                Toast.makeText(context, "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
+                models.clear();
+                models.add(new Activity7_RetryModel());
+                notifyDataSetChanged();
 
             }
         };
@@ -781,8 +748,8 @@ public class Activity7_Adapter extends RecyclerView.Adapter<Activity7_Adapter.vi
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
-    }
 
+    }
 }

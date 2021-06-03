@@ -22,7 +22,52 @@ class PersonnelController extends Controller
             ]
         );
 
-        return ['id' => $personnel->id];
+        return ["code"    => "200",
+                "message" => [
+                    "id" => $personnel->id]];
+    }
+
+    public function personnelQuery1(Request $request)
+    {
+        $personnel = Personnel::where('company_id', $request->company_id)
+                              ->whereNull("archive")
+                              ->get();
+
+        if ($personnel)
+        {
+            return ["code"    => "200",
+                    "message" => [
+                        "result" => $personnel,
+                    ]];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+    }
+
+    public function searchQuery(Request $request)
+    {
+        $personnel = Personnel::where('company_id', $request->company_id)
+                         ->where(($request->type) , 'LIKE' , '%' . ($request->value) . '%')
+                         ->whereNull("archive")
+                         ->get();
+
+        return ["code"    => "200",
+                "message" => [
+                    "result" => $personnel,
+                ]];
+    }
+
+    public function archive(Request $request){
+
+        $personnel=Personnel::where('id',$request->personnel_id)->first();
+
+        if ($personnel)
+        {
+            $personnel->archive = "done";
+            $personnel->save();
+        }
+        return ['code'=>'200'];
     }
 
     public function edit(Request $request){

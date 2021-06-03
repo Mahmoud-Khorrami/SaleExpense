@@ -27,7 +27,7 @@ public class User_Info
         realm=Realm.getDefaultInstance();
     }
 
-    public boolean save()
+    public void save()
     {
         try
         {
@@ -46,14 +46,12 @@ public class User_Info
             String token_id = object3.getString("id");
 
             realm.beginTransaction();
-            realm.copyToRealmOrUpdate(new User_Info_DB(0,user_id,phone_number,username,role,company_id,company_name,token,token_id));
+            realm.copyToRealmOrUpdate(new User_Info_DB(0,user_id,phone_number,"",username,role,company_id,company_name,token,token_id));
             realm.commitTransaction();
-
-            return true;
 
         } catch (JSONException e)
         {
-            return false;
+            e.printStackTrace();
         }
 
     }
@@ -62,59 +60,77 @@ public class User_Info
     {
         RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
 
+        String role = "";
+
         if (res.size()>0)
-            return res.get(0).getRole();
-        else
-            return "";
+            role = res.get(0).getRole();
+
+        realm.close();
+        return role;
     }
 
     public  String token()
     {
         RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
 
+        String token = "";
+
         if (res.size()>0)
-            return res.get(0).getToken();
-        else
-            return "";
+            token = res.get(0).getToken();
+
+        realm.close();
+        return token;
     }
 
     public  String token_id()
     {
         RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
 
+        String token_id = "";
+
         if (res.size()>0)
-            return res.get(0).getToken_id();
-        else
-            return "";
+            token_id = res.get(0).getToken_id();
+
+        realm.close();
+        return token_id;
     }
 
     public  String company_id()
     {
         RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
 
+        String company_id = "";
+
         if (res.size()>0)
-            return res.get(0).getCompany_id();
-        else
-            return "";
+            company_id = res.get(0).getCompany_id();
+
+        realm.close();
+        return company_id;
     }
 
     public  String company_name()
     {
         RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
 
+        String company_name = "";
+
         if (res.size()>0)
-            return res.get(0).getCompany_name();
-        else
-            return "";
+            company_name = res.get(0).getCompany_name();
+
+        realm.close();
+        return company_name;
     }
 
     public  String user_id()
     {
         RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
 
+        String user_id = "";
+
         if (res.size()>0)
-            return res.get(0).getUser_id();
-        else
-            return "";
+            user_id = res.get(0).getUser_id();
+
+        realm.close();
+        return user_id;
     }
 }

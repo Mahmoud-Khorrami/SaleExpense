@@ -42,7 +42,7 @@
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bkg104"
+            android:background="@color/white1"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout

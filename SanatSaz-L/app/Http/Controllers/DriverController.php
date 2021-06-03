@@ -21,7 +21,51 @@ class DriverController extends Controller
             ]
         );
 
-        return ['id' => $driver->id];
+        return ["code"    => "200",
+                "result" => $driver->id];
+    }
+
+    public function getDrivers(Request $request)
+    {
+        $drivers = Driver::where('company_id', $request->company_id)
+                         ->whereNull("archive")
+                         ->get();
+
+        if (($drivers->count()) > 0)
+        {
+            return ["code"    => "200",
+                    "result"  => $drivers];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+
+    }
+
+    public function searchQuery(Request $request)
+    {
+        $drivers = Driver::where('company_id', $request->company_id)
+                         ->where(($request->type) , 'LIKE' , '%' . ($request->value) . '%')
+                         ->whereNull("archive")
+                         ->get();
+
+        return ["code"    => "200",
+                "result" => $drivers];
+    }
+
+    public function archive(Request $request){
+
+        foreach (($request->driver_ids) as $driver_id)
+        {
+            $driver=Driver::where('id',$driver_id)->first();
+
+            if ($driver)
+            {
+                $driver->archive = "done";
+                $driver->save();
+            }
+        }
+        return ['code'=>'200'];
     }
 
     public function edit(Request $request){
@@ -65,21 +109,6 @@ class DriverController extends Controller
             return ['code'=>'200'];
         }
 
-    }
-
-    public function archive(Request $request){
-
-        foreach (($request->driver_ids) as $driver_id)
-        {
-            $driver=Driver::where('id',$driver_id)->first();
-
-            if ($driver)
-            {
-                $driver->archive = "done";
-                $driver->save();
-            }
-        }
-        return ['code'=>'200'];
     }
 
     public function unArchive(Request $request){

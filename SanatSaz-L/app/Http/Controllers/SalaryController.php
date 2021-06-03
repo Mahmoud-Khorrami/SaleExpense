@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
-use App\Models\Deposit;
+use App\Http\Resources\SlaryResource1;
+use App\Models\Personnel;
 use App\Models\Salary;
 use Illuminate\Http\Request;
 
@@ -26,6 +26,115 @@ class SalaryController extends Controller
         );
 
         return ['code' => '200'];
+    }
+
+    public function getSalariesCount(Request $request)
+    {
+        $salaries = Salary::where('company_id', $request->company_id);
+
+        $count = 0 ;
+        if ($salaries)
+            $count = $salaries->count();
+
+        return ["code"  => "200",
+                "count" => $count];
+    }
+
+    public function getAllSalaries(Request $request)
+    {
+        $salaries = Salary::where('company_id', $request->company_id);
+
+        //-----------------------------------------------------------------------
+
+        if ($salaries)
+        {
+            $salaries = $salaries->simplePaginate($request->paginate);
+
+            $result = collect([]);
+
+            $salaries = SlaryResource1::collection($salaries);
+            foreach ($salaries as $salary)
+            {
+                $result->push(
+                    [
+                        'salary'         => $salary,
+                        'account_title'  => $salary->account->title,
+                        'personnel_name' => $salary->personnel->name,]
+                );
+            }
+            return ["code"   => "200",
+                    "result" => $result];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+    }
+
+    public function searchQuery(Request $request)
+    {
+        if ($request->type == "date")
+        {
+            $salaries = Salary::where('company_id', $request->company_id)
+                              ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                              ->get();
+
+            //------------------------------------------------
+            if ($salaries)
+            {
+
+                $result = collect([]);
+
+                $salaries = SlaryResource1::collection($salaries);
+                foreach ($salaries as $salary)
+                {
+                    $result->push(
+                        [
+                            'salary'         => $salary,
+                            'account_title'  => $salary->account->title,
+                            'personnel_name' => $salary->personnel->name]
+                    );
+                }
+                return ["code"   => "200",
+                        "result" => $result];
+            }
+
+            return ["code"    => "207",
+                    'message' => trans('message1.207')];
+        }
+
+        else if ($request->type == "personnel_name")
+        {
+            $personnel = Personnel::where('company_id', $request->company_id)
+                           ->where("name", 'LIKE', '%' . ($request->value) . '%')
+                           ->get();
+
+            //------------------------------------------------
+            if ($personnel)
+            {
+                $result = collect([]);
+
+                foreach ($personnel as $item)
+                {
+                    $salaries = SlaryResource1::collection($item->salaries);
+                    foreach ($salaries as $salary)
+                    {
+                        $result->push(
+                            [
+                                'salary'         => $salary,
+                                'account_title'  => $salary->account->title,
+                                'personnel_name' => $salary->personnel->name]
+                        );
+                    }
+                }
+                return ["code"   => "200",
+                        "result" => $result];
+            }
+
+            return ["code"    => "207",
+                    'message' => trans('message1.207')];
+
+
+        }
     }
 
     public function edit(Request $request)

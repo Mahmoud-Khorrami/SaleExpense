@@ -41,19 +41,114 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="15dp"
-                        android:layout_marginBottom="10dp"
                         android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
+                            android:layout_height="40dp"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/rSale"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".35"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".35"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="مجموع فروش"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".1"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/sale" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorAccent" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/rRecive"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".35"
+                                android:background="@android:color/transparent"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:gravity="center"
+                                android:inputType="textPersonName"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".35"
+                                android:gravity="center|right"
+                                android:paddingRight="10dp"
+                                android:text="مجموع سایر دریافتی ها"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".1"
+                                android:padding="10dp"
+                                app:srcCompat="@drawable/income" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorAccent" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
                             android:orientation="horizontal">
 
                             <EditText
                                 android:id="@+id/rSalary"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".4"
+                                android:layout_weight=".35"
                                 android:background="@android:color/transparent"
                                 android:ems="10"
                                 android:focusable="false"
@@ -64,25 +159,24 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".45"
+                                android:layout_weight=".35"
                                 android:gravity="center|right"
                                 android:paddingRight="10dp"
-                                android:text="حقوق و دستمزد"
+                                android:text="مجموع حقوق و دستمزد"
                                 android:textColor="@color/black" />
 
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".15"
+                                android:layout_weight=".1"
                                 android:padding="10dp"
                                 app:srcCompat="@drawable/salary" />
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textView8"
+                        <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/boroodat1" />
+                            android:background="@color/colorAccent" />
 
                     </LinearLayout>
 
@@ -95,14 +189,14 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
+                            android:layout_height="40dp"
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/rMaterial"
+                                android:id="@+id/rRawMaterial"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".4"
+                                android:layout_weight=".35"
                                 android:background="@android:color/transparent"
                                 android:ems="10"
                                 android:focusable="false"
@@ -113,19 +207,24 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".45"
+                                android:layout_weight=".35"
                                 android:gravity="center|right"
                                 android:paddingRight="10dp"
-                                android:text="خرید مواد اولیه"
+                                android:text="مجموع خرید مواد اولیه"
                                 android:textColor="@color/black" />
 
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".15"
+                                android:layout_weight=".1"
                                 android:padding="10dp"
                                 app:srcCompat="@drawable/material" />
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorAccent" />
 
                     </LinearLayout>
 
@@ -139,63 +238,14 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/rDebtMaterial"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".4"
-                                android:background="@android:color/transparent"
-                                android:ems="10"
-                                android:focusable="false"
-                                android:gravity="center"
-                                android:inputType="textPersonName"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".45"
-                                android:gravity="center|right"
-                                android:paddingRight="10dp"
-                                android:text="بدهی بابت خرید مواد اولیه"
-                                android:textColor="@color/black" />
-
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".15"
-                                android:padding="10dp"
-                                app:srcCompat="@drawable/debt" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/textView9"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/boroodat1" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
+                            android:layout_height="40dp"
                             android:orientation="horizontal">
 
                             <EditText
                                 android:id="@+id/rOtherExpense"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".4"
+                                android:layout_weight=".35"
                                 android:background="@android:color/transparent"
                                 android:ems="10"
                                 android:focusable="false"
@@ -206,160 +256,57 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".45"
+                                android:layout_weight=".35"
                                 android:gravity="center|right"
                                 android:paddingRight="10dp"
-                                android:text="سایر هزینه ها"
+                                android:text="مجموع سایر هزینه ها"
                                 android:textColor="@color/black" />
 
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".15"
+                                android:layout_weight=".1"
                                 android:padding="10dp"
                                 app:srcCompat="@drawable/cost" />
                         </LinearLayout>
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/rDeptOtherExpense"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".4"
-                                android:background="@android:color/transparent"
-                                android:ems="10"
-                                android:focusable="false"
-                                android:gravity="center"
-                                android:inputType="textPersonName"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".45"
-                                android:gravity="center|right"
-                                android:paddingRight="10dp"
-                                android:text="بدهی بابت سایر هزینه ها"
-                                android:textColor="@color/black" />
-
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".15"
-                                android:padding="10dp"
-                                app:srcCompat="@drawable/debt" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/boroodat1" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="15dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/rSumExpense"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".4"
-                                android:background="@android:color/transparent"
-                                android:ems="10"
-                                android:focusable="false"
-                                android:gravity="center"
-                                android:inputType="textPersonName"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".45"
-                                android:gravity="center|right"
-                                android:paddingRight="10dp"
-                                android:text="مجموع کل هزینه ها"
-                                android:textColor="@color/black" />
-
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".15"
-                                android:padding="10dp"
-                                app:srcCompat="@drawable/expenses" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/rSumDept"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".4"
-                                android:background="@android:color/transparent"
-                                android:ems="10"
-                                android:focusable="false"
-                                android:gravity="center"
-                                android:inputType="textPersonName"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".45"
-                                android:gravity="center|right"
-                                android:paddingRight="10dp"
-                                android:text="مجموع کل بدهی ها"
-                                android:textColor="@color/black" />
-
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight=".15"
-                                android:padding="10dp"
-                                app:srcCompat="@drawable/debt" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
                 </LinearLayout>
 
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="20dp"
+                android:layout_weight=".5"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
+
+                <LinearLayout
+                    android:id="@+id/sale"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".8"
+                        android:gravity="center|right"
+                        android:text="گزارشات فروش"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="30dp"
+                        android:layout_weight=".2"
+                        app:srcCompat="@drawable/sale" />
+
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
@@ -393,7 +340,7 @@
                             android:layout_height="0dp"
                             android:layout_weight=".4"
                             android:gravity="center"
-                            android:text="ثبت خرید مواد اولیه"
+                            android:text="گزارشات خرید مواد اولیه"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -425,7 +372,7 @@
                             android:layout_height="0dp"
                             android:layout_weight=".4"
                             android:gravity="center"
-                            android:text="ثبت حقوق و دستمزد"
+                            android:text="گزارشات حقوق و دستمزد"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -446,8 +393,9 @@
                     app:cardBackgroundColor="@color/white"
                     app:cardElevation="5dp"
                     app:cardPreventCornerOverlap="true">
+
                     <LinearLayout
-                        android:id="@+id/reports"
+                        android:id="@+id/deposits"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
@@ -457,14 +405,14 @@
                             android:layout_height="0dp"
                             android:layout_margin="25dp"
                             android:layout_weight=".6"
-                            app:srcCompat="@drawable/reports" />
+                            app:srcCompat="@drawable/income" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight=".4"
                             android:gravity="center"
-                            android:text="گزارشات"
+                            android:text="گزارشات سایر دریافتی ها"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -495,7 +443,7 @@
                             android:layout_height="0dp"
                             android:layout_weight=".4"
                             android:gravity="center"
-                            android:text="ثبت سایر هزینه ها"
+                            android:text="گزارشات سایر هزینه ها"
                             android:textColor="@color/black" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

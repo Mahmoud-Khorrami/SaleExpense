@@ -1,19 +1,12 @@
 package com.example.boroodat.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -25,17 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity16_Adapter;
-import com.example.boroodat.adapter.Activity8_Adapter;
-import com.example.boroodat.adapter.Activity9_Adapter;
 import com.example.boroodat.database.Activity16_DB;
-import com.example.boroodat.database.Activity6_DB;
-import com.example.boroodat.database.Activity8_DB;
-import com.example.boroodat.database.Activity9_DB;
-import com.example.boroodat.database.Fragment5_DB;
-import com.example.boroodat.database.Fragment9_DB;
-import com.example.boroodat.databinding.A6Add1Binding;
-import com.example.boroodat.databinding.A8AddBinding;
-import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.databinding.Activity16RecordExpenseBinding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
@@ -43,12 +26,8 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
-import com.example.boroodat.general.Report;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity16_Model;
-import com.example.boroodat.model.Activity6_Model;
-import com.example.boroodat.model.Activity8_Model;
-import com.example.boroodat.model.Activity9_Model;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
@@ -120,7 +99,7 @@ public class Activity17_EditExpense extends AppCompatActivity
         adapter = new Activity16_Adapter(models, getApplicationContext(),binding.sum );
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( getApplicationContext()) );
         binding.recyclerView.setAdapter (adapter);
-        setAdapter();
+        getExpenseDetails();
 
         //---------------------------------------------------------------------------------------------------
 
@@ -210,7 +189,7 @@ public class Activity17_EditExpense extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                new Account(context,from).dialog(binding.accountNumber,binding.txtAccountId);
+                new Account(context,from).show(binding.accountNumber,binding.txtAccountId);
             }
         });
 
@@ -336,6 +315,85 @@ public class Activity17_EditExpense extends AppCompatActivity
 
     }
 
+    private void getExpenseDetails()
+    {
+        models.clear();
+
+        String url = getString(R.string.domain) + "api/expense/get-expense";
+
+        JSONObject object = new JSONObject();
+        try
+        {
+            object.put("expense_id", expense_id);
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    if (code.equals("200"))
+                    {
+                        clearActivity16DB();
+
+                        JSONArray expense_details = response.getJSONArray("expense_details");
+
+                        for (int i=expense_details.length()-1; i>=0; i--)
+                        {
+                            JSONObject object1 = expense_details.getJSONObject(i);
+
+                            realm.beginTransaction ();
+                            realm.copyToRealmOrUpdate ( new Activity16_DB( Integer.parseInt(object1.getString("id")),object1.getString("row"),object1.getString("description"),object1.getString("number"),object1.getString("unit_price"),object1.getString("total_price")) );
+                            realm.commitTransaction ();
+                        }
+
+                        setAdapter();
+                    }
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(context,error+"",Toast.LENGTH_SHORT).show();
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+
+    }
+
     private void setAdapter()
     {
         models.clear();
@@ -431,20 +489,6 @@ public class Activity17_EditExpense extends AppCompatActivity
             @Override
             public void onResponse(JSONObject response)
             {
-
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new Fragment9_DB(Integer.parseInt(expense_id), factor_number, date,sum,payment,account_id ));
-                realm.commitTransaction();
-
-                //-------------------------------------------------------------------------------
-
-                new Account().increase(last_account_id,last_payment);
-                new Account().decrease(account_id,payment);
-
-                new Report().expense(last_sum,last_payment,"d");
-                new Report().expense(sum,payment,"i");
-                //-------------------------------------------------------------------------------
-
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),"ویرایش با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
                 finish();
@@ -475,7 +519,7 @@ public class Activity17_EditExpense extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }

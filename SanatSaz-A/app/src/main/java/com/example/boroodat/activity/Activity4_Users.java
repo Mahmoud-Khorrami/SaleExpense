@@ -27,9 +27,12 @@ import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity4_Model;
+import com.example.boroodat.model.Activity4_LoadingModel;
+import com.example.boroodat.model.Activity4_MainModel;
 import com.example.boroodat.R;
 import com.example.boroodat.databinding.Activity4UsersBinding;
+import com.example.boroodat.model.Activity4_ParentModel;
+import com.example.boroodat.model.Activity4_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,11 +44,10 @@ import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
 
 public class Activity4_Users extends AppCompatActivity
 {
-    private List<Activity4_Model> models =new ArrayList<>(  );
+    private List<Activity4_ParentModel> models =new ArrayList<>(  );
     private Activity4_Adapter adapter;
     private Context context=this;
     private AlertDialog.Builder alertDialogBuilder=null;
@@ -67,10 +69,10 @@ public class Activity4_Users extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
-        adapter = new Activity4_Adapter(models, Activity4_Users.this );
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( Activity4_Users.this ) );
+        adapter = new Activity4_Adapter(models, Activity4_Users.this );
         binding.recyclerView.setAdapter (adapter);
-        addUser();
+        getUser();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -217,6 +219,7 @@ public class Activity4_Users extends AppCompatActivity
             @Override
             public void onResponse(JSONObject response)
             {
+
                 progressDialog.dismiss();
                 try
                 {
@@ -224,7 +227,7 @@ public class Activity4_Users extends AppCompatActivity
 
                     if (code.equals("200"))
                     {
-                        addUser();
+                        getUser();
                         Toast.makeText(getApplicationContext(), "ثبت کاربر با موفقیت انجام شد." , Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                         alertDialogBuilder = null;
@@ -246,10 +249,8 @@ public class Activity4_Users extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
-                Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
-
             }
         };
 
@@ -266,15 +267,18 @@ public class Activity4_Users extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void addUser()
+    public void getUser()
     {
+        models.clear();
+        models.add(new Activity4_LoadingModel());
+        adapter.notifyDataSetChanged();
+
         String url = getString(R.string.domain) + "api/user/show";
-        progressDialog.show();
 
         final JSONObject object = new JSONObject();
         try
@@ -302,13 +306,13 @@ public class Activity4_Users extends AppCompatActivity
                     {
                         JSONObject object1 = array.getJSONObject(i);
 
-                        int id = Integer.parseInt(object1.getString("id"));
+                        String id = object1.getString("id");
                         String name = object1.getString("name");
                         String phone = object1.getString("phone_number");
                         String role = object1.getString("role");
 
 
-                        models.add(new Activity4_Model(id, name, phone, role));
+                        models.add(new Activity4_MainModel(id, name, phone, role));
 
                     }
 
@@ -319,7 +323,6 @@ public class Activity4_Users extends AppCompatActivity
                 {
                     e.printStackTrace();
                 }
-                progressDialog.dismiss();
 
             }
         };
@@ -329,9 +332,9 @@ public class Activity4_Users extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
-                Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
+                models.clear();
+                models.add(new Activity4_RetryModel());
+                adapter.notifyDataSetChanged();
 
             }
         };
@@ -349,7 +352,7 @@ public class Activity4_Users extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }

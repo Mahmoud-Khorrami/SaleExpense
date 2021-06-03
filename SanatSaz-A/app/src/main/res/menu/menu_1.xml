@@ -8,24 +8,23 @@
         android:enabled="true"
         android:icon="@drawable/more1"/>
 
-    <item android:title="هزینه"
+    <item
         android:id="@+id/menu_1_2"
-        android:visible="true"
         android:enabled="true"
-        android:icon="@drawable/expenses"/>
+        android:icon="@drawable/expenses"
+        android:title="گزارشات"
+        android:visible="true" />
 
-    <item android:title="فروش"
+    <item
         android:id="@+id/menu_1_3"
-        android:visible="true"
         android:enabled="true"
-        android:icon="@drawable/sale"/>
+        android:icon="@drawable/sale"
+        android:title="فروش و هزینه"
+        android:visible="true" />
 
     <item android:title="خانه"
         android:id="@+id/menu_1_4"
         android:visible="true"
         android:enabled="true"
         android:icon="@drawable/home"/>
-    <item
-        android:id="@+id/menu_1_5"
-        android:title=""/>
 </menu>

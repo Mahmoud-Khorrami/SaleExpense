@@ -68,9 +68,24 @@ class UserController extends Controller
 
     }
 
+    public function archive(Request $request)
+    {
+        $user = Usera::where('id', $request->user_id)->first();
+
+        if ($user)
+        {
+            $user->archive = "done";
+            $user->save();
+        }
+
+        return ['code' => '200'];
+    }
+
     public function show(Request $request)
     {
-        $users = User::where('company_id', $request->company_id)->get();
+        $users = User::where('company_id', $request->company_id)
+                     ->whereNull("archive")
+                     ->get();
 
         return ['users' => $users,];
     }

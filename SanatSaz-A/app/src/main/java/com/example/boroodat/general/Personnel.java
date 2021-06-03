@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.AuthFailureError;
@@ -23,11 +23,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity14_Adapter;
-import com.example.boroodat.database.Activity14_DB;
 import com.example.boroodat.databinding.A14AddBinding;
-import com.example.boroodat.databinding.A6Add1Binding;
-import com.example.boroodat.model.Activity14_Model;
+import com.example.boroodat.databinding.PersonnelBinding;
+import com.example.boroodat.model.Activity14_LoadingModel;
+import com.example.boroodat.model.Activity14_MainModel;
+import com.example.boroodat.model.Activity14_NotFoundModel;
+import com.example.boroodat.model.Activity14_ParentModel;
+import com.example.boroodat.model.Activity14_RetryModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,11 +46,10 @@ import io.realm.RealmResults;
 
 public class Personnel
 {
-    private List<Activity14_Model> models =new ArrayList<>(  );
+    private List<Activity14_ParentModel> models =new ArrayList<>(  );
     private Activity14_Adapter adapter;
     private Context context;
     private android.app.AlertDialog progressDialog;
-    private Realm realm;
 
     public Personnel(Context context)
     {
@@ -54,15 +57,13 @@ public class Personnel
 
         //--------------------------------------------
 
-        realm=Realm.getDefaultInstance();
-
         progressDialog = new SpotsDialog(context, R.style.Custom);
         progressDialog.setCancelable(false);
     }
 
-    public void dialog(TextView personnel_name, TextView personnel_id)
+    public void show(TextView personnel_name, TextView personnel_id)
     {
-        final A6Add1Binding binding1 = A6Add1Binding.inflate(LayoutInflater.from(context));
+        final PersonnelBinding binding1 = PersonnelBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
@@ -76,19 +77,15 @@ public class Personnel
 
         //----------------------------------------------------------------------------------------------------------
 
-        binding1.title.setText("لیست پرسنل");
-
-        //----------------------------------------------------------------------------------------------------------
-
         progressDialog = new SpotsDialog(context, R.style.Custom);
         progressDialog.setCancelable(false);
 
         //----------------------------------------------------------------------------------------------------------
 
-        adapter = new Activity14_Adapter(models, context,2,personnel_name,personnel_id,alertDialog );
         binding1.recyclerView.setLayoutManager ( new LinearLayoutManager(context) );
+        adapter = new Activity14_Adapter(models, context,2,personnel_name,personnel_id,alertDialog );
         binding1.recyclerView.setAdapter (adapter);
-        addPersonnel();
+        getPersonnel();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -100,25 +97,12 @@ public class Personnel
         binding1.spinner.setAdapter(adp);
         binding1.spinner.setSelection(0);
 
-        //-------------------------------------------------------------------------------------------------------
-
-        binding1.lnr2.setVisibility(View.GONE);
-
-        binding1.search.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                binding1.lnr1.setVisibility(View.GONE);
-                binding1.lnr2.setVisibility(View.VISIBLE);
-            }
-        });
-
         //----------------------------------------------------------------------------------------------------------
 
-        binding1.searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+        binding1.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener()
+        {
             @Override
-            public boolean onQueryTextSubmit(String s)
+            public boolean onQueryTextSubmit(String query)
             {
                 return false;
             }
@@ -127,34 +111,26 @@ public class Personnel
             public boolean onQueryTextChange(String newText)
             {
                 newText = newText.toLowerCase();
-                List<Activity14_Model> newList = new ArrayList<>();
 
-                for (int i=0;i<models.size();i++)
-                {
-                    if (binding1.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی")
-                            && models.get(i).getName().toLowerCase().contains(newText))
-                        newList.add(models.get(i));
+                if (binding1.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی"))
+                    searchQuery("name", newText);
 
-                    else if (binding1.spinner.getSelectedItem().toString().equals("شماره همراه")
-                            && models.get(i).getPhone_number().toLowerCase().contains(newText))
-                        newList.add(models.get(i));
-                }
+                else if (binding1.spinner.getSelectedItem().toString().equals("شماره همراه"))
+                    searchQuery("phone_number", newText);
 
-                adapter.setFilter(newList);
                 return true;
             }
         });
 
         //----------------------------------------------------------------------------------------------------------
 
+
         binding1.searchView.setOnCloseListener(new SearchView.OnCloseListener()
         {
             @Override
             public boolean onClose()
             {
-                adapter.setFilter(models);
-                binding1.lnr1.setVisibility(View.VISIBLE);
-                binding1.lnr2.setVisibility(View.GONE);
+                getPersonnel();
                 return true;
             }
         });
@@ -175,7 +151,7 @@ public class Personnel
                     {
                         if (new Internet(context).check())
                         {
-                            addPersonnelDialog();
+                            dialog();
                         }
                         else
                             new Internet(context).enable();
@@ -206,7 +182,7 @@ public class Personnel
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    private void addPersonnelDialog()
+    private void dialog()
     {
         final A14AddBinding binding1 = A14AddBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
@@ -267,7 +243,7 @@ public class Personnel
 
                             if (new Internet(context).check())
                             {
-                                createPersonnel(binding1.name.getText().toString(),binding1.phoneNumber.getText().toString(),binding1.registerDate.getText().toString(),role1,credit_card1,alertDialog);
+                                create(binding1.name.getText().toString(),binding1.phoneNumber.getText().toString(),binding1.registerDate.getText().toString(),role1,credit_card1,alertDialog);
                             }
                             else
                                 new Internet(context).enable();
@@ -292,7 +268,7 @@ public class Personnel
 
         //------------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -300,7 +276,7 @@ public class Personnel
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void createPersonnel(final String name, final String phone_number, final String register_date, final String role, final String credit_card, final AlertDialog alertDialog)
+    public void create(final String name, final String phone_number, final String register_date, final String role, final String credit_card, final AlertDialog alertDialog)
     {
         String url = context.getString(R.string.domain) + "api/personnel/create";
         progressDialog.show();
@@ -328,18 +304,19 @@ public class Personnel
             {
                 try
                 {
-                    int id = Integer.parseInt(response.getString("id"));
-                    realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(new Activity14_DB(id, name, phone_number,register_date, role,credit_card,"-"));
-                    realm.commitTransaction();
+                    String code = response.getString("code");
+                    if (code.equals("200"))
+                    {
+                        JSONObject message = response.getJSONObject("message");
+                        String id = message.getString("id");
 
-                    //----------------------------------------------------
+                        progressDialog.dismiss();
+                        Toast.makeText(context, "ایجاد پرسنل جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
 
-                    progressDialog.dismiss();
-                    Toast.makeText(context, "ایجاد پرسنل جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
-                    alertDialog.dismiss();
-
-                    addPersonnel();
+                        models.add(new Activity14_MainModel(id,name,phone_number,register_date,role,credit_card,""));
+                        adapter.notifyDataSetChanged();
+                    }
 
                 } catch (JSONException e)
                 {
@@ -373,22 +350,191 @@ public class Personnel
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void addPersonnel()
+    public void getPersonnel()
     {
-        RealmResults<Activity14_DB> res = realm.where(Activity14_DB.class).findAll();
-
         models.clear();
+        models.add(new Activity14_LoadingModel());
+        adapter.notifyDataSetChanged();
 
-        for (int i=0;i<res.size();i++)
+        String url = context.getString(R.string.domain) + "api/personnel/personnel-query1";
+
+        JSONObject object = new JSONObject();
+        try
         {
-            models.add(new Activity14_Model(res.get(i).getId(),res.get(i).getName(),res.get(i).getPhone_number(),res.get(i).getRegister_date(),res.get(i).getRole(),res.get(i).getCredit_card(),res.get(i).getExit_date()));
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", context.getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
         }
 
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONObject message = response.getJSONObject("message");
+                        JSONArray result = message.getJSONArray("result");
+
+                        for (int i=0; i<result.length(); i++)
+                        {
+                            JSONObject object1 = result.getJSONObject(i);
+
+                            models.add(new Activity14_MainModel(object1.getString("id"),object1.getString("name"),object1.getString("phone_number"),object1.getString("register_date"),object1.getString("role"),object1.getString("credit_card"),object1.getString("exit_date")));
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    else if (code.equals("207"))
+                    {
+                        models.add(new Activity14_NotFoundModel());
+                        adapter.notifyDataSetChanged();
+                    }
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                models.clear();
+                models.add(new Activity14_RetryModel());
+                adapter.notifyDataSetChanged();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+
+    }
+
+    public void searchQuery(String type, String value)
+    {
+        String url = context.getString(R.string.domain) + "api/personnel/search-query";
+
+        models.clear();
+        models.add(new Activity14_LoadingModel());
         adapter.notifyDataSetChanged();
+
+        JSONObject object = new JSONObject();
+        try
+        {
+            object.put("type",type);
+            object.put("value",value);
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", context.getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONObject message = response.getJSONObject("message");
+                        JSONArray result = message.getJSONArray("result");
+
+                        if (result.length()>0)
+                        {
+                            for (int i = 0; i < result.length(); i++)
+                            {
+                                JSONObject object1 = result.getJSONObject(i);
+
+                                models.add(new Activity14_MainModel(object1.getString("id"),object1.getString("name"),object1.getString("phone_number"),object1.getString("register_date"),object1.getString("role"),object1.getString("credit_card"),object1.getString("exit_date")));
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        else
+                        {
+                            models.clear();
+                            models.add(new Activity14_NotFoundModel());
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                    Toast.makeText(context,"ok2",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                models.clear();
+                models.add(new Activity14_RetryModel());
+                adapter.notifyDataSetChanged();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

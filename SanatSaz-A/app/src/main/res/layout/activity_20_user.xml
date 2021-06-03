@@ -15,7 +15,6 @@
         android:paddingTop="50dp"
         android:paddingBottom="50dp">
 
-        <include layout="@layout/backdrop" />
     </LinearLayout>
 
     <com.google.android.material.appbar.AppBarLayout
@@ -29,8 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/Widget.Toolbar"
-            app:contentInsetStart="0dp"
-            app:navigationIcon="@drawable/navigation_menu">
+            app:contentInsetStart="0dp">
 
             <TextView
                 android:id="@+id/title"
@@ -177,7 +175,7 @@
                 app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
-                    android:id="@+id/report"
+                    android:id="@+id/saleReports"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -200,7 +198,7 @@
                             android:layout_weight=".75"
                             android:gravity="center|right"
                             android:paddingRight="10dp"
-                            android:text="گزارشات"
+                            android:text="گزارشات فروش"
                             android:textColor="@color/black" />
 
                         <ImageView
@@ -209,6 +207,61 @@
                             android:layout_weight=".15"
                             android:padding="10dp"
                             app:srcCompat="@drawable/reports" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/boroodat1" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
+
+                <LinearLayout
+                    android:id="@+id/expenseReports"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".1"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/left1" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".75"
+                            android:gravity="center|right"
+                            android:paddingRight="10dp"
+                            android:text="گزارشات هزینه ها"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".15"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/expenses" />
                     </LinearLayout>
 
                     <TextView

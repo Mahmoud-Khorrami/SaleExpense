@@ -22,14 +22,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.adapter.Activity0_Adapter;
-import com.example.boroodat.database.Activity7_DB;
 import com.example.boroodat.database.User_Info_DB;
 import com.example.boroodat.databinding.A0AddBinding;
 import com.example.boroodat.databinding.Activity0DeveloperBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
-import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.interfaces.RecyclerViewItemClickInterface1;
 import com.example.boroodat.model.Activity0_Model;
@@ -100,15 +98,25 @@ public class Activity0_Developer extends AppCompatActivity
         adapter.setOnItemClickListener(new RecyclerViewItemClickInterface1()
         {
             @Override
-            public void onItemClick(View v, Activity0_Model model1)
+            public void onItemClick(View v, final Activity0_Model model1)
             {
-                RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
+                realm.executeTransaction(new Realm.Transaction()
+                {
+                    @Override
+                    public void execute(Realm realm)
+                    {
+                        RealmResults<User_Info_DB> res = realm.where(User_Info_DB.class).findAll();
 
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new User_Info_DB(0,res.get(0).getUser_id(),res.get(0).getPhone_number(),res.get(0).getUsername(),res.get(0).getRole(),model1.getId()+"",model1.getName(),res.get(0).getToken(),res.get(0).getToken_id()));
-                realm.commitTransaction();
+                        if (res.size()>0)
+                        {
+                            res.get(0).setCompany_id(model1.getId() + "");
+                            res.get(0).setCompany_name(model1.getName());
+                        }
+                    }
+                });
 
-                getData1();
+                Intent intent = new Intent(Activity0_Developer.this, Activity2_Manager.class);
+                startActivity(intent);
             }
         });
     }
@@ -184,9 +192,9 @@ public class Activity0_Developer extends AppCompatActivity
             }
         });
 
-        //....................................................................................................
+        //------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -277,6 +285,7 @@ public class Activity0_Developer extends AppCompatActivity
             {
 
                 models.clear();
+                progressDialog.dismiss();
                 try
                 {
                     JSONArray array=response.getJSONArray("companies");
@@ -299,7 +308,6 @@ public class Activity0_Developer extends AppCompatActivity
                 {
 
                 }
-                progressDialog.dismiss();
 
             }
         };
@@ -329,20 +337,21 @@ public class Activity0_Developer extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void getData1()
+    /*
+    public void getSale()
     {
-        String url = getString(R.string.domain) + "api/general/data1";
+        String url = getString(R.string.domain) + "api/general/get-sales";
         progressDialog.show();
 
-        JSONObject object = new JSONObject();
+        final JSONObject object = new JSONObject();
         try
         {
-            object.put("company_id", new User_Info().company_id());
+            object.put("company_id", "8");
             object.put("secret_key", getString(R.string.secret_key));
         }
         catch (JSONException e)
@@ -355,38 +364,39 @@ public class Activity0_Developer extends AppCompatActivity
             @Override
             public void onResponse(JSONObject response)
             {
-                progressDialog.dismiss();
 
+                progressDialog.dismiss();
                 try
                 {
-                    JSONArray array1 = response.getJSONArray("accounts");
-                    JSONArray array2 = response.getJSONArray("buyers");
-                    JSONArray array3 = response.getJSONArray("drivers");
-                    JSONArray array4 = response.getJSONArray("personnel");
-                    JSONArray array5 = response.getJSONArray("reports");
+                    JSONArray array=response.getJSONArray("result");
 
-                    boolean b1 = new SaveData(array1).toActivity7DB();
-                    boolean b2 = new SaveData(array2).toActivity8DB();
-                    boolean b3 = new SaveData(array3).toActivity9DB();
-                    boolean b4 = new SaveData(array4).toActivity14DB();
-                    boolean b5 = new SaveData(array5).toReportDB();
+                    JSONArray payments = new JSONArray();
 
-                    if (b1 & b2 & b3 & b4 & b5)
+                    for (int i=0;i<array.length() ;i++)
                     {
-                        Intent intent = new Intent(Activity0_Developer.this, Activity2_Manager.class);
-                        intent.putExtra("token", new User_Info().token());
-                        intent.putExtra("company_id", new User_Info().company_id());
-                        intent.putExtra("company_name", new User_Info().company_name());
-                        startActivity(intent);
+                        JSONObject object1=array.getJSONObject(i);
+
+                        if (!object1.getString("payment").equals("0"))
+                        {
+                            JSONObject object2 = new JSONObject();
+                            object2.put("company_id", object1.getString("company_id"));
+                            object2.put("sale_id", object1.getString("id"));
+                            object2.put("amount", object1.getString("payment"));
+                            object2.put("date", object1.getString("date"));
+                            object2.put("description", object1.getString("description"));
+
+                            payments.put(object2);
+                        }
+
                     }
 
-                    else
-                        Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
+                    SavePayment(payments);
                 }
+                catch (Exception e)
+                {
+
+                }
+
             }
         };
 
@@ -415,8 +425,65 @@ public class Activity0_Developer extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+
     }
 
+    public void SavePayment(JSONArray payments)
+    {
+        String url = getString(R.string.domain) + "api/general/save-payments";
+
+        final JSONObject object = new JSONObject();
+        try
+        {
+            object.put("payments", payments);
+            object.put("secret_key", getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+
+
+                Toast.makeText(getApplicationContext(), response+"", Toast.LENGTH_LONG).show();
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+
+    }*/
 }

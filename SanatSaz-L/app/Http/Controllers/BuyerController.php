@@ -19,7 +19,36 @@ class BuyerController extends Controller
             ]
         );
 
-        return ['id'=>$buyer->id];
+        return ["code"    => "200",
+                "result" => $buyer->id];
+    }
+
+    public function getBuyers(Request $request)
+    {
+        $buyer = Buyer::where('company_id', $request->company_id)
+                      ->whereNull("archive")
+                      ->get();
+
+        if (($buyer->count()) > 0)
+        {
+            return ["code"   => "200",
+                    "result" => $buyer];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+
+    }
+
+    public function searchQuery(Request $request)
+    {
+        $buyer = Buyer::where('company_id', $request->company_id)
+                      ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                      ->whereNull("archive")
+                      ->get();
+
+        return ["code"   => "200",
+                "result" => $buyer];
     }
 
     public function edit(Request $request){

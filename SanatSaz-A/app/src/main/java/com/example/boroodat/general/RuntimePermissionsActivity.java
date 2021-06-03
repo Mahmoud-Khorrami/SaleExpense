@@ -1,5 +1,7 @@
 package com.example.boroodat.general;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -40,18 +42,18 @@ public abstract class RuntimePermissionsActivity extends AppCompatActivity
         }
     }
 
-    public void requestAppPermissions(final String[] requestedPermissions, final int requestCode)
+    public void requestAppPermissions(final String[] requestedPermissions, final int requestCode, Context context)
     {
         int permissionCheck = PackageManager.PERMISSION_GRANTED;
         boolean shouldShowRequestPermissionRationale = false;
         for (String permission : requestedPermissions)
         {
-            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(this, permission);
-            shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale || ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(context, permission);
+            shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale || ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission);
         }
         if (permissionCheck != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
+            ActivityCompat.requestPermissions((Activity) context, requestedPermissions, requestCode);
         }
         else
         {

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
-use App\Models\Company;
+use App\Http\Resources\DepositResource1;
 use App\Models\Deposit;
 use Illuminate\Http\Request;
 
@@ -33,25 +32,80 @@ class DepositController extends Controller
 
         $initial_balance=Deposit::where('account_id',$request->account_id)->where('title','موجودی اولیه')->first();
 
-        return ['initial_balance'=>$initial_balance->amount];
+        if ($initial_balance)
+            return ['initial_balance'=>$initial_balance->amount];
+        else
+            return ['initial_balance'=>"0"];
     }
 
-    public function getDeposit(Request $request)
+    public function getDepositsCount(Request $request)
     {
+        $deposits = Deposit::where('company_id', $request->company_id);
 
-        $deposit = Deposit::where('id', $request->deposit_id)->first();
-        if ($deposit)
+        $count = 0;
+        if ($deposits)
+            $count = $deposits->count();
+
+        return ["code"  => "200",
+                "count" => $count];
+    }
+
+    public function getAllDeposits(Request $request)
+    {
+        $deposits = Deposit::where('company_id', $request->company_id);
+
+        //-----------------------------------------------------------------------
+
+        if ($deposits)
         {
-            return ['code'          => '200',
-                    'deposit'       => $deposit,
-                    'account_title' => $deposit->account->title];
+            $deposits = $deposits->simplePaginate($request->paginate);
+
+            $result = collect([]);
+
+            $deposits = DepositResource1::collection($deposits);
+            foreach ($deposits as $deposit)
+            {
+                $result->push(
+                    [
+                        'deposit'       => $deposit,
+                        'account_title' => $deposit->account->title,]
+                );
+            }
+            return ["code"   => "200",
+                    "result" => $result];
         }
 
-        else
-            return [
-                'code'    => '202',
-                'message' => trans('message1.202')
-            ];
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+    }
+
+    public function searchQuery(Request $request)
+    {
+        $deposits = Deposit::where('company_id', $request->company_id)
+                             ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                             ->get();
+
+        //------------------------------------------------
+        if ($deposits)
+        {
+
+            $result = collect([]);
+
+            $deposits = DepositResource1::collection($deposits);
+            foreach ($deposits as $deposit)
+            {
+                $result->push(
+                    [
+                        'deposit'         => $deposit,
+                        'account_title'    => $deposit->account->title,]
+                );
+            }
+            return ["code"   => "200",
+                    "result" => $result];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
     }
 
     public function edit(Request $request)

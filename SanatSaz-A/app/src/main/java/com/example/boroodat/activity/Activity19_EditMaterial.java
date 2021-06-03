@@ -19,7 +19,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity18_Adapter;
 import com.example.boroodat.database.Activity18_DB;
-import com.example.boroodat.database.Fragment8_DB;
 import com.example.boroodat.databinding.Activity18RawMaterialBinding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
@@ -27,7 +26,6 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
-import com.example.boroodat.general.Report;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity18_Model;
 import com.google.android.material.textfield.TextInputEditText;
@@ -101,7 +99,7 @@ public class Activity19_EditMaterial extends AppCompatActivity
         adapter = new Activity18_Adapter(models, getApplicationContext(),binding.sum );
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( getApplicationContext()) );
         binding.recyclerView.setAdapter (adapter);
-        setAdapter();
+        getMaterialDetails();
 
         //---------------------------------------------------------------------------------------------------
 
@@ -191,7 +189,7 @@ public class Activity19_EditMaterial extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                new Account(context,from).dialog(binding.accountNumber,binding.txtAccountId);
+                new Account(context,from).show(binding.accountNumber,binding.txtAccountId);
             }
         });
 
@@ -317,6 +315,85 @@ public class Activity19_EditMaterial extends AppCompatActivity
 
     }
 
+    private void getMaterialDetails()
+    {
+        models.clear();
+
+        String url = getString(R.string.domain) + "api/material/get-material";
+
+        JSONObject object = new JSONObject();
+        try
+        {
+            object.put("material_id", material_id);
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    if (code.equals("200"))
+                    {
+                        clearActivity18DB();
+
+                        JSONArray material_details = response.getJSONArray("material_details");
+
+                        for (int i=material_details.length()-1; i>=0; i--)
+                        {
+                            JSONObject object1 = material_details.getJSONObject(i);
+
+                            realm.beginTransaction ();
+                            realm.copyToRealmOrUpdate ( new Activity18_DB( Integer.parseInt(object1.getString("id")),object1.getString("row"),object1.getString("description"),object1.getString("number"),object1.getString("unit_price"),object1.getString("total_price")) );
+                            realm.commitTransaction ();
+                        }
+
+                        setAdapter();
+                    }
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(context,error+"",Toast.LENGTH_SHORT).show();
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+
+    }
+
     private void setAdapter()
     {
         models.clear();
@@ -412,20 +489,6 @@ public class Activity19_EditMaterial extends AppCompatActivity
             @Override
             public void onResponse(JSONObject response)
             {
-
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new Fragment8_DB(Integer.parseInt(material_id), factor_number, date,sum,payment,account_id ));
-                realm.commitTransaction();
-
-                //-------------------------------------------------------------------------------
-
-                new Account().increase(last_account_id,last_payment);
-                new Account().decrease(account_id,payment);
-
-                new Report().material(last_sum,last_payment,"d");
-                new Report().material(sum,payment,"i");
-                //-------------------------------------------------------------------------------
-
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),"ویرایش با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
                 finish();
@@ -456,7 +519,7 @@ public class Activity19_EditMaterial extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }

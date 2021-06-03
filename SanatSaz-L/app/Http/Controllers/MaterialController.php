@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MaterialResource1;
+use App\Http\Resources\MaterialResource2;
 use App\Models\Account;
 use App\Models\Material;
 use App\Models\MaterialDetail;
@@ -62,9 +64,7 @@ class MaterialController extends Controller
         if ($material)
         {
             return ['code'          => '200',
-                    'material'          => $material,
-                    'account_title' => $material->account->title,
-                    'material_details'  => $material->materialDetails,
+                    'material_details'  => MaterialResource2::collection($material->materialDetails),
             ];
         }
         else
@@ -72,6 +72,104 @@ class MaterialController extends Controller
                 'code'    => '202',
                 'message' => trans('message1.202')
             ];
+    }
+
+    public function getMaterialsCount(Request $request){
+
+        $user = auth()->user();
+        $materials = null;
+
+        if ($user->role == "مدیر" || $user->role == "Developer")
+            $materials = Material::where('company_id', $request->company_id);
+
+        else if ($user->role == "کارمند")
+            $materials = Material::where('company_id', $request->company_id)->where("user_id", $user->id);
+
+        $count = 0;
+        if ($materials)
+            $count = $materials->count();
+
+        return ["code"  => "200",
+                "count" => $count];
+    }
+
+    public function getAllMaterials(Request $request)
+    {
+        $user = auth()->user();
+        $materials = null;
+
+        if ($user->role == "مدیر" || $user->role == "Developer")
+            $materials = Material::where('company_id', $request->company_id);
+
+        else if ($user->role == "کارمند")
+            $materials = Material::where('company_id', $request->company_id)->where("user_id", $user->id);
+
+        //-----------------------------------------------------------------------
+
+        if ($materials)
+        {
+            $materials = $materials->simplePaginate($request->paginate);
+
+            $result = collect([]);
+
+            $materials = MaterialResource1::collection($materials);
+            foreach ($materials as $material)
+            {
+                $result->push(
+                    [
+                        'material'         => $material,
+                        'account_title'    => $material->account->title,
+                        'material_details' => MaterialResource2::collection($material->materialDetails)]
+                );
+            }
+            return ["code"   => "200",
+                    "result" => $result];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+    }
+
+    public function searchQuery(Request $request)
+    {
+        $user = auth()->user();
+        $materials = null;
+
+        if ($user->role == "مدیر" || $user->role == "Developer")
+            $materials = Material::where('company_id', $request->company_id)
+                                ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                                ->get();
+
+
+        else if ($user->role == "کارمند")
+            $materials = Material::where('company_id', $request->company_id)
+                                ->where('user_id', $user->id)
+                                ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                                ->get();
+
+        //------------------------------------------------
+        if ($materials)
+        {
+
+            $result = collect([]);
+
+            $materials = MaterialResource1::collection($materials);
+            foreach ($materials as $material)
+            {
+                $result->push(
+                    [
+                        'material'          => $material,
+                        'account_title' => $material->account->title,
+                        'material_details' => MaterialResource2::collection($material->materialDetails)]
+                );
+            }
+            return ["code"   => "200",
+                    "result" => $result];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+
     }
 
     public function edit(Request $request)

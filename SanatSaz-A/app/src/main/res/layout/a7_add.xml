@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
+            android:background="@color/white1"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout

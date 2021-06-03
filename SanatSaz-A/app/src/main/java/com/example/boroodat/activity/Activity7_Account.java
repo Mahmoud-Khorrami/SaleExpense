@@ -22,18 +22,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity7_Adapter;
-import com.example.boroodat.database.Activity7_DB;
 import com.example.boroodat.databinding.A7AddBinding;
 import com.example.boroodat.databinding.Activity7AccountBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
-import com.example.boroodat.general.Report;
 import com.example.boroodat.general.TodayDate;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity7_Model;
+import com.example.boroodat.model.Activity7_LoadingModel;
+import com.example.boroodat.model.Activity7_MainModel;
+import com.example.boroodat.model.Activity7_NotFoundModel;
+import com.example.boroodat.model.Activity7_ParentModel;
+import com.example.boroodat.model.Activity7_RetryModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,19 +46,16 @@ import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Activity7_Account extends AppCompatActivity
 {
 
     Activity7AccountBinding binding;
-    private List<Activity7_Model> models =new ArrayList<>(  );
+    private List<Activity7_ParentModel> models =new ArrayList<>(  );
     private Activity7_Adapter adapter;
     private Context context=this;
     private AlertDialog.Builder alertDialogBuilder=null;
     private android.app.AlertDialog progressDialog;
-    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,8 +65,6 @@ public class Activity7_Account extends AppCompatActivity
         View view = binding.getRoot();
         setContentView(view);
 
-        realm=Realm.getDefaultInstance();
-
         //----------------------------------------------------------------------------------------------------------
 
         progressDialog = new SpotsDialog(this, R.style.Custom);
@@ -74,10 +72,10 @@ public class Activity7_Account extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
-        adapter = new Activity7_Adapter(models, Activity7_Account.this,1,"manager" );
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( Activity7_Account.this ) );
+        adapter = new Activity7_Adapter(models, Activity7_Account.this,1,"manager" );
         binding.recyclerView.setAdapter (adapter);
-        addSaleAccount();
+        getAccount();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -96,7 +94,6 @@ public class Activity7_Account extends AppCompatActivity
             }
         });
 
-        //----------------------------------------------------------------------------------------------------------
 
     }
 
@@ -172,9 +169,9 @@ public class Activity7_Account extends AppCompatActivity
             }
         });
 
-        //....................................................................................................
+        //------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -209,20 +206,24 @@ public class Activity7_Account extends AppCompatActivity
             {
                 try
                 {
-                    int id = Integer.parseInt(response.getString("id"));
-                    realm.beginTransaction();
+                    String code = response.getString("code");
+
+                    if (code.equals("200"))
+                    {
+                    /*realm.beginTransaction();
                     realm.copyToRealmOrUpdate(new Activity7_DB(id, title, account_number, balance));
                     realm.commitTransaction();
 
-                    new Report().deposit(balance,"i");
-                    //----------------------------------------------------
+                    new Report().deposit(balance,"i");*/
+                        //----------------------------------------------------
 
-                    progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "ایجاد حساب با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
-                    alertDialog.dismiss();
-                    alertDialogBuilder = null;
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "ایجاد حساب با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                        alertDialogBuilder = null;
 
-                    addSaleAccount();
+                        getAccount();
+                    }
 
                 } catch (JSONException e)
                 {
@@ -256,23 +257,98 @@ public class Activity7_Account extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void addSaleAccount()
+    public void getAccount()
     {
-        RealmResults<Activity7_DB> res = realm.where(Activity7_DB.class).findAll();
-
         models.clear();
+        models.add(new Activity7_LoadingModel());
+        adapter.notifyDataSetChanged();
 
-        for (int i=0;i<res.size();i++)
+        String url = getString(R.string.domain) + "api/account/account-query1";
+
+        JSONObject object = new JSONObject();
+        try
         {
-            models.add(new Activity7_Model(res.get(i).getId(),res.get(i).getTitle(),res.get(i).getAccountNumber(),res.get(i).getBalance()));
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
         }
 
-        adapter.notifyDataSetChanged();
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONObject message = response.getJSONObject("message");
+                        JSONArray result = message.getJSONArray("result");
+
+                        for (int i=0; i<result.length(); i++)
+                        {
+                            JSONObject object1 = result.getJSONObject(i);
+
+                            models.add(new Activity7_MainModel(object1.getString("id"),object1.getString("title"),object1.getString("account_number"),object1.getString("balance")));
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    else if (code.equals("207"))
+                    {
+                        models.add(new Activity7_NotFoundModel());
+                        adapter.notifyDataSetChanged();
+                    }
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                models.clear();
+                models.add(new Activity7_RetryModel());
+                adapter.notifyDataSetChanged();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+
     }
 
     @Override
@@ -280,6 +356,6 @@ public class Activity7_Account extends AppCompatActivity
     {
         super.onResume();
 
-        addSaleAccount();
+        getAccount();
     }
 }

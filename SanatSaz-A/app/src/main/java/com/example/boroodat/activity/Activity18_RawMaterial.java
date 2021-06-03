@@ -1,7 +1,6 @@
 package com.example.boroodat.activity;
 
 import android.content.Context;
-import android.icu.text.UnicodeSet;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,7 +26,6 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
-import com.example.boroodat.general.Report;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity18_Model;
 import com.google.android.material.textfield.TextInputEditText;
@@ -174,7 +172,7 @@ public class Activity18_RawMaterial extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                new Account(context,from).dialog(binding.accountNumber,binding.txtAccountId);
+                new Account(context,from).show(binding.accountNumber,binding.txtAccountId);
             }
         });
 
@@ -393,11 +391,6 @@ public class Activity18_RawMaterial extends AppCompatActivity
             @Override
             public void onResponse(JSONObject response)
             {
-
-                new Account().decrease(account_id,payment);
-                new Report().material(sum,payment,"i");
-                //-------------------------------------------------------------------------------
-
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),"ثبت هزینه خرید مواد اولیه با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
                 finish();
@@ -428,7 +421,7 @@ public class Activity18_RawMaterial extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }

@@ -1,8 +1,8 @@
 package com.example.boroodat.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
@@ -10,14 +10,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -28,15 +24,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity9_Adapter;
-import com.example.boroodat.database.Activity9_DB;
 import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.databinding.Activity9DriverBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
-import com.example.boroodat.general.SaveData;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity9_Model;
+import com.example.boroodat.interfaces.OnLoadMoreListener;
+import com.example.boroodat.interfaces.RetryListener;
+import com.example.boroodat.model.Activity9_LoadingModel;
+import com.example.boroodat.model.Activity9_MainModel;
+import com.example.boroodat.model.Activity9_NotFoundModel;
+import com.example.boroodat.model.Activity9_ParentModel;
+import com.example.boroodat.model.Activity9_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,18 +48,16 @@ import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Activity9_Driver extends AppCompatActivity
 {
     Activity9DriverBinding binding;
-    private List<Activity9_Model> models =new ArrayList<>(  );
+    private List<Activity9_ParentModel> models =new ArrayList<>(  );
     private Activity9_Adapter adapter;
     private Context context=this;
     private AlertDialog.Builder alertDialogBuilder=null;
     private android.app.AlertDialog progressDialog;
-    private Realm realm;
+    final JSONArray driver_ids=new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,7 +67,6 @@ public class Activity9_Driver extends AppCompatActivity
         final View view = binding.getRoot();
         setContentView(view);
 
-        realm=Realm.getDefaultInstance();
         //----------------------------------------------------------------------------------------------------------
 
         binding.toolbar.setTitle("");
@@ -82,17 +79,29 @@ public class Activity9_Driver extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
-        adapter = new Activity9_Adapter(models, Activity9_Driver.this,1,"manager");
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( Activity9_Driver.this ) );
+        adapter = new Activity9_Adapter(models, Activity9_Driver.this,1,"manager");
         binding.recyclerView.setAdapter (adapter);
-        addDriver();
+        getDriver();
 
         //----------------------------------------------------------------------------------------------------------
+
+        adapter.setRetryListener(new RetryListener()
+        {
+            @Override
+            public void retry1()
+            {
+                getDriver();
+            }
+        });
+
+        //-------------------------------------------------------------------------------------------------------
 
         ArrayList<String> searchItem=new ArrayList<>();
         searchItem.add("نام و نام خانوادگی");
         searchItem.add("شماره همراه");
-        searchItem.add("مشخصات خودرو");
+        searchItem.add("نوع خودرو");
+        searchItem.add("شماره پلاک");
 
         final ArrayAdapter<String> adp = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, searchItem);
         binding.spinner.setAdapter(adp);
@@ -105,9 +114,10 @@ public class Activity9_Driver extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
-        binding.searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener()
+        {
             @Override
-            public boolean onQueryTextSubmit(String s)
+            public boolean onQueryTextSubmit(String query)
             {
                 return false;
             }
@@ -116,38 +126,34 @@ public class Activity9_Driver extends AppCompatActivity
             public boolean onQueryTextChange(String newText)
             {
                 newText = newText.toLowerCase();
-                List<Activity9_Model> newList = new ArrayList<>();
 
-                for (int i=0;i<models.size();i++)
-                {
-                    if (binding.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی")
-                            && models.get(i).getName().toLowerCase().contains(newText))
-                        newList.add(models.get(i));
+                if (binding.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی"))
+                    searchQuery("name", newText);
 
-                    else if (binding.spinner.getSelectedItem().toString().equals("شماره همراه")
-                            && models.get(i).getPhone_number().toLowerCase().contains(newText))
-                        newList.add(models.get(i));
+                else if (binding.spinner.getSelectedItem().toString().equals("شماره همراه"))
+                    searchQuery("phone_number", newText);
 
-                    else if (binding.spinner.getSelectedItem().toString().equals("مشخصات خودرو")
-                            && models.get(i).getCar_type().toLowerCase().contains(newText))
-                        newList.add(models.get(i));
-                }
+                else if (binding.spinner.getSelectedItem().toString().equals("نوع خودرو"))
+                    searchQuery("car_type", newText);
 
-                adapter.setFilter(newList);
+                else if (binding.spinner.getSelectedItem().toString().equals("شماره پلاک"))
+                    searchQuery("number_plate", newText);
+
                 return true;
             }
         });
 
         //----------------------------------------------------------------------------------------------------------
 
+
         binding.searchView.setOnCloseListener(new SearchView.OnCloseListener()
         {
             @Override
             public boolean onClose()
             {
-                adapter.setFilter(models);
                 binding.toolbar.setVisibility(View.VISIBLE);
                 binding.lnr2.setVisibility(View.GONE);
+                getDriver();
                 return true;
             }
         });
@@ -263,9 +269,9 @@ public class Activity9_Driver extends AppCompatActivity
             }
         });
 
-        //....................................................................................................
+        //------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -300,20 +306,22 @@ public class Activity9_Driver extends AppCompatActivity
             {
                 try
                 {
-                    int id = Integer.parseInt(response.getString("id"));
-                    realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(new Activity9_DB(id, name, phone_number, car_type,number_plate,""));
-                    realm.commitTransaction();
+                    String code = response.getString("code");
+                    if (code.equals("200"))
+                    {
+                        String id = response.getString("result");
 
-                    //----------------------------------------------------
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "ایجاد راننده جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                        alertDialogBuilder = null;
 
-                    progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "ایجاد راننده جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
-                    alertDialog.dismiss();
-                    alertDialogBuilder = null;
+                        if (models.get(0).getCurrentType() == Activity9_ParentModel.NotFound)
+                            models.remove(0);
 
-                    addDriver();
-
+                        models.add(new Activity9_MainModel(id,name,phone_number,car_type,number_plate,null));
+                        adapter.notifyDataSetChanged();
+                    }
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
@@ -346,35 +354,22 @@ public class Activity9_Driver extends AppCompatActivity
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void addDriver()
-    {
-        RealmResults<Activity9_DB> res = realm.where(Activity9_DB.class).findAll();
-
-        models.clear();
-
-        for (int i=0;i<res.size();i++)
-        {
-            if (!res.get(i).getArchive().equals("done"))
-                models.add(new Activity9_Model(res.get(i).getId(),res.get(i).getName(),res.get(i).getPhone_number()
-                    ,res.get(i).getCar_type(),res.get(i).getNumber_plate(),res.get(i).getArchive()));
-        }
-
-        adapter.setFilter(models);
-    }
-
     private void archiveDialog()
     {
-        final JSONArray driver_ids=new JSONArray();
 
         for (int i=0; i<models.size();i++)
         {
-            if (models.get(i).isSelected())
-                driver_ids.put(models.get(i).getId());
+            if (models.get(i).getCurrentType() == Activity9_ParentModel.Main)
+            {
+                Activity9_MainModel model = (Activity9_MainModel) models.get(i);
+                if (model.isSelected())
+                    driver_ids.put(model.getId());
+            }
         }
 
         if(driver_ids.length()>0)
@@ -429,7 +424,7 @@ public class Activity9_Driver extends AppCompatActivity
 
             //---------------------------------------------------------------------------------------------------------
 
-            alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
+            alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg129));
             alertDialog.show();
             DisplayMetrics display = context.getResources().getDisplayMetrics();
             int width = display.widthPixels;
@@ -443,84 +438,241 @@ public class Activity9_Driver extends AppCompatActivity
 
     public void archive(final AlertDialog alertDialog)
     {
+        String url = getString(R.string.domain) + "api/driver/archive";
+        progressDialog.show();
 
-        JSONArray driver_ids=new JSONArray();
-
-        for (int i=0; i<models.size();i++)
+        JSONObject object = new JSONObject();
+        try
         {
-            if (models.get(i).isSelected())
-            {
-                driver_ids.put(models.get(i).getId());
-
-                RealmResults<Activity9_DB> res = realm.where(Activity9_DB.class).equalTo("id",models.get(i).getId()).findAll();
-
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(new Activity9_DB(models.get(i).getId(), res.get(0).getName(), res.get(0).getPhone_number(), res.get(0).getCar_type(), res.get(0).getNumber_plate(),"done"));
-                realm.commitTransaction();
-            }
+            object.put("driver_ids", driver_ids);
+            object.put("secret_key", getString(R.string.secret_key));
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
         }
 
-        if (driver_ids.length()>0)
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
         {
-            String url = getString(R.string.domain) + "api/driver/archive";
-            progressDialog.show();
+            @Override
+            public void onResponse(JSONObject response)
+            {
 
-            JSONObject object = new JSONObject();
-            try
-            {
-                object.put("driver_ids", driver_ids);
-                object.put("secret_key", getString(R.string.secret_key));
-            } catch (JSONException e)
-            {
-                e.printStackTrace();
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده از لیست حذف شدند.", Toast.LENGTH_SHORT).show();
+                binding.toolbar.setVisibility(View.VISIBLE);
+                binding.lnr3.setVisibility(View.GONE);
+                alertDialog.dismiss();
+                alertDialogBuilder = null;
+                getDriver();
             }
+        };
 
-            Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
-            {
-                @Override
-                public void onResponse(JSONObject response)
-                {
-
-                    progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "آیتم های انتخاب شده از لیست حذف شدند.", Toast.LENGTH_SHORT).show();
-                    binding.toolbar.setVisibility(View.VISIBLE);
-                    binding.lnr3.setVisibility(View.GONE);
-                    alertDialog.dismiss();
-                    addDriver();
-                }
-            };
-
-            Response.ErrorListener errorListener = new Response.ErrorListener()
-            {
-                @Override
-                public void onErrorResponse(VolleyError error)
-                {
-
-                    Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
-                    progressDialog.dismiss();
-
-                }
-            };
-
-
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
             {
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError
-                {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Accept", "application/json");
-                    headers.put("Authorization", "Bearer " + new User_Info().token());
-                    return headers;
-                }
-            };
-            request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
-            AppController.getInstance().addToRequestQueue(request);
+                Toast.makeText(getApplicationContext(), "مجددا تلاش کنید.", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer " + new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public void getDriver()
+    {
+        String url = getString(R.string.domain) + "api/driver/get-drivers";
+
+        models.clear();
+        models.add(new Activity9_LoadingModel());
+        adapter.notifyDataSetChanged();
+
+        JSONObject object = new JSONObject();
+        try
+        {
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
         }
 
-        else
-            Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONArray result = response.getJSONArray("result");
+
+                        for (int i=result.length()-1; i>=0; i--)
+                        {
+                            JSONObject object1 = result.getJSONObject(i);
+
+                            models.add(new Activity9_MainModel(object1.getString("id"),object1.getString("name"),object1.getString("phone_number"),object1.getString("car_type"),object1.getString("number_plate"),object1.getString("archive")));
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    else if (code.equals("207"))
+                    {
+                        models.add(new Activity9_NotFoundModel());
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                models.clear();
+                models.add(new Activity9_RetryModel());
+                adapter.notifyDataSetChanged();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public void searchQuery(String type, String value)
+    {
+        String url = getString(R.string.domain) + "api/driver/search-query";
+
+        models.clear();
+        models.add(new Activity9_LoadingModel());
+        adapter.notifyDataSetChanged();
+
+        JSONObject object = new JSONObject();
+        try
+        {
+            object.put("type",type);
+            object.put("value",value);
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONArray result = response.getJSONArray("result");
+
+                        if (result.length()>0)
+                        {
+                            for (int i=result.length()-1; i>=0; i--)
+                            {
+                                JSONObject object1 = result.getJSONObject(i);
+
+                                models.add(new Activity9_MainModel(object1.getString("id"), object1.getString("name"), object1.getString("phone_number"), object1.getString("car_type"), object1.getString("number_plate"), object1.getString("archive")));
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        else
+                        {
+                            models.clear();
+                            models.add(new Activity9_NotFoundModel());
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                models.clear();
+                models.add(new Activity9_RetryModel());
+                adapter.notifyDataSetChanged();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     public void changeStatusLnr3()
@@ -529,4 +681,5 @@ public class Activity9_Driver extends AppCompatActivity
         binding.lnr2.setVisibility(View.GONE);
         binding.lnr3.setVisibility(View.VISIBLE);
     }
+
 }

@@ -11,8 +11,8 @@ android {
         applicationId "com.example.boroodat"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 4
-        versionName "2.1.0"
+        versionCode 5
+        versionName "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,9 +38,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.0'
     implementation 'com.mohamadamin:persianmaterialdatetimepicker:1.2.1'
     implementation 'androidx.core:core:1.5.0-beta02'
-    //implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.1'
     implementation "com.google.code.gson:gson:2.8.6"
-    implementation "com.github.bmarrdev:android-DecoView-charting:v1.2"
     implementation "com.github.d-max:spots-dialog:0.4@aar"
     implementation "com.github.amlcurran.showcaseview:library:5.4.3"
     implementation files('libs/jxl.jar')

@@ -8,17 +8,18 @@ public class User_Info_DB extends RealmObject
     @PrimaryKey
     private int id;
 
-    private String user_id,phone_number,username,role,company_id,company_name,token,token_id;
+    private String user_id,phone_number,password,username,role,company_id,company_name,token,token_id;
 
     public User_Info_DB()
     {
     }
 
-    public User_Info_DB(int id, String user_id, String phone_number, String username, String role, String company_id, String company_name, String token, String token_id)
+    public User_Info_DB(int id, String user_id, String phone_number, String password, String username, String role, String company_id, String company_name, String token, String token_id)
     {
         this.id = id;
         this.user_id = user_id;
         this.phone_number = phone_number;
+        this.password = password;
         this.username = username;
         this.role = role;
         this.company_id = company_id;
@@ -55,6 +56,16 @@ public class User_Info_DB extends RealmObject
     public void setPhone_number(String phone_number)
     {
         this.phone_number = phone_number;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 
     public String getUsername()

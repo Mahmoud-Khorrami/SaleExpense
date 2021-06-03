@@ -21,11 +21,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity7_Adapter;
-import com.example.boroodat.database.Activity7_DB;
-import com.example.boroodat.databinding.A6Add1Binding;
 import com.example.boroodat.databinding.A7AddBinding;
-import com.example.boroodat.model.Activity7_Model;
+import com.example.boroodat.databinding.AccountBinding;
+import com.example.boroodat.model.Activity7_LoadingModel;
+import com.example.boroodat.model.Activity7_MainModel;
+import com.example.boroodat.model.Activity7_NotFoundModel;
+import com.example.boroodat.model.Activity7_ParentModel;
+import com.example.boroodat.model.Activity7_RetryModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,16 +39,13 @@ import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Account
 {
-    private List<Activity7_Model> models =new ArrayList<>(  );
+    private List<Activity7_ParentModel> models =new ArrayList<>(  );
     private Activity7_Adapter adapter;
     private Context context;
     private android.app.AlertDialog progressDialog;
-    private Realm realm;
     private String from;
 
     public Account(Context context,String from)
@@ -54,20 +55,17 @@ public class Account
 
         //--------------------------------------------
 
-        realm=Realm.getDefaultInstance();
-
         progressDialog = new SpotsDialog(context, R.style.Custom);
         progressDialog.setCancelable(false);
     }
 
     public Account()
     {
-        realm=Realm.getDefaultInstance();
     }
 
-    public void dialog(TextView accountName, TextView accountId)
+    public void show(TextView accountName, TextView accountId)
     {
-        final A6Add1Binding binding1 = A6Add1Binding.inflate(LayoutInflater.from(context));
+        final AccountBinding binding1 = AccountBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
@@ -84,15 +82,6 @@ public class Account
 
         //----------------------------------------------------------------------------------------------------------
 
-        binding1.title.setText("لیست حساب ها");
-
-        //----------------------------------------------------------------------------------------------------------
-
-        binding1.lnr2.setVisibility(View.GONE);
-        binding1.search.setVisibility(View.GONE);
-
-        //----------------------------------------------------------------------------------------------------------
-
         progressDialog = new SpotsDialog(context, R.style.Custom);
         progressDialog.setCancelable(false);
 
@@ -101,7 +90,7 @@ public class Account
         adapter = new Activity7_Adapter(models, context,2,accountName,accountId,alertDialog,from );
         binding1.recyclerView.setLayoutManager ( new LinearLayoutManager( context ) );
         binding1.recyclerView.setAdapter (adapter);
-        addAccount();
+        getAccount();
 
         //----------------------------------------------------------------------------------------------------------
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
@@ -118,7 +107,7 @@ public class Account
                     {
                         if (new Internet(context).check())
                         {
-                            addAccountDialog();
+                            dialog();
                         }
                         else
                             new Internet(context).enable();
@@ -141,7 +130,7 @@ public class Account
 
         //----------------------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -149,7 +138,7 @@ public class Account
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    private void addAccountDialog()
+    private void dialog()
     {
         final A7AddBinding binding1 = A7AddBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
@@ -167,7 +156,7 @@ public class Account
 
         binding1.balance.addTextChangedListener(new NumberTextWatcherForThousand(binding1.balance));
         binding1.title.addTextChangedListener(new ClearError(binding1.til1));
-        
+
         //----------------------------------------------------------------------------------------------------------
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
@@ -223,7 +212,7 @@ public class Account
 
         //--------------------------------------------------------------------------------------------------
 
-        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.rounded_linear));
+        alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bkg127));
         alertDialog.show();
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         int width = display.widthPixels;
@@ -231,7 +220,7 @@ public class Account
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void createAccount(final String title, final String account_number, final String balance, final AlertDialog alertDialog)
+    private void createAccount(final String title, final String account_number, final String balance, final AlertDialog alertDialog)
     {
         String url = context.getString(R.string.domain) + "api/account/create";
         progressDialog.show();
@@ -258,19 +247,16 @@ public class Account
             {
                 try
                 {
-                    int id = Integer.parseInt(response.getString("id"));
-                    realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(new Activity7_DB(id, title, account_number, balance));
-                    realm.commitTransaction();
+                    String code = response.getString("code");
 
-                    new Report().deposit(balance,"i");
-                    //----------------------------------------------------
+                    if (code.equals("200"))
+                    {
+                        progressDialog.dismiss();
+                        Toast.makeText(context, "ایجاد حساب با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
 
-                    progressDialog.dismiss();
-                    Toast.makeText(context, "ایجاد حساب با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
-                    alertDialog.dismiss();
-
-                    addAccount();
+                        getAccount();
+                    }
 
                 } catch (JSONException e)
                 {
@@ -304,28 +290,103 @@ public class Account
                 return headers;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(3000, 1, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
-    public void addAccount()
+    private void getAccount()
     {
-        RealmResults<Activity7_DB> res = realm.where(Activity7_DB.class).findAll();
-
         models.clear();
+        models.add(new Activity7_LoadingModel());
+        adapter.notifyDataSetChanged();
 
-        for (int i=0;i<res.size();i++)
+        String url = context.getString(R.string.domain) + "api/account/account-query1";
+
+        JSONObject object = new JSONObject();
+        try
         {
-            models.add(new Activity7_Model(res.get(i).getId(),res.get(i).getTitle(),res.get(i).getAccountNumber(),res.get(i).getBalance()));
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", context.getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
         }
 
-        adapter.notifyDataSetChanged();
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONObject message = response.getJSONObject("message");
+                        JSONArray result = message.getJSONArray("result");
+
+                        for (int i=0; i<result.length(); i++)
+                        {
+                            JSONObject object1 = result.getJSONObject(i);
+
+                            models.add(new Activity7_MainModel(object1.getString("id"),object1.getString("title"),object1.getString("account_number"),object1.getString("balance")));
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    else if (code.equals("207"))
+                    {
+                        models.add(new Activity7_NotFoundModel());
+                        adapter.notifyDataSetChanged();
+                    }
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                models.clear();
+                models.add(new Activity7_RetryModel());
+                adapter.notifyDataSetChanged();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+
     }
 
     public void increase(String account_id,String amount)
     {
-        RealmResults<Activity7_DB> results=realm.where(Activity7_DB.class).equalTo("id",Integer.parseInt(account_id)).findAll();
+       /* RealmResults<Activity7_DB> results=realm.where(Activity7_DB.class).equalTo("id",Integer.parseInt(account_id)).findAll();
 
         if (results.size()>0)
         {
@@ -335,12 +396,12 @@ public class Account
             realm.beginTransaction();
             realm.copyToRealmOrUpdate(new Activity7_DB(results.get(0).getId(),results.get(0).getTitle(),results.get(0).getAccountNumber(), Math.round(balance)+""));
             realm.commitTransaction();
-        }
+        }*/
     }
 
     public void decrease(String account_id,String amount)
     {
-        RealmResults<Activity7_DB> results=realm.where(Activity7_DB.class).equalTo("id",Integer.parseInt(account_id)).findAll();
+       /* RealmResults<Activity7_DB> results=realm.where(Activity7_DB.class).equalTo("id",Integer.parseInt(account_id)).findAll();
 
         if (results.size()>0)
         {
@@ -350,6 +411,6 @@ public class Account
             realm.beginTransaction();
             realm.copyToRealmOrUpdate(new Activity7_DB(results.get(0).getId(),results.get(0).getTitle(),results.get(0).getAccountNumber(), Math.round(balance)+""));
             realm.commitTransaction();
-        }
+        }*/
     }
 }

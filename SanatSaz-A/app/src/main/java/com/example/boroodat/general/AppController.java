@@ -32,6 +32,7 @@ public class AppController extends Application
 				.name("sample.realm")
 				.schemaVersion(0)
 				.migration(new Migration())
+				.allowWritesOnUiThread(true)
 				.build();
 		Realm.setDefaultConfiguration(configuration);
 		Realm.getInstance(configuration);

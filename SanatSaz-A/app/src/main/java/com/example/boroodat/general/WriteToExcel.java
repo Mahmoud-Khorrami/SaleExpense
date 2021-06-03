@@ -70,7 +70,7 @@ public class WriteToExcel
             WritableSheet sheet9 = workbook.createSheet("سایر دریافتی ها", 8);
             WritableSheet sheet10 = workbook.createSheet("حقوق ها", 9);
             WritableSheet sheet11 = workbook.createSheet("فاکتور هزینه", 10);
-            WritableSheet sheet12 = workbook.createSheet("جزئیات فاکتور هزینه هزینه", 11);
+            WritableSheet sheet12 = workbook.createSheet("جزئیات فاکتور هزینه", 11);
             WritableSheet sheet13 = workbook.createSheet("فاکتور مواد اولیه", 12);
             WritableSheet sheet14 = workbook.createSheet("جزئیات فاکتور مواد اولیه", 13);
 
