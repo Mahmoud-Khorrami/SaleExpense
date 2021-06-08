@@ -31,11 +31,11 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity14_LoadingModel;
-import com.example.boroodat.model.Activity14_MainModel;
-import com.example.boroodat.model.Activity14_NotFoundModel;
-import com.example.boroodat.model.Activity14_ParentModel;
-import com.example.boroodat.model.Activity14_RetryModel;
+import com.example.boroodat.model.activity14.Activity14_LoadingModel;
+import com.example.boroodat.model.activity14.Activity14_MainModel;
+import com.example.boroodat.model.activity14.Activity14_NotFoundModel;
+import com.example.boroodat.model.activity14.Activity14_ParentModel;
+import com.example.boroodat.model.activity14.Activity14_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,8 +47,6 @@ import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Activity14_Personnel extends AppCompatActivity
 {

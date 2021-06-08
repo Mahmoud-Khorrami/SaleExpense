@@ -139,6 +139,43 @@ class SaleController extends Controller
                 'message' => trans('message1.207')];
     }
 
+    public function getBuyerSales(Request $request)
+    {
+
+        $sales = Sale::where('company_id', $request->company_id)->where("buyer_id", $request->buyer_id)->get();
+
+        //-----------------------------------------------------------------------
+
+        if ($sales->count()>0)
+        {
+            $result = collect([]);
+            $sales = SaleResource::collection($sales);
+
+            foreach ($sales as $sale)
+            {
+                $saleDetails = $sale->saleDetails;
+                $description = "";
+
+                foreach ($saleDetails as $saleDetail)
+                    $description = $description . $saleDetail->description . ' ' . $saleDetail->number . ' عدد، ';
+
+                $result->push(
+                    ["sale"        => $sale,
+                     'buyer_name'    => $sale->buyer->name,
+                     'driver_name'   => $sale->driver->name,
+                     'account_title' => $sale->account->title,
+                     "description" => $description]
+                );
+            }
+
+            return ["code"        => "200",
+                    "result"      => $result];
+        }
+
+        return ["code"    => "207",
+                'message' => trans('message1.207')];
+    }
+
     public function searchQuery(Request $request)
     {
         $user = auth()->user();
@@ -160,7 +197,7 @@ class SaleController extends Controller
                              ->get();
 
             //------------------------------------------------
-            if ($sales)
+            if ($sales->count()>0)
             {
 
                 $result = collect([]);
@@ -193,7 +230,7 @@ class SaleController extends Controller
                            ->get();
 
             //------------------------------------------------
-            if ($buyers)
+            if ($buyers->count()>0)
             {
                 $result = collect([]);
 
@@ -248,7 +285,7 @@ class SaleController extends Controller
                              ->get();
 
             //------------------------------------------------
-            if ($drivers)
+            if ($drivers->count()>0)
             {
                 $result = collect([]);
 
@@ -293,6 +330,46 @@ class SaleController extends Controller
             return ["code"    => "207",
                     'message' => trans('message1.207')];
         }
+
+    }
+
+    public function buyerSearchQuery(Request $request)
+    {
+       $sales = Sale::where('company_id', $request->company_id)
+                             ->where('buyer_id', $request-> buyer_id)
+                             ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                             ->get();
+
+            //------------------------------------------------
+
+        if ($sales->count()>0)
+        {
+            $result = collect([]);
+            $sales = SaleResource::collection($sales);
+
+            foreach ($sales as $sale)
+            {
+                $saleDetails = $sale->saleDetails;
+                $description = "";
+
+                foreach ($saleDetails as $saleDetail)
+                    $description = $description . $saleDetail->description . ' ' . $saleDetail->number . ' عدد، ';
+
+                $result->push(
+                    ["sale"        => $sale,
+                     'buyer_name'    => $sale->buyer->name,
+                     'driver_name'   => $sale->driver->name,
+                     'account_title' => $sale->account->title,
+                     "description" => $description]
+                );
+            }
+
+            return ["code"        => "200",
+                    "result"      => $result];
+        }
+
+            return ["code"    => "207",
+                    'message' => trans('message1.207')];
 
     }
 

@@ -21,10 +21,10 @@ import com.example.boroodat.databinding.Activity5Binding;
 import com.example.boroodat.fragment.Activity15Fragments;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity15_FragmentLoadingModel;
-import com.example.boroodat.model.Activity15_FragmentNotFoundModel;
-import com.example.boroodat.model.Activity15_FragmentParentModel;
-import com.example.boroodat.model.Activity15_FragmentsMainModel;
+import com.example.boroodat.model.activity15.Activity15_FragmentLoadingModel;
+import com.example.boroodat.model.activity15.Activity15_FragmentNotFoundModel;
+import com.example.boroodat.model.activity15.Activity15_FragmentParentModel;
+import com.example.boroodat.model.activity15.Activity15_FragmentsMainModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;

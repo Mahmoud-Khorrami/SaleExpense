@@ -33,11 +33,11 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity7_LoadingModel;
-import com.example.boroodat.model.Activity7_MainModel;
-import com.example.boroodat.model.Activity7_NotFoundModel;
-import com.example.boroodat.model.Activity7_ParentModel;
-import com.example.boroodat.model.Activity7_RetryModel;
+import com.example.boroodat.model.activity7.Activity7_LoadingModel;
+import com.example.boroodat.model.activity7.Activity7_MainModel;
+import com.example.boroodat.model.activity7.Activity7_NotFoundModel;
+import com.example.boroodat.model.activity7.Activity7_ParentModel;
+import com.example.boroodat.model.activity7.Activity7_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;

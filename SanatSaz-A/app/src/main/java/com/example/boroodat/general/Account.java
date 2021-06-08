@@ -23,11 +23,11 @@ import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity7_Adapter;
 import com.example.boroodat.databinding.A7AddBinding;
 import com.example.boroodat.databinding.AccountBinding;
-import com.example.boroodat.model.Activity7_LoadingModel;
-import com.example.boroodat.model.Activity7_MainModel;
-import com.example.boroodat.model.Activity7_NotFoundModel;
-import com.example.boroodat.model.Activity7_ParentModel;
-import com.example.boroodat.model.Activity7_RetryModel;
+import com.example.boroodat.model.activity7.Activity7_LoadingModel;
+import com.example.boroodat.model.activity7.Activity7_MainModel;
+import com.example.boroodat.model.activity7.Activity7_NotFoundModel;
+import com.example.boroodat.model.activity7.Activity7_ParentModel;
+import com.example.boroodat.model.activity7.Activity7_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;

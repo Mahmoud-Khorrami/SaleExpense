@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -33,10 +32,9 @@ import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.interfaces.OnLoadMoreListener;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.Activity9_MainModel;
-import com.example.boroodat.model.Activity9_ParentModel;
+import com.example.boroodat.model.activity9.Activity9_MainModel;
+import com.example.boroodat.model.activity9.Activity9_ParentModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;

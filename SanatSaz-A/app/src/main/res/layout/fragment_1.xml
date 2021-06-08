@@ -286,7 +286,7 @@
                 app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
-                    android:id="@+id/sale"
+                    android:id="@+id/buyer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -296,7 +296,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight=".8"
                         android:gravity="center|right"
-                        android:text="گزارشات فروش"
+                        android:text="گزارشات خریدار"
                         android:textColor="@color/black" />
 
                     <ImageView
@@ -304,7 +304,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="30dp"
                         android:layout_weight=".2"
-                        app:srcCompat="@drawable/sale" />
+                        app:srcCompat="@drawable/buyer" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -450,6 +450,40 @@
 
 
             </LinearLayout>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="20dp"
+                android:layout_weight=".5"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="true">
+
+                <LinearLayout
+                    android:id="@+id/sale"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".8"
+                        android:gravity="center|right"
+                        android:text="گزارشات فروش"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="30dp"
+                        android:layout_weight=".2"
+                        app:srcCompat="@drawable/sale" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <Space
                 android:layout_width="match_parent"

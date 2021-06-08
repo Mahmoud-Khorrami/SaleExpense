@@ -74,7 +74,9 @@ Route::middleware('secret_key')->group(function ()
                 Route::post('get-sale', [SaleController::class, 'getSale']);
                 Route::post('get-sales-count', [SaleController::class, 'getSalesCount']);
                 Route::post('get-all-sales', [SaleController::class, 'getAllSales']);
+                Route::post('get-buyer-sales', [SaleController::class, 'getBuyerSales']);
                 Route::post('search-query', [SaleController::class, 'searchQuery']);
+                Route::post('buyer-search-query', [SaleController::class, 'buyerSearchQuery']);
                 Route::post('edit', [SaleController::class, 'edit']);
                 Route::post('delete', [SaleController::class, 'delete']);
             }

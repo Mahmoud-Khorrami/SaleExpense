@@ -93,7 +93,11 @@ class AccountController extends Controller
         {
             $balance = $account->balance;
 
-            $deposit = Deposit::where('account_id', $request->account_id)->where('title', 'موجودی اولیه')->first();
+//            $initial_balance=0;
+
+            $deposit = Deposit::where('account_id', $request->account_id)
+                              ->where('title', 'موجودی اولیه')
+                              ->first();
             $initial_balance = $deposit->amount;
 
             $account->title = $request->title;

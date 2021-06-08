@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
+import com.example.boroodat.activity.Activity11_BuyerReports;
 import com.example.boroodat.activity.Activity12_MaterialReports;
 import com.example.boroodat.activity.Activity13_SalaryReports;
 import com.example.boroodat.activity.Activity15_ExpenseReports;
@@ -114,6 +115,17 @@ public class Fragment1
             public void onClick(View view)
             {
                 Intent intent = new Intent(context, Activity13_SalaryReports.class);
+                context.startActivity(intent);
+            }
+        });
+        //-----------------------------------------------------------------
+
+        binding.buyer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(context, Activity11_BuyerReports.class);
                 context.startActivity(intent);
             }
         });

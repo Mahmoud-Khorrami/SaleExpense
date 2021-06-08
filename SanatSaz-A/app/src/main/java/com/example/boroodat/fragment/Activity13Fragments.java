@@ -18,15 +18,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity13_FragmentsAdapter;
-import com.example.boroodat.adapter.Activity3_FragmentsAdapter;
 import com.example.boroodat.databinding.Activity5FragmentsBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity13_FragmentLoadingModel;
-import com.example.boroodat.model.Activity13_FragmentMainModel;
-import com.example.boroodat.model.Activity13_FragmentParentModel;
-import com.example.boroodat.model.Activity3_FragmentLoadingModel;
-import com.example.boroodat.model.Activity3_FragmentMainModel;
+import com.example.boroodat.model.activity13.Activity13_FragmentLoadingModel;
+import com.example.boroodat.model.activity13.Activity13_FragmentMainModel;
+import com.example.boroodat.model.activity13.Activity13_FragmentParentModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;

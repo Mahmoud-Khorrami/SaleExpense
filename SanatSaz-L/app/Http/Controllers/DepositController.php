@@ -56,7 +56,7 @@ class DepositController extends Controller
 
         //-----------------------------------------------------------------------
 
-        if ($deposits)
+        if ($deposits->count()>0)
         {
             $deposits = $deposits->simplePaginate($request->paginate);
 
@@ -86,7 +86,7 @@ class DepositController extends Controller
                              ->get();
 
         //------------------------------------------------
-        if ($deposits)
+        if ($deposits->count()>0)
         {
 
             $result = collect([]);

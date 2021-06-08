@@ -21,9 +21,9 @@ import com.example.boroodat.adapter.Activity5_FragmentsAdapter;
 import com.example.boroodat.databinding.Activity5FragmentsBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity5_FragmentLoadingModel;
-import com.example.boroodat.model.Activity5_FragmentParentModel;
-import com.example.boroodat.model.Activity5_FragmentsMainModel;
+import com.example.boroodat.model.activity5.Activity5_FragmentLoadingModel;
+import com.example.boroodat.model.activity5.Activity5_FragmentParentModel;
+import com.example.boroodat.model.activity5.Activity5_FragmentsMainModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Activity5Fragments extends Fragment
 {

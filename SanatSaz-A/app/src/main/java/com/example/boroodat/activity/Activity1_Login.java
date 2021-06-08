@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -21,7 +23,6 @@ import com.example.boroodat.databinding.Activity1LoginBinding;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.Prefs;
-import com.example.boroodat.general.RuntimePermissionsActivity;
 import com.example.boroodat.general.User_Info;
 
 import org.json.JSONException;
@@ -32,14 +33,12 @@ import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
-public class Activity1_Login extends RuntimePermissionsActivity
+public class Activity1_Login extends AppCompatActivity
 {
     private Activity1LoginBinding binding;
     private AlertDialog progressDialog;
     private Context context=this;
-    private int code = 10;
     private Realm realm;
 
     @Override
@@ -51,14 +50,6 @@ public class Activity1_Login extends RuntimePermissionsActivity
         setContentView(view);
 
         realm = Realm.getDefaultInstance();
-        //-------------------------------------------------------------------------------------------------------
-
-        if (Prefs.with ( this ).isFirstLoad ())
-        {
-            Activity1_Login.super.requestAppPermissions ( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, code, context );
-
-            Prefs.with ( this ).firstLoadIsDone ();
-        }
 
         //-------------------------------------------------------------------------------------------------------
 
@@ -219,18 +210,4 @@ public class Activity1_Login extends RuntimePermissionsActivity
 
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode)
-    {
-        if (requestCode == code)
-            Toast.makeText ( getApplicationContext (),
-                    "مجوز دسترسی به حافظه داده شد.", Toast.LENGTH_SHORT ).show ();
-    }
-
-    @Override
-    public void onPermissionsDeny(int requestCode)
-    {
-        Toast.makeText ( getApplicationContext (),
-                "مجوز دسترسی به حافظه داده نشد.", Toast.LENGTH_LONG ).show ();
-    }
 }

@@ -30,13 +30,12 @@ import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.interfaces.OnLoadMoreListener;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.Activity9_LoadingModel;
-import com.example.boroodat.model.Activity9_MainModel;
-import com.example.boroodat.model.Activity9_NotFoundModel;
-import com.example.boroodat.model.Activity9_ParentModel;
-import com.example.boroodat.model.Activity9_RetryModel;
+import com.example.boroodat.model.activity9.Activity9_LoadingModel;
+import com.example.boroodat.model.activity9.Activity9_MainModel;
+import com.example.boroodat.model.activity9.Activity9_NotFoundModel;
+import com.example.boroodat.model.activity9.Activity9_ParentModel;
+import com.example.boroodat.model.activity9.Activity9_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -33,10 +32,9 @@ import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.interfaces.OnLoadMoreListener;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.Activity8_MainModel;
-import com.example.boroodat.model.Activity8_ParentModel;
+import com.example.boroodat.model.activity8.Activity8_MainModel;
+import com.example.boroodat.model.activity8.Activity8_ParentModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
-import io.realm.Realm;
 
 public class Activity8_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
@@ -57,14 +54,11 @@ public class Activity8_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private AlertDialog alertDialog;
     private AlertDialog.Builder alertDialogBuilder=null;
     private android.app.AlertDialog progressDialog;
-    private Realm realm;
     private String from2;
     private int s1=0;
-    private boolean isLoading = false;
-    private OnLoadMoreListener onLoadMoreListener;
     private RetryListener retryListener;
 
-    public Activity8_Adapter(List<Activity8_ParentModel> models, Context context, int from, TextView txtName, TextView txtId, AlertDialog alertDialog, String from2, RecyclerView recyclerView)
+    public Activity8_Adapter(List<Activity8_ParentModel> models, Context context, int from, TextView txtName, TextView txtId, AlertDialog alertDialog, String from2)
     {
         this.models = models;
         this.context = context;
@@ -80,7 +74,7 @@ public class Activity8_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         progressDialog.setCancelable(false);
     }
 
-    public Activity8_Adapter(List<Activity8_ParentModel> models, Context context, int from, String from2, RecyclerView recyclerView)
+    public Activity8_Adapter(List<Activity8_ParentModel> models, Context context, int from, String from2)
     {
         this.models = models;
         this.context = context;

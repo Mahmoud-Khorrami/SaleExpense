@@ -102,7 +102,7 @@ class ExpenseController extends Controller
 
         //-----------------------------------------------------------------------
 
-        if ($expenses)
+        if ($expenses->count()>0)
         {
             $expenses = $expenses->simplePaginate($request->paginate);
 
@@ -144,7 +144,7 @@ class ExpenseController extends Controller
                                ->get();
 
         //------------------------------------------------
-        if ($expenses)
+        if ($expenses->count()>0)
         {
 
             $result = collect([]);

@@ -34,8 +34,8 @@ import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity5_FragmentParentModel;
-import com.example.boroodat.model.Activity5_FragmentsMainModel;
+import com.example.boroodat.model.activity5.Activity5_FragmentParentModel;
+import com.example.boroodat.model.activity5.Activity5_FragmentsMainModel;
 import com.example.boroodat.model.Fragment_Details1_Model;
 
 import org.json.JSONArray;

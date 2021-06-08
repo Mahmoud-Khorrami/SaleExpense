@@ -24,18 +24,12 @@ import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity8_Adapter;
 import com.example.boroodat.databinding.A8AddBinding;
 import com.example.boroodat.databinding.BuyerBinding;
-import com.example.boroodat.interfaces.OnLoadMoreListener;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.Activity8_LoadingModel;
-import com.example.boroodat.model.Activity8_MainModel;
-import com.example.boroodat.model.Activity8_NotFoundModel;
-import com.example.boroodat.model.Activity8_ParentModel;
-import com.example.boroodat.model.Activity8_RetryModel;
-import com.example.boroodat.model.Activity9_LoadingModel;
-import com.example.boroodat.model.Activity9_MainModel;
-import com.example.boroodat.model.Activity9_NotFoundModel;
-import com.example.boroodat.model.Activity9_ParentModel;
-import com.example.boroodat.model.Activity9_RetryModel;
+import com.example.boroodat.model.activity8.Activity8_LoadingModel;
+import com.example.boroodat.model.activity8.Activity8_MainModel;
+import com.example.boroodat.model.activity8.Activity8_NotFoundModel;
+import com.example.boroodat.model.activity8.Activity8_ParentModel;
+import com.example.boroodat.model.activity8.Activity8_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +76,7 @@ public class Buyer
         //----------------------------------------------------------------------------------------------------------
 
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( context ) );
-        adapter = new Activity8_Adapter(models, context,2, buyerName, buyerId,alertDialog,from,binding.recyclerView);
+        adapter = new Activity8_Adapter(models, context,2, buyerName, buyerId,alertDialog,from);
         binding.recyclerView.setAdapter (adapter);
         getBuyer();
 

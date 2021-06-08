@@ -10,9 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-/**
- * Created by MG on 03-04-2016.
- */
 public abstract class RuntimePermissionsActivity extends AppCompatActivity
 {
 

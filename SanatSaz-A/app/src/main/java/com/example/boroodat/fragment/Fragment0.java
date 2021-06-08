@@ -40,6 +40,7 @@ import com.example.boroodat.database.User_Info_DB;
 import com.example.boroodat.databinding.Dialog1Binding;
 import com.example.boroodat.databinding.Fragment0Binding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.CheckPermission;
 import com.example.boroodat.general.RuntimePermissionsActivity;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.general.WriteToExcel;
@@ -60,7 +61,6 @@ public class Fragment0 extends RuntimePermissionsActivity
     private Fragment0Binding binding;
     private Context context;
     private android.app.AlertDialog progressDialog;
-    private int code = 10;
     private Realm realm;
 
     public Fragment0(Context context)
@@ -148,11 +148,12 @@ public class Fragment0 extends RuntimePermissionsActivity
             @Override
             public void onClick(View view)
             {
-                if (checkWriteExternalPermission())
+                if (new CheckPermission(context,Manifest.permission.READ_EXTERNAL_STORAGE).check() &&
+                new CheckPermission(context,Manifest.permission.WRITE_EXTERNAL_STORAGE).check())
                     getXls();
 
                 else
-                    Fragment0.super.requestAppPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, code, context);
+                    Fragment0.super.requestAppPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 10, context);
             }
         });
 
@@ -311,21 +312,11 @@ public class Fragment0 extends RuntimePermissionsActivity
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    private boolean checkWriteExternalPermission()
-    {
-        String permission1 = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        String permission2 = Manifest.permission.READ_EXTERNAL_STORAGE;
-        int res1 = context.checkCallingOrSelfPermission(permission1);
-        int res2 = context.checkCallingOrSelfPermission(permission2);
-        return ((res1 == PackageManager.PERMISSION_GRANTED) && (res2 == PackageManager.PERMISSION_GRANTED));
-    }
-
     @Override
     public void onPermissionsGranted(int requestCode)
     {
-        if (requestCode == code)
-            Toast.makeText ( getApplicationContext (),
-                    "مجوز دسترسی به حافظه داده شد.", Toast.LENGTH_SHORT ).show ();
+        if (requestCode == 10)
+            getXls();
     }
 
     @Override

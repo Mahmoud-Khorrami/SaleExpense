@@ -106,7 +106,7 @@ class MaterialController extends Controller
 
         //-----------------------------------------------------------------------
 
-        if ($materials)
+        if ($materials->count()>0)
         {
             $materials = $materials->simplePaginate($request->paginate);
 
@@ -148,7 +148,7 @@ class MaterialController extends Controller
                                 ->get();
 
         //------------------------------------------------
-        if ($materials)
+        if ($materials->count()>0)
         {
 
             $result = collect([]);

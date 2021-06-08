@@ -21,11 +21,9 @@ import com.example.boroodat.adapter.Activity12_FragmentsAdapter;
 import com.example.boroodat.databinding.Activity5FragmentsBinding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity12_FragmentLoadingModel;
-import com.example.boroodat.model.Activity12_FragmentMainModel;
-import com.example.boroodat.model.Activity12_FragmentParentModel;
-import com.example.boroodat.model.Activity15_FragmentLoadingModel;
-import com.example.boroodat.model.Activity15_FragmentsMainModel;
+import com.example.boroodat.model.activity12.Activity12_FragmentLoadingModel;
+import com.example.boroodat.model.activity12.Activity12_FragmentMainModel;
+import com.example.boroodat.model.activity12.Activity12_FragmentParentModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;

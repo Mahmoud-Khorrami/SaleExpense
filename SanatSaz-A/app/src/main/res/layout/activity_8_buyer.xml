@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.Activity9_Driver">
+    tools:context=".activity.Activity8_Buyer">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -101,6 +101,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lnr2">

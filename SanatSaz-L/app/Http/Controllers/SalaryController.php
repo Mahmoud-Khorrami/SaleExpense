@@ -46,7 +46,7 @@ class SalaryController extends Controller
 
         //-----------------------------------------------------------------------
 
-        if ($salaries)
+        if ($salaries->count()>0)
         {
             $salaries = $salaries->simplePaginate($request->paginate);
 
@@ -79,7 +79,7 @@ class SalaryController extends Controller
                               ->get();
 
             //------------------------------------------------
-            if ($salaries)
+            if ($salaries->count()>0)
             {
 
                 $result = collect([]);
@@ -109,7 +109,7 @@ class SalaryController extends Controller
                            ->get();
 
             //------------------------------------------------
-            if ($personnel)
+            if ($personnel->count()>0)
             {
                 $result = collect([]);
 

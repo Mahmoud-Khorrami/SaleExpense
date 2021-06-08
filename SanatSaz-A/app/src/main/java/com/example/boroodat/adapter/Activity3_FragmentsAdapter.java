@@ -35,8 +35,8 @@ import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
 import com.example.boroodat.general.User_Info;
-import com.example.boroodat.model.Activity3_FragmentMainModel;
-import com.example.boroodat.model.Activity3_FragmentParentModel;
+import com.example.boroodat.model.activity3.Activity3_FragmentMainModel;
+import com.example.boroodat.model.activity3.Activity3_FragmentParentModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;

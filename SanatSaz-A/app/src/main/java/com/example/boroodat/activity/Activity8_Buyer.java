@@ -32,11 +32,11 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.Activity8_LoadingModel;
-import com.example.boroodat.model.Activity8_MainModel;
-import com.example.boroodat.model.Activity8_NotFoundModel;
-import com.example.boroodat.model.Activity8_ParentModel;
-import com.example.boroodat.model.Activity8_RetryModel;
+import com.example.boroodat.model.activity8.Activity8_LoadingModel;
+import com.example.boroodat.model.activity8.Activity8_MainModel;
+import com.example.boroodat.model.activity8.Activity8_NotFoundModel;
+import com.example.boroodat.model.activity8.Activity8_ParentModel;
+import com.example.boroodat.model.activity8.Activity8_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +57,6 @@ public class Activity8_Buyer extends AppCompatActivity
     private Context context=this;
     private AlertDialog.Builder alertDialogBuilder=null;
     private android.app.AlertDialog progressDialog;
-    private int loadItemIndex = 0;
     final JSONArray buyer_ids=new JSONArray();
 
 
@@ -82,7 +81,7 @@ public class Activity8_Buyer extends AppCompatActivity
         //----------------------------------------------------------------------------------------------------------
 
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( Activity8_Buyer.this ) );
-        adapter = new Activity8_Adapter(models, Activity8_Buyer.this,1,"manager",binding.recyclerView);
+        adapter = new Activity8_Adapter(models, Activity8_Buyer.this,1,"manager");
         binding.recyclerView.setAdapter (adapter);
         getBuyer();
 

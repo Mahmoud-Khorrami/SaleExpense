@@ -24,13 +24,12 @@ import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity9_Adapter;
 import com.example.boroodat.databinding.A9AddBinding;
 import com.example.boroodat.databinding.DriverBinding;
-import com.example.boroodat.interfaces.OnLoadMoreListener;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.Activity9_LoadingModel;
-import com.example.boroodat.model.Activity9_MainModel;
-import com.example.boroodat.model.Activity9_NotFoundModel;
-import com.example.boroodat.model.Activity9_ParentModel;
-import com.example.boroodat.model.Activity9_RetryModel;
+import com.example.boroodat.model.activity9.Activity9_LoadingModel;
+import com.example.boroodat.model.activity9.Activity9_MainModel;
+import com.example.boroodat.model.activity9.Activity9_NotFoundModel;
+import com.example.boroodat.model.activity9.Activity9_ParentModel;
+import com.example.boroodat.model.activity9.Activity9_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
