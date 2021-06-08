@@ -44,7 +44,7 @@ public class Activity20_User extends AppCompatActivity
         View view = binding.getRoot();
         setContentView(view);
 
-        realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
         //-------------------------------------------------------------------------------------------------------
 
         binding.appBar.setTitle("");
@@ -98,6 +98,7 @@ public class Activity20_User extends AppCompatActivity
                     new Internet(context).enable();
             }
         });
+
         //-------------------------------------------------------------------------------------------------------
 
         binding.expenseReports.setOnClickListener(new View.OnClickListener()
@@ -113,6 +114,90 @@ public class Activity20_User extends AppCompatActivity
                 }
                 else
                     new Internet(context).enable();
+            }
+        });
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding.deletePassword.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                final User_Info_DB info = realm.where(User_Info_DB.class).findFirst();
+
+                if (!info.getPassword().equals(""))
+                {
+                    final Dialog1Binding binding1 = Dialog1Binding.inflate(LayoutInflater.from(context));
+                    View view1 = binding1.getRoot();
+                    androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(context);
+                    alertDialogBuilder.setView(view1);
+
+                    //-------------------------------------------------------------------------------------------------------
+
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setPositiveButton("تایید", null);
+                    alertDialogBuilder.setNeutralButton("لغو", null);
+                    final androidx.appcompat.app.AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    //-------------------------------------------------------------------------------------------------------
+
+                    binding1.message.setText("آیا مایلید رمز عبور را از حافظه حذف کنید؟");
+
+                    //-------------------------------------------------------------------------------------------------------
+
+                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener()
+                    {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface)
+                        {
+                            Button approve = alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE);
+                            approve.setTextColor(context.getResources().getColor(R.color.black));
+                            approve.setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View view)
+                                {
+
+                                    realm.executeTransaction(new Realm.Transaction()
+                                    {
+                                        @Override
+                                        public void execute(Realm realm)
+                                        {
+                                            User_Info_DB infoDb = realm.where(User_Info_DB.class).findFirst();
+                                            infoDb.setPassword("");
+                                            Toast.makeText(context,"حذف رمز عبور از حافظه با موفقیت انجام شد.",Toast.LENGTH_LONG).show();
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                }
+                            });
+
+                            Button Cancel = alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEUTRAL);
+                            Cancel.setTextColor(context.getResources().getColor(R.color.black));
+                            Cancel.setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    alertDialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+
+                    //---------------------------------------------------------------------------------------------
+
+                    alertDialog.show();
+                    DisplayMetrics display = context.getResources().getDisplayMetrics();
+                    int width = display.widthPixels;
+                    width = (int) ((width) * ((double) 4 / 5));
+                    alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                }
+
+                else
+                    Toast.makeText(context,"رمز عبور ذخیره نشده است.",Toast.LENGTH_LONG).show();
             }
         });
     }

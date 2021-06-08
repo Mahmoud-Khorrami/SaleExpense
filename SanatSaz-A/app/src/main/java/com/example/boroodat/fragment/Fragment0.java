@@ -237,7 +237,7 @@ public class Fragment0 extends RuntimePermissionsActivity
                 }
 
                 else
-                    Toast.makeText(context,"نام کاربری و رمز عبور ذخیره نشده است.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"رمز عبور ذخیره نشده است.",Toast.LENGTH_LONG).show();
             }
         });
 
