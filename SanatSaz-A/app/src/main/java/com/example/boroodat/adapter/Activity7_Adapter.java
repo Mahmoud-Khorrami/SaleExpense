@@ -32,6 +32,7 @@ import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
+import com.example.boroodat.general.TodayDate;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.activity7.Activity7_LoadingModel;
 import com.example.boroodat.model.activity7.Activity7_MainModel;
@@ -449,6 +450,7 @@ public class Activity7_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             object.put("title", title);
             object.put("account_number", account_number);
             object.put("balance", balance);
+            object.put("date", new TodayDate().get());
             object.put("secret_key", context.getString(R.string.secret_key));
         }
         catch (JSONException e)

@@ -87,27 +87,53 @@ class AccountController extends Controller
 
     public function edit(Request $request)
     {
+        $user = auth()->user();
+
         $account=Account::where('id',$request->account_id)->first();
 
         if ($account)
         {
             $balance = $account->balance;
 
-//            $initial_balance=0;
+            $initial_balance=0;
 
             $deposit = Deposit::where('account_id', $request->account_id)
                               ->where('title', 'موجودی اولیه')
                               ->first();
-            $initial_balance = $deposit->amount;
+
+            if ($deposit)
+                $initial_balance = $deposit->amount;
 
             $account->title = $request->title;
             $account->account_number = $request->account_number;
             $account->balance = $balance - $initial_balance + $request->balance;
             $account->save();
 
-            $deposit->amount = $request->balance;
-            $deposit->save();
+            if ($deposit)
+            {
+                if ($request->balance>0)
+                {
+                    $deposit->amount = $request->balance;
+                    $deposit->save();
+                }
+                else
+                    $deposit->delete();
+            }
 
+            else if ($request->balance>0)
+            {
+                Deposit::create(
+                    [
+                        'user_id'     => $user->id,
+                        'company_id'  => $request->company_id,
+                        'title'       => 'موجودی اولیه',
+                        'amount'      => $request->balance,
+                        'account_id'  => $account->id,
+                        'date'        => $request->date,
+                        'description' => "-"
+                    ]
+                );
+            }
 
             return ['code'    => '200',
                     'balance' => $account->balance,];
