@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Activity21_BuyerDetails extends AppCompatActivity
+public class Activity21_BuyerDetails extends RuntimePermissionsActivity
 {
 
     private Activity21BuyerDetailsBinding binding;
@@ -109,50 +109,12 @@ public class Activity21_BuyerDetails extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                binding.share.setVisibility(View.GONE);
-                binding.search.setVisibility(View.GONE);
+                if (new CheckPermission(context,Manifest.permission.READ_EXTERNAL_STORAGE).check() &&
+                        new CheckPermission(context,Manifest.permission.WRITE_EXTERNAL_STORAGE).check())
+                    share();
 
-                int s1 =0;
-                int s2 =0;
-                int s3 =0;
-
-                if (binding.refresh.getVisibility() == View.VISIBLE)
-                {
-                    s1 = 1;
-                    binding.refresh.setVisibility(View.GONE);
-                }
-
-                if (binding.select.getVisibility() == View.VISIBLE)
-                {
-                    s2 = 1;
-                    binding.select.setVisibility(View.GONE);
-                }
-
-                if (binding.lnr2.getVisibility() == View.VISIBLE)
-                {
-                    s3 = 1;
-                    binding.lnr2.setVisibility(View.GONE);
-                    binding.lnr1.setVisibility(View.VISIBLE);
-                }
-
-                View rootView = findViewById(android.R.id.content).getRootView();
-                new Share(context, rootView).screenShot();
-
-                binding.share.setVisibility(View.VISIBLE);
-                binding.search.setVisibility(View.VISIBLE);
-
-                if (s1 == 1)
-                    binding.refresh.setVisibility(View.VISIBLE);
-
-                if (s2==1)
-                    binding.select.setVisibility(View.VISIBLE);
-
-
-                if (s3 == 1)
-                {
-                    binding.lnr2.setVisibility(View.VISIBLE);
-                    binding.lnr1.setVisibility(View.GONE);
-                }
+                else
+                    Activity21_BuyerDetails.super.requestAppPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 10, context);
             }
         });
 
@@ -495,5 +457,67 @@ public class Activity21_BuyerDetails extends AppCompatActivity
         };
         request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public void share()
+    {
+        binding.share.setVisibility(View.GONE);
+        binding.search.setVisibility(View.GONE);
+
+        int s1 =0;
+        int s2 =0;
+        int s3 =0;
+
+        if (binding.refresh.getVisibility() == View.VISIBLE)
+        {
+            s1 = 1;
+            binding.refresh.setVisibility(View.GONE);
+        }
+
+        if (binding.select.getVisibility() == View.VISIBLE)
+        {
+            s2 = 1;
+            binding.select.setVisibility(View.GONE);
+        }
+
+        if (binding.lnr2.getVisibility() == View.VISIBLE)
+        {
+            s3 = 1;
+            binding.lnr2.setVisibility(View.GONE);
+            binding.lnr1.setVisibility(View.VISIBLE);
+        }
+
+        View rootView = findViewById(android.R.id.content).getRootView();
+        new Share(context, rootView).screenShot();
+
+        binding.share.setVisibility(View.VISIBLE);
+        binding.search.setVisibility(View.VISIBLE);
+
+        if (s1 == 1)
+            binding.refresh.setVisibility(View.VISIBLE);
+
+        if (s2==1)
+            binding.select.setVisibility(View.VISIBLE);
+
+
+        if (s3 == 1)
+        {
+            binding.lnr2.setVisibility(View.VISIBLE);
+            binding.lnr1.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode)
+    {
+        if (requestCode == 10)
+            share();
+    }
+
+    @Override
+    public void onPermissionsDeny(int requestCode)
+    {
+        Toast.makeText ( getApplicationContext (),
+                "مجوز دسترسی به حافظه داده نشد.", Toast.LENGTH_LONG ).show ();
     }
 }

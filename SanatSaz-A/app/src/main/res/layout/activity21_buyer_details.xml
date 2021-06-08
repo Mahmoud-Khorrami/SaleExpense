@@ -180,7 +180,8 @@
                 android:gravity="center"
                 android:text="-"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
@@ -189,7 +190,8 @@
                 android:gravity="center|right"
                 android:paddingRight="10dp"
                 android:text="جمع کل:"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="13sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -206,7 +208,8 @@
                 android:gravity="center"
                 android:text="-"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
@@ -215,7 +218,8 @@
                 android:gravity="center|right"
                 android:paddingRight="10dp"
                 android:text="پرداختی:"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="13sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -232,7 +236,8 @@
                 android:gravity="center"
                 android:text="-"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
@@ -241,7 +246,8 @@
                 android:gravity="center|right"
                 android:paddingRight="10dp"
                 android:text="باقیمانده:"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

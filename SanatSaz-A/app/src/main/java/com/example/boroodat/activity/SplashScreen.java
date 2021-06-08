@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.example.boroodat.R;
 import com.example.boroodat.database.User_Info_DB;
 import com.example.boroodat.databinding.SplashScreenBinding;
 import com.example.boroodat.general.AppController;
+import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
 
 import org.json.JSONException;
@@ -39,6 +41,7 @@ public class SplashScreen extends AppCompatActivity
     private AlertDialog progressDialog;
     private Realm realm;
     private int s=0;
+    private Context context=this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -120,7 +123,13 @@ public class SplashScreen extends AppCompatActivity
         }
 
         else
-            login(results.get(0).getPhone_number(), results.get(0).getPassword());
+            if (new Internet(context).check())
+                login(results.get(0).getPhone_number(), results.get(0).getPassword());
+            else
+            {
+                s=1;
+                new Internet(context).enable();
+            }
     }
 
     public void login(String phone_number, String password)
