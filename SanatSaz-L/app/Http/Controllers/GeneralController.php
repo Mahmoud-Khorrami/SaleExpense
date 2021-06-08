@@ -2,6 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AccountResource1;
+use App\Http\Resources\BuyerResource1;
+use App\Http\Resources\DepositResource1;
+use App\Http\Resources\DriverResource1;
+use App\Http\Resources\ExpenseResource1;
+use App\Http\Resources\ExpenseResource2;
+use App\Http\Resources\MaterialResource1;
+use App\Http\Resources\MaterialResource2;
+use App\Http\Resources\PersonnelResource1;
+use App\Http\Resources\SaleResource;
+use App\Http\Resources\SaleResource3;
+use App\Http\Resources\SlaryResource1;
+use App\Http\Resources\UserResource1;
 use App\Models\Account;
 use App\Models\Buyer;
 use App\Models\Deposit;
@@ -21,7 +34,7 @@ class GeneralController extends Controller
 {
     public function xls(Request $request)
     {
-        $accounts = Account::where('company_id', $request->company_id)->get();
+        $accounts = Account::where('company_id', $request->company_id)->whereNull("archive")->get();
 
         foreach ($accounts as $account)
         {
@@ -31,10 +44,10 @@ class GeneralController extends Controller
 
         //---------------------------------------------------------------
 
-        $users = User::where('company_id', $request->company_id)->get();
-        $buyers = Buyer::where('company_id', $request->company_id)->get();
-        $drivers = Driver::where('company_id', $request->company_id)->get();
-        $personnel = Personnel::where('company_id', $request->company_id)->get();
+        $users = User::where('company_id', $request->company_id)->whereNull("archive")->get();
+        $buyers = Buyer::where('company_id', $request->company_id)->whereNull("archive")->get();
+        $drivers = Driver::where('company_id', $request->company_id)->whereNull("archive")->get();
+        $personnel = Personnel::where('company_id', $request->company_id)->whereNull("archive")->get();
         $sales = Sale::where('company_id', $request->company_id)->get();
         $sale_details = SaleDetail::where('company_id', $request->company_id)->get();
         $deposits = Deposit::where('company_id', $request->company_id)->get();
@@ -44,20 +57,80 @@ class GeneralController extends Controller
         $materials = Material::where('company_id', $request->company_id)->get();
         $material_details = MaterialDetail::where('company_id', $request->company_id)->get();
 
+        //---------------------------------------------------------------
+
+        $saleResults = collect([]);
+
+        foreach (SaleResource::collection($sales) as $sale)
+        {
+            $saleResults->push(
+                ["sale"          => $sale,
+                 "buyer_name"    => $sale->buyer->name,
+                 "driver_name"   => $sale->driver->name,
+                 "account_title" => $sale->account->title]
+            );
+        }
+
+        //---------------------------------------------------------------
+
+        $depositResults = collect([]);
+
+        foreach (DepositResource1::collection($deposits) as $deposit)
+        {
+            $depositResults->push(
+                ["deposit"       => $deposit,
+                 "account_title" => $deposit->account->title]);
+        }
+
+        //---------------------------------------------------------------
+
+        $salaryResults = collect([]);
+
+        foreach (SlaryResource1::collection($salaries) as $salary)
+        {
+            $salaryResults->push(
+                ["salary"         => $salary,
+                 "account_title"  => $salary->account->title,
+                 "personnel_name" => $salary->personnel->name]);
+        }
+
+        //---------------------------------------------------------------
+
+        $expenseResults = collect([]);
+
+        foreach (ExpenseResource1::collection($expenses) as $expense)
+        {
+            $expenseResults->push(
+                ["expense"         => $expense,
+                 "account_title"  => $expense->account->title]);
+        }
+
+        //---------------------------------------------------------------
+
+        $materialResults = collect([]);
+
+        foreach (MaterialResource1::collection($materials) as $material)
+        {
+            $materialResults->push(
+                ["material"         => $material,
+                 "account_title"  => $material->account->title]);
+        }
+
+        //---------------------------------------------------------------
         return [
-            'users'            => $users,
-            'accounts'         => $accounts,
-            'buyers'           => $buyers,
-            'drivers'          => $drivers,
-            'personnel'        => $personnel,
-            'sales'            => $sales,
-            'sale_details'     => $sale_details,
-            'deposits'         => $deposits,
-            'salaries'         => $salaries,
-            'expenses'         => $expenses,
-            'expense_details'  => $expense_details,
-            'materials'        => $materials,
-            'material_details' => $material_details];
+            'users'            => UserResource1::collection($users),
+            'accounts'         => AccountResource1::collection($accounts),
+            'buyers'           => BuyerResource1::collection($buyers),
+            'drivers'          => DriverResource1::collection($drivers),
+            'personnel'        => PersonnelResource1::collection($personnel),
+            'sales'            => $saleResults,
+            'sale_details'     => SaleResource3::collection($sale_details),
+            'deposits'         => $depositResults,
+            'salaries'         => $salaryResults,
+            'expenses'         => $expenseResults,
+            'expense_details'  => ExpenseResource2::collection($expense_details),
+            'materials'        => $materialResults,
+            'material_details' => MaterialResource2::collection($material_details)];
 
     }
 

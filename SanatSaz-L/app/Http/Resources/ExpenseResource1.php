@@ -20,6 +20,7 @@ class ExpenseResource1 extends JsonResource
             "date"=>$this->date,
             "sum"=>$this->sum,
             "payment"=>$this->payment,
+            "remain"=>$this->remain,
             "account_id"=>$this->account_id,
             "description"=>$this->description,
         ];

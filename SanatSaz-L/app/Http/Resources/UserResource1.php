@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DepositResource2 extends JsonResource
+class UserResource1 extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,11 @@ class DepositResource2 extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            "id"=> $this->id,
+            "name"=>$this->name,
+            "phone_number"=>$this->phone_number,
+            "role"=>$this->role
+        ];
     }
 }

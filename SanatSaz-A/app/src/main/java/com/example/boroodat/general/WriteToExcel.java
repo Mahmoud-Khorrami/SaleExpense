@@ -273,27 +273,34 @@ public class WriteToExcel
             sheet7.addCell(new Label(1,0,"شماره فاکتور"));
             sheet7.addCell(new Label(2,0,"تاریخ"));
             sheet7.addCell(new Label(3,0,"شناسه خریدار"));
-            sheet7.addCell(new Label(4,0,"شناسه راننده"));
-            sheet7.addCell(new Label(5,0,"جمع مبلغ فاکتور"));
-            sheet7.addCell(new Label(6,0,"مبلغ دریافت شده"));
-            sheet7.addCell(new Label(7,0,"مبلغ باقیمانده"));
-            sheet7.addCell(new Label(8,0,"شناسه حساب بانکی"));
-            sheet7.addCell(new Label(9,0,"شرح"));
+            sheet7.addCell(new Label(4,0,"نام خریدار"));
+            sheet7.addCell(new Label(5,0,"شناسه راننده"));
+            sheet7.addCell(new Label(6,0,"نام راننده"));
+            sheet7.addCell(new Label(7,0,"جمع مبلغ فاکتور"));
+            sheet7.addCell(new Label(8,0,"مبلغ دریافت شده"));
+            sheet7.addCell(new Label(9,0,"مبلغ باقیمانده"));
+            sheet7.addCell(new Label(10,0,"شناسه حساب بانکی"));
+            sheet7.addCell(new Label(11,0,"عنوان حساب بانکی"));
+            sheet7.addCell(new Label(12,0,"شرح"));
 
             for (int i=0; i<array.length(); i++)
             {
                 JSONObject object = array.getJSONObject(i);
+                JSONObject object1 = object.getJSONObject("sale");
 
-                sheet7.addCell(new Label(0,i+1,object.getString("id")));
-                sheet7.addCell(new Label(1,i+1,object.getString("factor_number")));
-                sheet7.addCell(new Label(2,i+1,object.getString("date")));
-                sheet7.addCell(new Label(3,i+1,object.getString("buyer_id")));
-                sheet7.addCell(new Label(4,i+1,object.getString("driver_id")));
-                sheet7.addCell(new Label(5,i+1,object.getString("sum")));
-                sheet7.addCell(new Label(6,i+1,object.getString("payment")));
-                sheet7.addCell(new Label(7,i+1,object.getString("remain")));
-                sheet7.addCell(new Label(8,i+1,object.getString("account_id")));
-                sheet7.addCell(new Label(9,i+1,object.getString("description")));
+                sheet7.addCell(new Label(0,i+1,object1.getString("id")));
+                sheet7.addCell(new Label(1,i+1,object1.getString("factor_number")));
+                sheet7.addCell(new Label(2,i+1,object1.getString("date")));
+                sheet7.addCell(new Label(3,i+1,object1.getString("buyer_id")));
+                sheet7.addCell(new Label(4,i+1,object.getString("buyer_name")));
+                sheet7.addCell(new Label(5,i+1,object1.getString("driver_id")));
+                sheet7.addCell(new Label(6,i+1,object.getString("driver_name")));
+                sheet7.addCell(new Label(7,i+1,object1.getString("sum")));
+                sheet7.addCell(new Label(8,i+1,object1.getString("payment")));
+                sheet7.addCell(new Label(9,i+1,object1.getString("remain")));
+                sheet7.addCell(new Label(10,i+1,object1.getString("account_id")));
+                sheet7.addCell(new Label(11,i+1,object.getString("account_title")));
+                sheet7.addCell(new Label(12,i+1,object1.getString("description")));
             }
 
             return true;
@@ -345,19 +352,22 @@ public class WriteToExcel
             sheet9.addCell(new Label(1,0,"عنوان"));
             sheet9.addCell(new Label(2,0,"مبلغ"));
             sheet9.addCell(new Label(3,0,"شناسه حساب بانکی"));
-            sheet9.addCell(new Label(4,0,"تاریخ"));
-            sheet9.addCell(new Label(5,0,"توضیحات"));
+            sheet9.addCell(new Label(4,0,"عنوان حساب بانکی"));
+            sheet9.addCell(new Label(5,0,"تاریخ"));
+            sheet9.addCell(new Label(6,0,"توضیحات"));
 
             for (int i=0; i<array.length(); i++)
             {
                 JSONObject object = array.getJSONObject(i);
+                JSONObject object1 = object.getJSONObject("deposit");
 
-                sheet9.addCell(new Label(0,i+1,object.getString("id")));
-                sheet9.addCell(new Label(1,i+1,object.getString("title")));
-                sheet9.addCell(new Label(2,i+1,object.getString("amount")));
-                sheet9.addCell(new Label(3,i+1,object.getString("account_id")));
-                sheet9.addCell(new Label(4,i+1,object.getString("date")));
-                sheet9.addCell(new Label(5,i+1,object.getString("description")));
+                sheet9.addCell(new Label(0,i+1,object1.getString("id")));
+                sheet9.addCell(new Label(1,i+1,object1.getString("title")));
+                sheet9.addCell(new Label(2,i+1,object1.getString("amount")));
+                sheet9.addCell(new Label(3,i+1,object1.getString("account_id")));
+                sheet9.addCell(new Label(4,i+1,object.getString("account_title")));
+                sheet9.addCell(new Label(5,i+1,object1.getString("date")));
+                sheet9.addCell(new Label(6,i+1,object1.getString("description")));
             }
 
             return true;
@@ -374,25 +384,30 @@ public class WriteToExcel
         {
             sheet10.addCell(new Label(0,0,"شناسه"));
             sheet10.addCell(new Label(1,0,"شناسه پرسنل"));
-            sheet10.addCell(new Label(2,0,"حقوق"));
-            sheet10.addCell(new Label(3,0,"بیعانه"));
-            sheet10.addCell(new Label(4,0,"بیمه و مالیات"));
-            sheet10.addCell(new Label(5,0,"شناسه حساب بانکی"));
-            sheet10.addCell(new Label(6,0,"تاریخ"));
-            sheet10.addCell(new Label(7,0,"توضیحات"));
+            sheet10.addCell(new Label(2,0,"نام پرسنل"));
+            sheet10.addCell(new Label(3,0,"حقوق"));
+            sheet10.addCell(new Label(4,0,"بیعانه"));
+            sheet10.addCell(new Label(5,0,"بیمه و مالیات"));
+            sheet10.addCell(new Label(6,0,"شناسه حساب بانکی"));
+            sheet10.addCell(new Label(7,0,"عنوان حساب بانکی"));
+            sheet10.addCell(new Label(8,0,"تاریخ"));
+            sheet10.addCell(new Label(9,0,"توضیحات"));
 
             for (int i=0; i<array.length(); i++)
             {
                 JSONObject object = array.getJSONObject(i);
+                JSONObject object1 = object.getJSONObject("salary");
 
-                sheet10.addCell(new Label(0,i+1,object.getString("id")));
-                sheet10.addCell(new Label(1,i+1,object.getString("personnel_id")));
-                sheet10.addCell(new Label(2,i+1,object.getString("salary")));
-                sheet10.addCell(new Label(3,i+1,object.getString("earnest")));
-                sheet10.addCell(new Label(4,i+1,object.getString("insurance_tax")));
-                sheet10.addCell(new Label(5,i+1,object.getString("account_id")));
-                sheet10.addCell(new Label(6,i+1,object.getString("date")));
-                sheet10.addCell(new Label(7,i+1,object.getString("description")));
+                sheet10.addCell(new Label(0,i+1,object1.getString("id")));
+                sheet10.addCell(new Label(1,i+1,object1.getString("personnel_id")));
+                sheet10.addCell(new Label(2,i+1,object.getString("personnel_name")));
+                sheet10.addCell(new Label(3,i+1,object1.getString("salary")));
+                sheet10.addCell(new Label(4,i+1,object1.getString("earnest")));
+                sheet10.addCell(new Label(5,i+1,object1.getString("insurance_tax")));
+                sheet10.addCell(new Label(6,i+1,object1.getString("account_id")));
+                sheet10.addCell(new Label(7,i+1,object.getString("account_title")));
+                sheet10.addCell(new Label(8,i+1,object1.getString("date")));
+                sheet10.addCell(new Label(9,i+1,object1.getString("description")));
             }
 
             return true;
@@ -414,20 +429,23 @@ public class WriteToExcel
             sheet11.addCell(new Label(4,0,"پرداخت شده"));
             sheet11.addCell(new Label(5,0,"باقیمانده"));
             sheet11.addCell(new Label(6,0,"شناسه حساب بانکی"));
-            sheet11.addCell(new Label(7,0,"شرح"));
+            sheet11.addCell(new Label(7,0,"عنوان حساب بانکی"));
+            sheet11.addCell(new Label(8,0,"شرح"));
 
             for (int i=0; i<array.length(); i++)
             {
                 JSONObject object = array.getJSONObject(i);
+                JSONObject object1 = object.getJSONObject("expense");
 
-                sheet11.addCell(new Label(0,i+1,object.getString("id")));
-                sheet11.addCell(new Label(1,i+1,object.getString("factor_number")));
-                sheet11.addCell(new Label(2,i+1,object.getString("date")));
-                sheet11.addCell(new Label(3,i+1,object.getString("sum")));
-                sheet11.addCell(new Label(4,i+1,object.getString("payment")));
-                sheet11.addCell(new Label(5,i+1,object.getString("remain")));
-                sheet11.addCell(new Label(6,i+1,object.getString("account_id")));
-                sheet11.addCell(new Label(7,i+1,object.getString("description")));
+                sheet11.addCell(new Label(0,i+1,object1.getString("id")));
+                sheet11.addCell(new Label(1,i+1,object1.getString("factor_number")));
+                sheet11.addCell(new Label(2,i+1,object1.getString("date")));
+                sheet11.addCell(new Label(3,i+1,object1.getString("sum")));
+                sheet11.addCell(new Label(4,i+1,object1.getString("payment")));
+                sheet11.addCell(new Label(5,i+1,object1.getString("remain")));
+                sheet11.addCell(new Label(6,i+1,object1.getString("account_id")));
+                sheet11.addCell(new Label(7,i+1,object.getString("account_title")));
+                sheet11.addCell(new Label(8,i+1,object1.getString("description")));
             }
 
             return true;
@@ -482,20 +500,23 @@ public class WriteToExcel
             sheet13.addCell(new Label(4,0,"پرداخت شده"));
             sheet13.addCell(new Label(5,0,"باقیمانده"));
             sheet13.addCell(new Label(6,0,"شناسه حساب بانکی"));
-            sheet13.addCell(new Label(7,0,"شرح"));
+            sheet13.addCell(new Label(7,0,"عنوان حساب بانکی"));
+            sheet13.addCell(new Label(8,0,"شرح"));
 
             for (int i=0; i<array.length(); i++)
             {
                 JSONObject object = array.getJSONObject(i);
+                JSONObject object1 = object.getJSONObject("material");
 
-                sheet13.addCell(new Label(0,i+1,object.getString("id")));
-                sheet13.addCell(new Label(1,i+1,object.getString("factor_number")));
-                sheet13.addCell(new Label(2,i+1,object.getString("date")));
-                sheet13.addCell(new Label(3,i+1,object.getString("sum")));
-                sheet13.addCell(new Label(4,i+1,object.getString("payment")));
-                sheet13.addCell(new Label(5,i+1,object.getString("remain")));
-                sheet13.addCell(new Label(6,i+1,object.getString("account_id")));
-                sheet13.addCell(new Label(7,i+1,object.getString("description")));
+                sheet13.addCell(new Label(0,i+1,object1.getString("id")));
+                sheet13.addCell(new Label(1,i+1,object1.getString("factor_number")));
+                sheet13.addCell(new Label(2,i+1,object1.getString("date")));
+                sheet13.addCell(new Label(3,i+1,object1.getString("sum")));
+                sheet13.addCell(new Label(4,i+1,object1.getString("payment")));
+                sheet13.addCell(new Label(5,i+1,object1.getString("remain")));
+                sheet13.addCell(new Label(6,i+1,object1.getString("account_id")));
+                sheet13.addCell(new Label(7,i+1,object.getString("account_title")));
+                sheet13.addCell(new Label(8,i+1,object1.getString("description")));
             }
 
             return true;

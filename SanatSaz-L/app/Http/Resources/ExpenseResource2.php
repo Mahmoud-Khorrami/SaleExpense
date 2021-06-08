@@ -16,6 +16,7 @@ class ExpenseResource2 extends JsonResource
     {
         return [
             "id"=> $this->id,
+            "expense_id"=>$this->expense_id,
             "row"=> $this->row,
             "description"=> $this->description,
             "number"=> $this->number,

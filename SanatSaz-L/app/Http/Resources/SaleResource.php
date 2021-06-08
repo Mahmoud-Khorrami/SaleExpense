@@ -22,6 +22,7 @@ class SaleResource extends JsonResource
             "driver_id"=>$this->driver_id,
             "sum"=>$this->sum,
             "payment"=>$this->payment,
+            "remain"=>$this->remain,
             "account_id"=>$this->account_id,
             "description"=>$this->description,
         ];
