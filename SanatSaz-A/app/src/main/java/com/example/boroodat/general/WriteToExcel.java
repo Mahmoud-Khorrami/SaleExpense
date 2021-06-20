@@ -19,6 +19,7 @@ import jxl.WorkbookSettings;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 
 public class WriteToExcel
 {
@@ -73,6 +74,7 @@ public class WriteToExcel
             WritableSheet sheet12 = workbook.createSheet("جزئیات فاکتور هزینه", 11);
             WritableSheet sheet13 = workbook.createSheet("فاکتور مواد اولیه", 12);
             WritableSheet sheet14 = workbook.createSheet("جزئیات فاکتور مواد اولیه", 13);
+            WritableSheet sheet15 = workbook.createSheet("گزارشات خریدار", 14);
 
             //---------------------------------------------------------------------------
 
@@ -98,8 +100,9 @@ public class WriteToExcel
                 boolean b11 = saveExpenseDetail(response.getJSONArray("expense_details"),sheet12);
                 boolean b12 = saveMaterial(response.getJSONArray("materials"),sheet13);
                 boolean b13 = saveMaterialDetail(response.getJSONArray("material_details"),sheet14);
+                boolean b14 = saveBuyerReports(response.getJSONArray("sales"),sheet15);
 
-                if (b1 & b2 & b3 & b4 & b5 & b6 & b7 & b8 & b9 & b10 & b11 & b12 & b13 )
+                if (b1 & b2 & b3 & b4 & b5 & b6 & b7 & b8 & b9 & b10 & b11 & b12 & b13 & b14)
                 {
                     progressDialog.dismiss();
                     workbook.write();
@@ -550,6 +553,75 @@ public class WriteToExcel
                 sheet14.addCell(new Label(4,i+1,object.getString("number")));
                 sheet14.addCell(new Label(5,i+1,object.getString("unit_price")));
                 sheet14.addCell(new Label(6,i+1,object.getString("total_price")));
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    private boolean saveBuyerReports(JSONArray array, WritableSheet sheet15)
+    {
+        try
+        {
+            sheet15.addCell(new Label(0,0,"شماره فاکتور"));
+            sheet15.addCell(new Label(1,0,"شناسه خریدار"));
+            sheet15.addCell(new Label(2,0,"نام خریدار"));
+            sheet15.addCell(new Label(3,0,"نام راننده"));
+            sheet15.addCell(new Label(4,0,"تاریخ"));
+            sheet15.addCell(new Label(5,0,"شرح"));
+            sheet15.addCell(new Label(6,0,"تعداد"));
+            sheet15.addCell(new Label(7,0,"قیمت واحد"));
+            sheet15.addCell(new Label(8,0,"قیمت کل"));
+            sheet15.addCell(new Label(9,0,"جمع کل فاکتور"));
+            sheet15.addCell(new Label(10,0,"مبلغ دریافت شده"));
+            sheet15.addCell(new Label(11,0,"مبلغ باقیمانده"));
+            sheet15.addCell(new Label(12,0,"توضیحات"));
+
+            int j=0;
+            for (int i=0; i<array.length(); i++)
+            {
+                JSONObject object = array.getJSONObject(i);
+                JSONObject object1 = object.getJSONObject("sale");
+                JSONArray array1 = object.getJSONArray("sale_details");
+
+                j = j+1;
+                if (array1.length()>1)
+                {
+                    sheet15.mergeCells(3,j,3,j+array1.length()-1);
+                    sheet15.mergeCells(4,j,4,j+array1.length()-1);
+                    sheet15.mergeCells(9,j,9,j+array1.length()-1);
+                    sheet15.mergeCells(10,j,10,j+array1.length()-1);
+                    sheet15.mergeCells(11,j,11,j+array1.length()-1);
+                    sheet15.mergeCells(12,j,12,j+array1.length()-1);
+
+
+                }
+
+                for (int i1=0; i1<array1.length(); i1++)
+                {
+                    JSONObject object2 = array1.getJSONObject(i1);
+
+                    sheet15.addCell(new Label(0,j+i1,object1.getString("factor_number")));
+                    sheet15.addCell(new Label(1,j+i1,object1.getString("buyer_id")));
+                    sheet15.addCell(new Label(2,j+i1,object.getString("buyer_name")));
+                    sheet15.addCell(new Label(5,j+i1,object2.getString("description")));
+                    sheet15.addCell(new Label(6,j+i1,object2.getString("number")));
+                    sheet15.addCell(new Label(7,j+i1,object2.getString("unit_price")));
+                    sheet15.addCell(new Label(8,j+i1,object2.getString("total_price")));
+                }
+
+                sheet15.addCell(new Label(3,j,object.getString("driver_name")));
+                sheet15.addCell(new Label(4,j,object1.getString("date")));
+                sheet15.addCell(new Label(9,j,object1.getString("sum")));
+                sheet15.addCell(new Label(10,j,object1.getString("payment")));
+                sheet15.addCell(new Label(11,j,object1.getString("remain")));
+                sheet15.addCell(new Label(12,j,object1.getString("description")));
+
+                j = j + array1.length()-1;
             }
 
             return true;

@@ -11,6 +11,7 @@ use App\Http\Resources\ExpenseResource2;
 use App\Http\Resources\MaterialResource1;
 use App\Http\Resources\MaterialResource2;
 use App\Http\Resources\PersonnelResource1;
+use App\Http\Resources\SaleRecource2;
 use App\Http\Resources\SaleResource;
 use App\Http\Resources\SaleResource3;
 use App\Http\Resources\SlaryResource1;
@@ -67,7 +68,8 @@ class GeneralController extends Controller
                 ["sale"          => $sale,
                  "buyer_name"    => $sale->buyer->name,
                  "driver_name"   => $sale->driver->name,
-                 "account_title" => $sale->account->title]
+                 "account_title" => $sale->account->title,
+                 'sale_details'  => SaleRecource2::collection($sale->saleDetails)]
             );
         }
 
