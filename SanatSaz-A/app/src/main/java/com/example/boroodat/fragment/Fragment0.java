@@ -31,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.activity.Activity14_Personnel;
+import com.example.boroodat.activity.Activity22_DefaultSetting;
 import com.example.boroodat.activity.Activity24_AboutUs;
 import com.example.boroodat.activity.Activity4_Users;
 import com.example.boroodat.activity.Activity7_Account;
@@ -76,7 +77,7 @@ public class Fragment0 extends RuntimePermissionsActivity
 
     }
 
-    public View getView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    public View getView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         binding = Fragment0Binding.inflate(inflater, container, false);
         View view = binding.getRoot();
@@ -251,7 +252,17 @@ public class Fragment0 extends RuntimePermissionsActivity
                 context.startActivity(new Intent(context, Activity24_AboutUs.class));
             }
         });
+        //-------------------------------------------------------------------------------------------------------
 
+        binding.defaultSetting.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(context, Activity22_DefaultSetting.class);
+                context.startActivity(intent);
+            }
+        });
         //-------------------------------------------------------------------------------------------------------
 
         return view;

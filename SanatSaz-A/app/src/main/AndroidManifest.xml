@@ -21,12 +21,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".activity.Activity21_BuyerDetails"
+        <activity android:name=".activity.Activity22_DefaultSetting"></activity>
+        <activity
+            android:name=".activity.Activity21_BuyerDetails"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".activity.Activity11_BuyerReports"
+        <activity
+            android:name=".activity.Activity11_BuyerReports"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"  />
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.Activity5_SaleReports"
             android:screenOrientation="portrait"
@@ -129,15 +132,10 @@
             android:authorities="com.example.boroodat.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/path_file">
-            </meta-data>
+                android:resource="@xml/path_file"></meta-data>
         </provider>
-
     </application>
-
-
 
 </manifest>

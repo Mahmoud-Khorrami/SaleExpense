@@ -30,7 +30,7 @@ public class AppController extends Application
 
 		final RealmConfiguration configuration = new RealmConfiguration.Builder()
 				.name("sample.realm")
-				.schemaVersion(0)
+				.schemaVersion(1)
 				.migration(new Migration())
 				.allowWritesOnUiThread(true)
 				.build();
@@ -43,6 +43,7 @@ public class AppController extends Application
 		Realm.getDefaultInstance().close();
 		super.onTerminate();
 	}
+
 	public static synchronized AppController getInstance()
 	{
 		return mInstance;

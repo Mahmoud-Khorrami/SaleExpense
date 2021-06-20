@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity16_Adapter;
 import com.example.boroodat.database.Activity16_DB;
+import com.example.boroodat.database.DefaultItems_DB;
 import com.example.boroodat.databinding.Activity16RecordExpenseBinding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
@@ -63,6 +64,7 @@ public class Activity16_RecordExpense extends AppCompatActivity
         setContentView(view);
 
         realm=Realm.getDefaultInstance();
+        setDefault();
         //------------------------------------------------------------------
 
         progressDialog = new SpotsDialog(this, R.style.Custom);
@@ -271,6 +273,23 @@ public class Activity16_RecordExpense extends AppCompatActivity
             }
         });
 
+    }
+
+    private void setDefault()
+    {
+        RealmResults<DefaultItems_DB> results = realm.where(DefaultItems_DB.class)
+                .equalTo("id",new User_Info().company_id())
+                .findAll();
+
+        if (results.size()>0)
+        {
+            if (!results.get(0).getAccount_title().equals("-"))
+            {
+                binding.accountNumber.setText(results.get(0).getAccount_title());
+                binding.txtAccountId.setText(results.get(0).getAccount_id());
+            }
+
+        }
     }
 
     private void clearActivity16DB()

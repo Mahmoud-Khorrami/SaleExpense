@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.activity.Activity16_RecordExpense;
 import com.example.boroodat.activity.Activity18_RawMaterial;
+import com.example.boroodat.database.DefaultItems_DB;
 import com.example.boroodat.databinding.F2SalaryAddBinding;
 import com.example.boroodat.databinding.F2DepositAddBinding;
 import com.example.boroodat.databinding.Fragment2Binding;
@@ -45,6 +47,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 public class Fragment2
@@ -54,12 +58,15 @@ public class Fragment2
     private android.app.AlertDialog progressDialog;
     private AlertDialog.Builder alertDialogBuilder=null;
     private Context context;
+    private Realm realm;
 
     public Fragment2(Context context)
     {
         this.context = context;
 
         //-------------------------------------------------------
+
+        realm = Realm.getDefaultInstance();
 
         progressDialog = new SpotsDialog(context,R.style.Custom);
         progressDialog.setCancelable(false);
@@ -130,6 +137,7 @@ public class Fragment2
         alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
 
+        setDefault(binding1.accountTitle,binding1.accountId);
         //----------------------------------------------------------------------------------------------------------
 
         alertDialogBuilder.setCancelable(false);
@@ -344,6 +352,7 @@ public class Fragment2
         alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
 
+        setDefault(binding1.account,binding1.accountId);
         //---------------------------------------------------------------------------------------------------
 
         alertDialogBuilder.setCancelable(false);
@@ -534,5 +543,22 @@ public class Fragment2
         request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
 
+    }
+
+    private void setDefault(TextView account_title, TextView account_id)
+    {
+        RealmResults<DefaultItems_DB> results = realm.where(DefaultItems_DB.class)
+                .equalTo("id",new User_Info().company_id())
+                .findAll();
+
+        if (results.size()>0)
+        {
+            if (!results.get(0).getAccount_title().equals("-"))
+            {
+                account_title.setText(results.get(0).getAccount_title());
+                account_id.setText(results.get(0).getAccount_id());
+            }
+
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.adapter.Activity6_Adapter;
 import com.example.boroodat.database.Activity6_DB;
+import com.example.boroodat.database.DefaultItems_DB;
 import com.example.boroodat.databinding.Activity6SalesBinding;
 import com.example.boroodat.general.Account;
 import com.example.boroodat.general.AppController;
@@ -66,6 +67,7 @@ public class Activity6_RecordSales extends AppCompatActivity
         setContentView(view);
 
         realm=Realm.getDefaultInstance();
+        setDefault();
         //------------------------------------------------------------------
 
         progressDialog = new SpotsDialog(this,R.style.Custom);
@@ -307,6 +309,34 @@ public class Activity6_RecordSales extends AppCompatActivity
             }
         });
 
+    }
+
+    private void setDefault()
+    {
+        RealmResults<DefaultItems_DB> results = realm.where(DefaultItems_DB.class)
+                .equalTo("id",new User_Info().company_id())
+                .findAll();
+
+        if (results.size()>0)
+        {
+            if (!results.get(0).getAccount_title().equals("-"))
+            {
+                binding.accountNumber.setText(results.get(0).getAccount_title());
+                binding.txtAccountId.setText(results.get(0).getAccount_id());
+            }
+
+            if (!results.get(0).getBuyer_name().equals("-"))
+            {
+                binding.buyer.setText(results.get(0).getBuyer_name());
+                binding.buyerId.setText(results.get(0).getBuyer_id());
+            }
+
+            if (!results.get(0).getDriver_name().equals("-"))
+            {
+                binding.driver.setText(results.get(0).getDriver_name());
+                binding.driverId.setText(results.get(0).getDriver_id());
+            }
+        }
     }
 
     private void clearActivity6DB()
