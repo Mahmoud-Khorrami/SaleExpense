@@ -6,21 +6,43 @@ public class Activity12_FragmentMainModel extends Activity12_FragmentParentModel
 {
     private String id;
 
-    private String factorNumber, date, sum,payment,account_id,account_title,description;
+    private String factorNumber, date, seller_id, seller_name, sum,payment,account_id,account_title,description;
     private JSONArray details;
 
-    public Activity12_FragmentMainModel(String id, String factorNumber, String date, String sum, String payment, String account_id, String account_title, String description, JSONArray details)
+    public Activity12_FragmentMainModel(String id, String factorNumber, String date, String seller_id, String seller_name, String sum, String payment, String account_id, String account_title, String description, JSONArray details)
     {
         super(Activity12_FragmentParentModel.Main);
         this.id = id;
         this.factorNumber = factorNumber;
         this.date = date;
+        this.seller_id = seller_id;
+        this.seller_name = seller_name;
         this.sum = sum;
         this.payment = payment;
         this.account_id = account_id;
         this.account_title = account_title;
         this.description = description;
         this.details = details;
+    }
+
+    public String getSeller_id()
+    {
+        return seller_id;
+    }
+
+    public void setSeller_id(String seller_id)
+    {
+        this.seller_id = seller_id;
+    }
+
+    public String getSeller_name()
+    {
+        return seller_name;
+    }
+
+    public void setSeller_name(String seller_name)
+    {
+        this.seller_name = seller_name;
     }
 
     public String getAccount_title()

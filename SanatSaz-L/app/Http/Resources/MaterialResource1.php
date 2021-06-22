@@ -18,6 +18,7 @@ class MaterialResource1 extends JsonResource
             "id"=> $this->id,
             "factor_number"=>$this->factor_number,
             "date"=>$this->date,
+            "seller_id"=>$this->seller_id,
             "sum"=>$this->sum,
             "payment"=>$this->payment,
             "remain"=>$this->remain,

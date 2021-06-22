@@ -14,6 +14,7 @@ class Material extends Model
         'company_id',
         'factor_number',
         'date',
+        'seller_id',
         'sum',
         'payment',
         'remain',
@@ -39,5 +40,10 @@ class Material extends Model
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo(Seller::class);
     }
 }

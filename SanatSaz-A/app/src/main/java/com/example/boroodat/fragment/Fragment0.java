@@ -32,6 +32,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
 import com.example.boroodat.activity.Activity14_Personnel;
 import com.example.boroodat.activity.Activity22_DefaultSetting;
+import com.example.boroodat.activity.Activity23_Seller;
 import com.example.boroodat.activity.Activity24_AboutUs;
 import com.example.boroodat.activity.Activity4_Users;
 import com.example.boroodat.activity.Activity7_Account;
@@ -114,6 +115,18 @@ public class Fragment0 extends RuntimePermissionsActivity
             public void onClick(View view)
             {
                 Intent intent=new Intent(context, Activity8_Buyer.class);
+                context.startActivity(intent);
+            }
+        });
+
+        //-------------------------------------------------------------------------------------------------------
+
+        binding.sellers.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent=new Intent(context, Activity23_Seller.class);
                 context.startActivity(intent);
             }
         });

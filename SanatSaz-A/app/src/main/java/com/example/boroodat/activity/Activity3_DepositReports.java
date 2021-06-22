@@ -55,10 +55,6 @@ public class Activity3_DepositReports extends AppCompatActivity
 
         //-------------------------------------------------------------
 
-        getDepositsCount();
-
-        //-------------------------------------------------------------
-
         ArrayList<String> searchItem=new ArrayList<>();
         searchItem.add("عنوان");
         searchItem.add("تاریخ");
@@ -306,5 +302,12 @@ public class Activity3_DepositReports extends AppCompatActivity
         };
         request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        getDepositsCount();
     }
 }

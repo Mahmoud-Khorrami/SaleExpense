@@ -26,6 +26,7 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
+import com.example.boroodat.general.Seller;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity18_Model;
 import com.google.android.material.textfield.TextInputEditText;
@@ -53,7 +54,7 @@ public class Activity19_EditMaterial extends AppCompatActivity
     private Activity18_Adapter adapter;
     private Realm realm;
     private Context context=this;
-    private String last_account_id,last_sum, last_payment, material_id;
+    private String last_account_id,last_sum, last_payment, material_id,last_seller_id;
     private String from;
 
     @Override
@@ -77,6 +78,8 @@ public class Activity19_EditMaterial extends AppCompatActivity
         material_id =extras.getString("material_id");
         String factor_number=extras.getString("factor_number");
         String date=extras.getString("date");
+        last_seller_id=extras.getString("seller_id");
+        String seller_name=extras.getString("seller_name");
         last_sum=extras.getString("sum");
         last_payment=extras.getString("payment");
         last_account_id=extras.getString("account_id");
@@ -91,6 +94,17 @@ public class Activity19_EditMaterial extends AppCompatActivity
             public void onClick(View view)
             {
                 new Date(binding.date,context).setDate();
+            }
+        });
+
+        //---------------------------------------------------------------------------------------------------
+
+        binding.seller.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                new Seller(context,from,binding.seller,binding.sellerId).show();
             }
         });
 
@@ -176,6 +190,8 @@ public class Activity19_EditMaterial extends AppCompatActivity
 
         binding.factorNumber.setText(factor_number);
         binding.date.setText(date);
+        binding.sellerId.setText(last_seller_id);
+        binding.seller.setText(seller_name);
         binding.sum.setText(last_sum);
         binding.payment.setText(last_payment);
         binding.accountNumber.setText(account_title);
@@ -241,6 +257,12 @@ public class Activity19_EditMaterial extends AppCompatActivity
                         binding.date.setError("تاریخ را وارد کنید.");
                     }
 
+                    else if (binding.seller.getText().toString().equals(""))
+                    {
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
+                        binding.sellerTil.setError("نام فروشنده را وارد کنید.");
+                    }
+
                     else if (binding.accountNumber.getText().toString().equals(""))
                     {
                         binding.scrollView.scrollTo(0, binding.crdv3.getTop());
@@ -269,7 +291,7 @@ public class Activity19_EditMaterial extends AppCompatActivity
 
                         if (new Internet(getApplicationContext()).check())
                         {
-                            editMaterial(binding.factorNumber.getText().toString(),binding.date.getText().toString(),sum1,payment1,remain1,binding.txtAccountId.getText().toString(),description);
+                            editMaterial(binding.factorNumber.getText().toString(),binding.date.getText().toString(),binding.sellerId.getText().toString(),sum1,payment1,remain1,binding.txtAccountId.getText().toString(),description);
                         }
                         else
                             new Internet(getApplicationContext()).enable();
@@ -450,7 +472,7 @@ public class Activity19_EditMaterial extends AppCompatActivity
         }
     }
 
-    public void editMaterial(final String factor_number, final String date, final String sum, final String payment, final String remain, final String account_id, String description)
+    public void editMaterial(final String factor_number, final String date, String seller_id, final String sum, final String payment, final String remain, final String account_id, String description)
     {
         String url = getString(R.string.domain) + "api/material/edit";
         progressDialog.show();
@@ -471,6 +493,7 @@ public class Activity19_EditMaterial extends AppCompatActivity
             object.put("material_id", material_id);
             object.put("factor_number", factor_number);
             object.put("date", date);
+            object.put("seller_id", seller_id);
             object.put("sum", sum);
             object.put("payment", payment);
             object.put("remain", remain);

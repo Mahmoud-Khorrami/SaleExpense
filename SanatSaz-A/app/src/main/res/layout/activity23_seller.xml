@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.Activity9_Driver">
+    tools:context=".activity.Activity23_Seller">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -40,16 +40,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="17dp"
-                    android:layout_weight=".15"
                     app:srcCompat="@drawable/search" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".8"
+                android:layout_weight=".85"
                 android:gravity="center"
-                android:text="راننده ها"
+                android:text="فروشنده ها"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />

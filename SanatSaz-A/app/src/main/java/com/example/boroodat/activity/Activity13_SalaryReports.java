@@ -55,10 +55,6 @@ public class Activity13_SalaryReports extends AppCompatActivity
 
         //-------------------------------------------------------------
 
-        getSalariesCount();
-
-        //-------------------------------------------------------------
-
         ArrayList<String> searchItem=new ArrayList<>();
         searchItem.add("نام و نام خانوادگی");
         searchItem.add("تاریخ");
@@ -308,5 +304,13 @@ public class Activity13_SalaryReports extends AppCompatActivity
         };
         request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        getSalariesCount();
     }
 }

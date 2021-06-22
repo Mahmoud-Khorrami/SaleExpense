@@ -144,7 +144,6 @@ public class Activity9_Driver extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
-
         binding.searchView.setOnCloseListener(new SearchView.OnCloseListener()
         {
             @Override
@@ -156,19 +155,26 @@ public class Activity9_Driver extends AppCompatActivity
                 return true;
             }
         });
+
+        //----------------------------------------------------------------------------------------------------------
+
+        binding.search.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                binding.toolbar.setVisibility(View.GONE);
+                binding.lnr3.setVisibility(View.GONE);
+                binding.lnr2.setVisibility(View.VISIBLE);
+
+                adapter.changeStatusS1();
+            }
+        });
     }
 
     public void onClick(View view)
     {
-        if (view.getId() == R.id.search)
-        {
-            binding.toolbar.setVisibility(View.GONE);
-            binding.lnr3.setVisibility(View.GONE);
-            binding.lnr2.setVisibility(View.VISIBLE);
-
-            adapter.changeStatusS1();
-        }
-
         if (view.getId() == R.id.delete)
         {
             archiveDialog();

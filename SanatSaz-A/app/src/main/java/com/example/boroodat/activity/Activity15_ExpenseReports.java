@@ -61,10 +61,6 @@ public class Activity15_ExpenseReports extends AppCompatActivity
 
         //-------------------------------------------------------------
 
-        getExpensesCount();
-
-        //-------------------------------------------------------------
-
         ArrayList<String> searchItem=new ArrayList<>();
         searchItem.add("شماره فاکتور");
         searchItem.add("تاریخ");
@@ -314,5 +310,13 @@ public class Activity15_ExpenseReports extends AppCompatActivity
         };
         request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        getExpensesCount();
     }
 }

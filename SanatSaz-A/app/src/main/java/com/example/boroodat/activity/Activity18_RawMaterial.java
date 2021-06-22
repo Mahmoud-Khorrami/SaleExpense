@@ -27,6 +27,7 @@ import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Date;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.NumberTextWatcherForThousand;
+import com.example.boroodat.general.Seller;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.model.Activity18_Model;
 import com.google.android.material.textfield.TextInputEditText;
@@ -81,6 +82,17 @@ public class Activity18_RawMaterial extends AppCompatActivity
             public void onClick(View view)
             {
                 new Date(binding.date,context).setDate();
+            }
+        });
+
+        //---------------------------------------------------------------------------------------------------
+
+        binding.seller.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                new Seller(context,from,binding.seller,binding.sellerId).show();
             }
         });
 
@@ -166,6 +178,7 @@ public class Activity18_RawMaterial extends AppCompatActivity
         binding.factorNumber.addTextChangedListener(new ClearError(binding.factorNumberTil));
         binding.date.addTextChangedListener(new ClearError(binding.dateTil));
         binding.accountNumber.addTextChangedListener(new ClearError(binding.accountNumberTil));
+        binding.seller.addTextChangedListener(new ClearError(binding.sellerTil));
 
         //---------------------------------------------------------------------------------------------------
 
@@ -225,6 +238,12 @@ public class Activity18_RawMaterial extends AppCompatActivity
                         binding.dateTil.setError("تاریخ را وارد کنید.");
                     }
 
+                    else if (binding.seller.getText().toString().equals(""))
+                    {
+                        binding.scrollView.scrollTo(0, binding.crdv1.getTop());
+                        binding.sellerTil.setError("نام فروشنده را وارد کنید.");
+                    }
+
                     else if (binding.accountNumber.getText().toString().equals(""))
                     {
                         binding.scrollView.scrollTo(0, binding.crdv3.getTop());
@@ -253,7 +272,7 @@ public class Activity18_RawMaterial extends AppCompatActivity
 
                         if (new Internet(getApplicationContext()).check())
                         {
-                            createRawMaterial(binding.factorNumber.getText().toString(),binding.date.getText().toString(),sum1,payment1,remain1,binding.txtAccountId.getText().toString(),description);
+                            createRawMaterial(binding.factorNumber.getText().toString(),binding.date.getText().toString(),binding.sellerId.getText().toString(),sum1,payment1,remain1,binding.txtAccountId.getText().toString(),description);
                         }
                         else
                             new Internet(getApplicationContext()).enable();
@@ -288,6 +307,11 @@ public class Activity18_RawMaterial extends AppCompatActivity
                 binding.txtAccountId.setText(results.get(0).getAccount_id());
             }
 
+            if (!results.get(0).getSeller_name().equals("-"))
+            {
+                binding.seller.setText(results.get(0).getSeller_name());
+                binding.sellerId.setText(results.get(0).getSeller_id());
+            }
         }
     }
 
@@ -372,7 +396,7 @@ public class Activity18_RawMaterial extends AppCompatActivity
         }
     }
 
-    public void createRawMaterial(String factor_number, String date, final String sum, final String payment, final String remain, final String account_id, String description)
+    public void createRawMaterial(String factor_number, String date, String seller_id, final String sum, final String payment, final String remain, final String account_id, String description)
     {
         String url = getString(R.string.domain) + "api/material/create";
         progressDialog.show();
@@ -392,6 +416,7 @@ public class Activity18_RawMaterial extends AppCompatActivity
             object.put("company_id",new User_Info().company_id());
             object.put("factor_number", factor_number);
             object.put("date", date);
+            object.put("seller_id", seller_id);
             object.put("sum", sum);
             object.put("payment", payment);
             object.put("remain", remain);

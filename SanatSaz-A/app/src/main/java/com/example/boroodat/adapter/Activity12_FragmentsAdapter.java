@@ -27,6 +27,7 @@ import com.example.boroodat.activity.Activity19_EditMaterial;
 import com.example.boroodat.databinding.A12ItemBinding;
 import com.example.boroodat.databinding.DeleteDialog2Binding;
 import com.example.boroodat.databinding.FragmentDetails1Binding;
+import com.example.boroodat.databinding.FragmentDetails4Binding;
 import com.example.boroodat.databinding.LoadingBinding;
 import com.example.boroodat.databinding.NotFoundBinding;
 import com.example.boroodat.databinding.RetryBinding;
@@ -168,6 +169,7 @@ public class Activity12_FragmentsAdapter extends RecyclerView.Adapter<RecyclerVi
             holder1.binding.factorNumber.setText(model.getFactorNumber());
             holder1.binding.totalPrice.setText(model.getSum());
             holder1.binding.date.setText(model.getDate());
+            holder1.binding.seller.setText(model.getSeller_name());
 
             //--------------------------------------------------------------
 
@@ -212,14 +214,12 @@ public class Activity12_FragmentsAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void details(final Activity12_FragmentMainModel model)
     {
-        final FragmentDetails1Binding binding1 = FragmentDetails1Binding.inflate(LayoutInflater.from(context));
+        final FragmentDetails4Binding binding1 = FragmentDetails4Binding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
 
         //-------------------------------------------------------------------------------------------------------
-
-        binding1.lnr1.setVisibility(View.GONE);
 
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("ویرایش", null);
@@ -238,6 +238,7 @@ public class Activity12_FragmentsAdapter extends RecyclerView.Adapter<RecyclerVi
 
             binding1.factorNumber.setText(model.getFactorNumber());
             binding1.date.setText(model.getDate());
+            binding1.seller.setText(model.getSeller_name());
             binding1.sum.setText(model.getSum());
             binding1.payment.setText(model.getPayment());
             binding1.remain.setText(Math.round(remain)+"");
@@ -293,6 +294,8 @@ public class Activity12_FragmentsAdapter extends RecyclerView.Adapter<RecyclerVi
                         intent.putExtra("material_id",model.getId());
                         intent.putExtra("factor_number",model.getFactorNumber());
                         intent.putExtra("date",model.getDate());
+                        intent.putExtra("seller_id",model.getSeller_id());
+                        intent.putExtra("seller_name",model.getSeller_name());
                         intent.putExtra("sum",model.getSum());
                         intent.putExtra("payment",model.getPayment());
                         intent.putExtra("remain",Math.round(remain)+"");

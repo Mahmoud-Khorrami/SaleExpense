@@ -28,14 +28,21 @@
             tools:layout_editor_absoluteX="284dp"
             tools:layout_editor_absoluteY="1dp">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:layout_weight=".2"
+                android:layout_weight=".15"
                 android:onClick="onClick"
-                app:srcCompat="@android:drawable/ic_menu_search" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="17dp"
+                    android:layout_weight=".15"
+                    app:srcCompat="@drawable/search" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="0dp"

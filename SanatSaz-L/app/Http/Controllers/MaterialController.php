@@ -7,6 +7,7 @@ use App\Http\Resources\MaterialResource2;
 use App\Models\Account;
 use App\Models\Material;
 use App\Models\MaterialDetail;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 
 class MaterialController extends Controller
@@ -16,12 +17,13 @@ class MaterialController extends Controller
 
         $user = auth()->user();
 
-        $material=Material::create(
+        $material = Material::create(
             [
                 'user_id'       => $user->id,
                 'company_id'    => $request->company_id,
                 'factor_number' => $request->factor_number,
                 'date'          => $request->date,
+                'seller_id'     => $request->seller_id,
                 'sum'           => $request->sum,
                 'payment'       => $request->payment,
                 'remain'        => $request->remain,
@@ -118,6 +120,7 @@ class MaterialController extends Controller
                 $result->push(
                     [
                         'material'         => $material,
+                        'seller_name'      => $material->seller->seller_name,
                         'account_title'    => $material->account->title,
                         'material_details' => MaterialResource2::collection($material->materialDetails)]
                 );
@@ -135,41 +138,97 @@ class MaterialController extends Controller
         $user = auth()->user();
         $materials = null;
 
-        if ($user->role == "مدیر" || $user->role == "Developer")
-            $materials = Material::where('company_id', $request->company_id)
-                                ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
-                                ->get();
-
-
-        else if ($user->role == "کارمند")
-            $materials = Material::where('company_id', $request->company_id)
-                                ->where('user_id', $user->id)
-                                ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
-                                ->get();
-
-        //------------------------------------------------
-        if ($materials->count()>0)
+        if ($request->type == "factor_number" || $request->type == "date")
         {
+            if ($user->role == "مدیر" || $user->role == "Developer")
+                $materials = Material::where('company_id', $request->company_id)
+                                     ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                                     ->get();
 
-            $result = collect([]);
 
-            $materials = MaterialResource1::collection($materials);
-            foreach ($materials as $material)
+            else if ($user->role == "کارمند")
+                $materials = Material::where('company_id', $request->company_id)
+                                     ->where('user_id', $user->id)
+                                     ->where(($request->type), 'LIKE', '%' . ($request->value) . '%')
+                                     ->get();
+
+            //------------------------------------------------
+            if ($materials->count() > 0)
             {
-                $result->push(
-                    [
-                        'material'          => $material,
-                        'account_title' => $material->account->title,
-                        'material_details' => MaterialResource2::collection($material->materialDetails)]
-                );
+
+                $result = collect([]);
+
+                $materials = MaterialResource1::collection($materials);
+                foreach ($materials as $material)
+                {
+                    $result->push(
+                        [
+                            'material'         => $material,
+                            'seller_name'      => $material->seller->seller_name,
+                            'account_title'    => $material->account->title,
+                            'material_details' => MaterialResource2::collection($material->materialDetails)]
+                    );
+                }
+                return ["code"   => "200",
+                        "result" => $result];
             }
-            return ["code"   => "200",
-                    "result" => $result];
+
+            return ["code"    => "207",
+                    'message' => trans('message1.207')];
         }
 
-        return ["code"    => "207",
-                'message' => trans('message1.207')];
+        else if ($request->type == "seller_name")
+        {
+            $sellers = Seller::where('company_id', $request->company_id)
+                           ->where("seller_name", 'LIKE', '%' . ($request->value) . '%')
+                           ->get();
 
+            //------------------------------------------------
+            if ($sellers->count()>0)
+            {
+                $result = collect([]);
+
+                foreach ($sellers as $seller)
+                {
+                    $materials = MaterialResource1::collection($seller->materials);
+                    foreach ($materials as $material)
+                    {
+
+                        if ($user->role == "مدیر" || $user->role == "Developer")
+                        {
+                            $result->push(
+                                [
+                                    'material'         => $material,
+                                    'seller_name'      => $material->seller->seller_name,
+                                    'account_title'    => $material->account->title,
+                                    'material_details' => MaterialResource2::collection($material->materialDetails)]
+                            );
+                        }
+
+                        else if ($user->role == "کارمند")
+                        {
+                            if ($material->user_id == $user->id)
+                            {
+                                $result->push(
+                                    [
+                                        'material'         => $material,
+                                        'seller_name'      => $material->seller->seller_name,
+                                        'account_title'    => $material->account->title,
+                                        'material_details' => MaterialResource2::collection($material->materialDetails)]
+                                );
+                            }
+                        }
+                    }
+                }
+                return ["code"   => "200",
+                        "result" => $result];
+            }
+
+            return ["code"    => "207",
+                    'message' => trans('message1.207')];
+
+
+        }
     }
 
     public function edit(Request $request)
@@ -191,6 +250,7 @@ class MaterialController extends Controller
             $material->user_id = $user->id;
             $material->factor_number = $request->factor_number;
             $material->date = $request->date;
+            $material->seller_id = $request->seller_id;
             $material->sum = $request->sum;
             $material->payment = $request->payment;
             $material->remain = $request->remain;

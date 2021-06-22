@@ -21,15 +21,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
-import com.example.boroodat.adapter.Activity9_Adapter;
-import com.example.boroodat.databinding.A9AddBinding;
-import com.example.boroodat.databinding.DriverBinding;
+import com.example.boroodat.adapter.Activity23_Adapter;
+import com.example.boroodat.databinding.A23AddBinding;
+import com.example.boroodat.databinding.SellerBinding;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.activity9.Activity9_LoadingModel;
-import com.example.boroodat.model.activity9.Activity9_MainModel;
-import com.example.boroodat.model.activity9.Activity9_NotFoundModel;
-import com.example.boroodat.model.activity9.Activity9_ParentModel;
-import com.example.boroodat.model.activity9.Activity9_RetryModel;
+import com.example.boroodat.model.activity23.Activity23_LoadingModel;
+import com.example.boroodat.model.activity23.Activity23_MainModel;
+import com.example.boroodat.model.activity23.Activity23_NotFoundModel;
+import com.example.boroodat.model.activity23.Activity23_ParentModel;
+import com.example.boroodat.model.activity23.Activity23_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,28 +40,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Driver
+public class Seller
 {
     private Context context;
     private String from;
-    private TextView driverName,driverId;
+    private TextView txt_seller_name, txt_seller_id;
 
 
-    private Activity9_Adapter adapter;
-    private List<Activity9_ParentModel> models = new ArrayList<>();
+    private Activity23_Adapter adapter;
+    private List<Activity23_ParentModel> models = new ArrayList<>();
     private AlertDialog.Builder alertDialogBuilder1 = null;
 
-    public Driver(Context context, String from, TextView driverName, TextView driverId)
+    public Seller(Context context, String from, TextView txt_seller_name, TextView txt_seller_id)
     {
         this.context = context;
         this.from = from;
-        this.driverName = driverName;
-        this.driverId = driverId;
+        this.txt_seller_name = txt_seller_name;
+        this.txt_seller_id = txt_seller_id;
     }
 
     public void show()
     {
-        final DriverBinding binding = DriverBinding.inflate(LayoutInflater.from(context));
+        final SellerBinding binding = SellerBinding.inflate(LayoutInflater.from(context));
         View view = binding.getRoot();
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
@@ -69,16 +69,16 @@ public class Driver
         //----------------------------------------------------------------------------------------------------------
 
         alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.setPositiveButton("ایجاد راننده جدید", null);
+        alertDialogBuilder.setPositiveButton("ایجاد فروشنده جدید", null);
         alertDialogBuilder.setNeutralButton("لغو", null);
         final AlertDialog alertDialog = alertDialogBuilder.create();
 
         //----------------------------------------------------------------------------------------------------------
 
         binding.recyclerView.setLayoutManager ( new LinearLayoutManager( context ) );
-        adapter = new Activity9_Adapter(models, context,2,driverName,driverId,alertDialog,from);
+        adapter = new Activity23_Adapter(models, context,2, txt_seller_name, txt_seller_id,alertDialog,from);
         binding.recyclerView.setAdapter (adapter);
-        getDrivers();
+        getSellers();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -87,17 +87,17 @@ public class Driver
             @Override
             public void retry1()
             {
-                getDrivers();
+                getSellers();
             }
         });
 
         //-------------------------------------------------------------------------------------------------------
 
         ArrayList<String> searchItem=new ArrayList<>();
-        searchItem.add("نام و نام خانوادگی");
+        searchItem.add("نام فروشنده");
+        searchItem.add("نام فروشگاه");
         searchItem.add("شماره همراه");
-        searchItem.add("نوع خودرو");
-        searchItem.add("شماره پلاک");
+        searchItem.add("آدرس");
 
         final ArrayAdapter<String> adp = new ArrayAdapter<String>(context, R.layout.spinner_item, searchItem);
         binding.spinner.setAdapter(adp);
@@ -118,17 +118,18 @@ public class Driver
             {
                 newText = newText.toLowerCase();
 
-                if (binding.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی"))
-                    searchQuery("name", newText);
+
+                if (binding.spinner.getSelectedItem().toString().equals("نام فروشنده"))
+                    searchQuery("seller_name", newText);
+
+                else if (binding.spinner.getSelectedItem().toString().equals("نام فروشگاه"))
+                    searchQuery("shop_name", newText);
 
                 else if (binding.spinner.getSelectedItem().toString().equals("شماره همراه"))
                     searchQuery("phone_number", newText);
 
-                else if (binding.spinner.getSelectedItem().toString().equals("نوع خودرو"))
-                    searchQuery("car_type", newText);
-
-                else if (binding.spinner.getSelectedItem().toString().equals("شماره پلاک"))
-                    searchQuery("number_plate", newText);
+                else if (binding.spinner.getSelectedItem().toString().equals("آدرس"))
+                    searchQuery("address", newText);
 
                 return true;
             }
@@ -141,7 +142,7 @@ public class Driver
             @Override
             public boolean onClose()
             {
-                getDrivers();
+                getSellers();
                 return true;
             }
         });
@@ -191,7 +192,7 @@ public class Driver
 
     private void dialog()
     {
-        final A9AddBinding binding1 = A9AddBinding.inflate(LayoutInflater.from(context));
+        final A23AddBinding binding1 = A23AddBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         alertDialogBuilder1 = new AlertDialog.Builder(context);
         alertDialogBuilder1.setView(view);
@@ -205,7 +206,7 @@ public class Driver
 
         //----------------------------------------------------------------------------------------------------------
 
-        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+        binding1.sellerName.addTextChangedListener(new ClearError(binding1.til1));
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -221,28 +222,31 @@ public class Driver
                     @Override
                     public void onClick(View v)
                     {
-                        if (binding1.name.getText().toString().equals(""))
-                            binding1.til1.setError("نام راننده را وارد کنید.");
+                        if (binding1.sellerName.getText().toString().equals(""))
+                            binding1.til1.setError("نام فروشنده را وارد کنید.");
 
                         else
                         {
-                            String phone_number1 = "-";
-                            String car_type1 = "-";
-                            String number_plate1 = "-";
+                            String shop_name1="-";
+                            String phone_number1="-";
+                            String address1="-";
+
+                            if (!binding1.shopName.getText().toString().equals(""))
+                                shop_name1= binding1.shopName.getText().toString();
 
                             if (!binding1.phoneNumber.getText().toString().equals(""))
-                                phone_number1 = binding1.phoneNumber.getText().toString();
+                                phone_number1=binding1.phoneNumber.getText().toString();
 
-                            if (!binding1.carType.getText().toString().equals(""))
-                                car_type1 = binding1.carType.getText().toString();
-
-                            if (!binding1.numberPlate.getText().toString().equals(""))
-                                number_plate1 = binding1.numberPlate.getText().toString();
+                            if (!binding1.address.getText().toString().equals(""))
+                                address1=binding1.address.getText().toString();
 
                             if (new Internet(context).check())
-                                createDriver(binding1.name.getText().toString(), phone_number1, car_type1, number_plate1, alertDialog);
+                            {
+                                createSeller(binding1.sellerName.getText().toString(),shop_name1,phone_number1,address1,alertDialog);
+                            }
                             else
                                 new Internet(context).enable();
+
                         }
                     }
                 });
@@ -272,19 +276,18 @@ public class Driver
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    private void createDriver(final String name, final String phone_number, final String car_type,final String number_plate, final AlertDialog alertDialog)
+    private void createSeller(final String seller_name, final String shop_name, final String phone_number, final String address, final AlertDialog alertDialog)
     {
-        String url = context.getString(R.string.domain) + "api/driver/create";
-        //progressDialog.show();
+        String url = context.getString(R.string.domain) + "api/seller/create";
 
         JSONObject object = new JSONObject();
         try
         {
             object.put("company_id", new User_Info().company_id());
-            object.put("name", name);
+            object.put("seller_name", txt_seller_name);
+            object.put("shop_name", shop_name);
             object.put("phone_number",phone_number);
-            object.put("car_type", car_type);
-            object.put("number_plate",number_plate);
+            object.put("address", address);
             object.put("secret_key", context.getString(R.string.secret_key));
         }
         catch (JSONException e)
@@ -297,18 +300,19 @@ public class Driver
             @Override
             public void onResponse(JSONObject response)
             {
+
                 try
                 {
                     String code = response.getString("code");
                     if (code.equals("200"))
                     {
-                        String id = response.getString("result");
+                        String id = response.getString("id");
 
-                        if (models.get(0).getCurrentType() == Activity9_ParentModel.NotFound)
+                        if (models.get(0).getCurrentType() == Activity23_ParentModel.NotFound)
                             models.remove(0);
 
-                        models.add(new Activity9_MainModel(id,name,phone_number,car_type,number_plate,null));
-                        Toast.makeText(context, "ایجاد راننده جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                        models.add(new Activity23_MainModel(id,seller_name,shop_name,phone_number,address,null));
+                        Toast.makeText(context, "ایجاد خریدار جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                         alertDialogBuilder1 = null;
                         adapter.notifyDataSetChanged();
@@ -351,12 +355,12 @@ public class Driver
 
     }
 
-    private void getDrivers()
+    private void getSellers()
     {
-        String url = context.getString(R.string.domain) + "api/driver/get-drivers";
+        String url = context.getString(R.string.domain) + "api/seller/get-sellers";
 
         models.clear();
-        models.add(new Activity9_LoadingModel());
+        models.add(new Activity23_LoadingModel());
         adapter.notifyDataSetChanged();
 
         JSONObject object = new JSONObject();
@@ -389,7 +393,8 @@ public class Driver
                         {
                             JSONObject object1 = result.getJSONObject(i);
 
-                            models.add(new Activity9_MainModel(object1.getString("id"),object1.getString("name"),object1.getString("phone_number"),object1.getString("car_type"),object1.getString("number_plate"),object1.getString("archive")));
+
+                            models.add(new Activity23_MainModel(object1.getString("id"),object1.getString("seller_name"),object1.getString("shop_name"),object1.getString("phone_number"),object1.getString("address"),object1.getString("archive")));
                         }
 
                         adapter.notifyDataSetChanged();
@@ -397,7 +402,7 @@ public class Driver
 
                     else if (code.equals("207"))
                     {
-                        models.add(new Activity9_NotFoundModel());
+                        models.add(new Activity23_NotFoundModel());
                         adapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e)
@@ -415,7 +420,7 @@ public class Driver
             {
 
                 models.clear();
-                models.add(new Activity9_RetryModel());
+                models.add(new Activity23_RetryModel());
                 adapter.notifyDataSetChanged();
 
             }
@@ -440,10 +445,10 @@ public class Driver
 
     public void searchQuery(String type, String value)
     {
-        String url = context.getString(R.string.domain) + "api/driver/search-query";
+        String url = context.getString(R.string.domain) + "api/seller/search-query";
 
         models.clear();
-        models.add(new Activity9_LoadingModel());
+        models.add(new Activity23_LoadingModel());
         adapter.notifyDataSetChanged();
 
         JSONObject object = new JSONObject();
@@ -480,7 +485,7 @@ public class Driver
                             {
                                 JSONObject object1 = result.getJSONObject(i);
 
-                                models.add(new Activity9_MainModel(object1.getString("id"), object1.getString("name"), object1.getString("phone_number"), object1.getString("car_type"), object1.getString("number_plate"), object1.getString("archive")));
+                                models.add(new Activity23_MainModel(object1.getString("id"),object1.getString("seller_name"),object1.getString("shop_name"),object1.getString("phone_number"),object1.getString("address"),object1.getString("archive")));
                             }
 
                             adapter.notifyDataSetChanged();
@@ -488,7 +493,7 @@ public class Driver
                         else
                         {
                             models.clear();
-                            models.add(new Activity9_NotFoundModel());
+                            models.add(new Activity23_NotFoundModel());
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -508,7 +513,7 @@ public class Driver
             {
 
                 models.clear();
-                models.add(new Activity9_RetryModel());
+                models.add(new Activity23_RetryModel());
                 adapter.notifyDataSetChanged();
 
             }

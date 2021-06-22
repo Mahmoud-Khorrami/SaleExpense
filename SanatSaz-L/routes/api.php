@@ -12,6 +12,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SellerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
 use App\Models\Account;
@@ -122,6 +123,20 @@ Route::middleware('secret_key')->group(function ()
                 Route::post('edit', [BuyerController::class, 'edit']);
                 Route::post('delete', [BuyerController::class, 'delete']);
                 Route::post('un-archive', [BuyerController::class, 'unArchive']);
+            }
+        );
+
+        //----------------------------------------------------------------------------------------
+
+        Route::prefix('seller')->group(
+            function ()
+            {
+                Route::post('create', [SellerController::class, 'create']);
+                Route::post('get-sellers', [SellerController::class, 'getSellers']);
+                Route::post('search-query', [SellerController::class, 'searchQuery']);
+                Route::post('archive', [SellerController::class, 'archive']);
+                Route::post('edit', [SellerController::class, 'edit']);
+                Route::post('un-archive', [SellerController::class, 'unArchive']);
             }
         );
 

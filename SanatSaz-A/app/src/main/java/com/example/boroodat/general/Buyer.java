@@ -359,7 +359,6 @@ public class Buyer
         JSONObject object = new JSONObject();
         try
         {
-            object.put("paginate",50);
             object.put("company_id", new User_Info().company_id());
             object.put("secret_key", context.getString(R.string.secret_key));
         }

@@ -62,11 +62,8 @@ public class Activity12_MaterialReports extends AppCompatActivity
 
         //-------------------------------------------------------------
 
-        getMaterialsCount();
-
-        //-------------------------------------------------------------
-
         ArrayList<String> searchItem=new ArrayList<>();
+        searchItem.add("نام فروشنده");
         searchItem.add("شماره فاکتور");
         searchItem.add("تاریخ");
 
@@ -99,6 +96,9 @@ public class Activity12_MaterialReports extends AppCompatActivity
                 binding.pager.setVisibility(View.GONE);
 
                 newText = newText.toLowerCase();
+
+                if (binding.spinner.getSelectedItem().toString().equals("نام فروشنده"))
+                    searchQuery("seller_name", newText);
 
                 if (binding.spinner.getSelectedItem().toString().equals("شماره فاکتور"))
                     searchQuery("factor_number", newText);
@@ -261,6 +261,8 @@ public class Activity12_MaterialReports extends AppCompatActivity
                             String id = material.getString("id");
                             String factor_number = material.getString("factor_number");
                             String date = material.getString("date");
+                            String seller_id = material.getString("seller_id");
+                            String seller_name = object1.getString("seller_name");
                             String sum = material.getString("sum");
                             String payment = material.getString("payment");
                             String account_id = material.getString("account_id");
@@ -268,7 +270,7 @@ public class Activity12_MaterialReports extends AppCompatActivity
                             String description = material.getString("description");
                             JSONArray material_details = object1.getJSONArray("material_details");
 
-                            models.add(new Activity12_FragmentMainModel(id,factor_number,date,sum,payment,account_id,account_title,description,material_details));
+                            models.add(new Activity12_FragmentMainModel(id,factor_number,date,seller_id,seller_name,sum,payment,account_id,account_title,description,material_details));
                         }
 
                         adapter2.notifyDataSetChanged();
@@ -314,5 +316,13 @@ public class Activity12_MaterialReports extends AppCompatActivity
         };
         request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        getMaterialsCount();
     }
 }

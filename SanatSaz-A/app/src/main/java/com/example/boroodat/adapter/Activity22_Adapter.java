@@ -233,6 +233,8 @@ public class Activity22_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         getBuyer();
                     if (type.equals("driver"))
                         getDrivers();
+                    if (type.equals("seller"))
+                        getSeller();
 
                 }
             });
@@ -462,6 +464,93 @@ public class Activity22_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             JSONObject object1 = result.getJSONObject(i);
 
                             models.add(new Activity22_MainModel(object1.getString("id"),object1.getString("name")));
+                        }
+
+                        notifyDataSetChanged();
+                    }
+
+                    else if (code.equals("207"))
+                    {
+                        models.add(new Activity22_NotFoundModel());
+                        notifyDataSetChanged();
+                    }
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+                models.clear();
+                models.add(new Activity22_RetryModel());
+                notifyDataSetChanged();
+
+            }
+        };
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, listener, errorListener)
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Bearer "+ new User_Info().token());
+                return headers;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES));
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public void getSeller()
+    {
+        String url = context.getString(R.string.domain) + "api/seller/get-sellers";
+
+        models.clear();
+        models.add(new Activity22_LoadingModel());
+        notifyDataSetChanged();
+
+        JSONObject object = new JSONObject();
+        try
+        {
+            object.put("company_id", new User_Info().company_id());
+            object.put("secret_key", context.getString(R.string.secret_key));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    String code = response.getString("code");
+
+                    models.clear();
+
+                    if (code.equals("200"))
+                    {
+                        JSONArray result = response.getJSONArray("result");
+
+                        for (int i=result.length()-1; i>=0; i--)
+                        {
+                            JSONObject object1 = result.getJSONObject(i);
+
+                            models.add(new Activity22_MainModel(object1.getString("id"),object1.getString("seller_name")));
                         }
 
                         notifyDataSetChanged();

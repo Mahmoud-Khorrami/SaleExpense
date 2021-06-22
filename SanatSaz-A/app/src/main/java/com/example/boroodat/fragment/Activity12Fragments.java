@@ -132,6 +132,8 @@ public class Activity12Fragments extends Fragment
                             String id = material.getString("id");
                             String factor_number = material.getString("factor_number");
                             String date = material.getString("date");
+                            String seller_id = material.getString("seller_id");
+                            String seller_name = object1.getString("seller_name");
                             String sum = material.getString("sum");
                             String payment = material.getString("payment");
                             String account_id = material.getString("account_id");
@@ -139,7 +141,7 @@ public class Activity12Fragments extends Fragment
                             String description = material.getString("description");
                             JSONArray material_details = object1.getJSONArray("material_details");
 
-                            models.add(new Activity12_FragmentMainModel(id,factor_number,date,sum,payment,account_id,account_title,description,material_details));
+                            models.add(new Activity12_FragmentMainModel(id,factor_number,date,seller_id,seller_name,sum,payment,account_id,account_title,description,material_details));
                         }
 
                         adapter.notifyDataSetChanged();

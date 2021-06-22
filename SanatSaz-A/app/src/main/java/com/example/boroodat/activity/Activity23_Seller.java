@@ -23,20 +23,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.boroodat.R;
-import com.example.boroodat.adapter.Activity8_Adapter;
+import com.example.boroodat.adapter.Activity23_Adapter;
+import com.example.boroodat.databinding.A23AddBinding;
 import com.example.boroodat.databinding.A8AddBinding;
-import com.example.boroodat.databinding.Activity8BuyerBinding;
+import com.example.boroodat.databinding.Activity23SellerBinding;
 import com.example.boroodat.databinding.DeleteDialog2Binding;
 import com.example.boroodat.general.AppController;
 import com.example.boroodat.general.ClearError;
 import com.example.boroodat.general.Internet;
 import com.example.boroodat.general.User_Info;
 import com.example.boroodat.interfaces.RetryListener;
-import com.example.boroodat.model.activity8.Activity8_LoadingModel;
-import com.example.boroodat.model.activity8.Activity8_MainModel;
-import com.example.boroodat.model.activity8.Activity8_NotFoundModel;
-import com.example.boroodat.model.activity8.Activity8_ParentModel;
-import com.example.boroodat.model.activity8.Activity8_RetryModel;
+import com.example.boroodat.model.activity23.Activity23_LoadingModel;
+import com.example.boroodat.model.activity23.Activity23_MainModel;
+import com.example.boroodat.model.activity23.Activity23_NotFoundModel;
+import com.example.boroodat.model.activity23.Activity23_ParentModel;
+import com.example.boroodat.model.activity23.Activity23_RetryModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,70 +50,72 @@ import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 
-public class Activity8_Buyer extends AppCompatActivity
+public class Activity23_Seller extends AppCompatActivity
 {
-    Activity8BuyerBinding binding;
-    private List<Activity8_ParentModel> models =new ArrayList<>(  );
-    private Activity8_Adapter adapter;
+
+    private Activity23SellerBinding binding;
+    private List<Activity23_ParentModel> models =new ArrayList<>(  );
+    private Activity23_Adapter adapter;
     private Context context=this;
     private AlertDialog.Builder alertDialogBuilder=null;
     private android.app.AlertDialog progressDialog;
-    final JSONArray buyer_ids=new JSONArray();
+    final JSONArray seller_ids =new JSONArray();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        binding = Activity8BuyerBinding.inflate(getLayoutInflater());
+        binding = Activity23SellerBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        //----------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
         binding.toolbar.setTitle("");
         setSupportActionBar(binding.toolbar);
 
-        //----------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
         progressDialog = new SpotsDialog(this, R.style.Custom);
         progressDialog.setCancelable(false);
 
-        //----------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
-        binding.recyclerView.setLayoutManager ( new LinearLayoutManager( Activity8_Buyer.this ) );
-        adapter = new Activity8_Adapter(models, Activity8_Buyer.this,1,"manager");
+        binding.recyclerView.setLayoutManager ( new LinearLayoutManager( Activity23_Seller.this ) );
+        adapter = new Activity23_Adapter(models, Activity23_Seller.this,1,"manager");
         binding.recyclerView.setAdapter (adapter);
-        getBuyer();
+        getSeller();
 
-        //----------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
         adapter.setRetryListener(new RetryListener()
         {
             @Override
             public void retry1()
             {
-                getBuyer();
+                getSeller();
             }
         });
 
-        //-------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
         ArrayList<String> searchItem=new ArrayList<>();
-        searchItem.add("نام و نام خانوادگی");
+        searchItem.add("نام فروشنده");
+        searchItem.add("نام فروشگاه");
         searchItem.add("شماره همراه");
-        searchItem.add("مقصد");
+        searchItem.add("آدرس");
 
         ArrayAdapter<String> adp = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, searchItem);
         binding.spinner.setAdapter(adp);
         binding.spinner.setSelection(0);
 
-        //-------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
         binding.lnr2.setVisibility(View.GONE);
         binding.lnr3.setVisibility(View.GONE);
 
-        //----------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
         binding.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener()
         {
@@ -127,20 +130,23 @@ public class Activity8_Buyer extends AppCompatActivity
             {
                 newText = newText.toLowerCase();
 
-                if (binding.spinner.getSelectedItem().toString().equals("نام و نام خانوادگی"))
-                    searchQuery("name", newText);
+                if (binding.spinner.getSelectedItem().toString().equals("نام فروشنده"))
+                    searchQuery("seller_name", newText);
+
+                else if (binding.spinner.getSelectedItem().toString().equals("نام فروشگاه"))
+                    searchQuery("shop_name", newText);
 
                 else if (binding.spinner.getSelectedItem().toString().equals("شماره همراه"))
                     searchQuery("phone_number", newText);
 
-                else if (binding.spinner.getSelectedItem().toString().equals("مقصد"))
-                    searchQuery("destination", newText);
+                else if (binding.spinner.getSelectedItem().toString().equals("آدرس"))
+                    searchQuery("address", newText);
 
                 return true;
             }
         });
 
-        //----------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
 
         binding.searchView.setOnCloseListener(new SearchView.OnCloseListener()
@@ -150,12 +156,12 @@ public class Activity8_Buyer extends AppCompatActivity
             {
                 binding.toolbar.setVisibility(View.VISIBLE);
                 binding.lnr2.setVisibility(View.GONE);
-                getBuyer();
+                getSeller();
                 return true;
             }
         });
 
-        //----------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------
 
         binding.search.setOnClickListener(new View.OnClickListener()
         {
@@ -169,6 +175,7 @@ public class Activity8_Buyer extends AppCompatActivity
                 adapter.changeStatusS1();
             }
         });
+
     }
 
     public void onClick(View view)
@@ -199,7 +206,7 @@ public class Activity8_Buyer extends AppCompatActivity
 
     private void dialog()
     {
-        final A8AddBinding binding1 = A8AddBinding.inflate(LayoutInflater.from(context));
+        final A23AddBinding binding1 = A23AddBinding.inflate(LayoutInflater.from(context));
         View view = binding1.getRoot();
         alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(view);
@@ -213,7 +220,7 @@ public class Activity8_Buyer extends AppCompatActivity
 
         //----------------------------------------------------------------------------------------------------------
 
-        binding1.name.addTextChangedListener(new ClearError(binding1.til1));
+        binding1.sellerName.addTextChangedListener(new ClearError(binding1.til1));
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -229,24 +236,27 @@ public class Activity8_Buyer extends AppCompatActivity
                     @Override
                     public void onClick(View v)
                     {
-                        if (binding1.name.getText().toString().equals(""))
-                            binding1.til1.setError("نام خریدار را وارد کنید.");
+                        if (binding1.sellerName.getText().toString().equals(""))
+                            binding1.til1.setError("نام فروشنده را وارد کنید.");
 
                         else
                         {
-
+                            String shop_name1="-";
                             String phone_number1="-";
-                            String destination1="-";
+                            String address1="-";
+
+                            if (!binding1.shopName.getText().toString().equals(""))
+                                shop_name1= binding1.shopName.getText().toString();
 
                             if (!binding1.phoneNumber.getText().toString().equals(""))
-                                phone_number1= binding1.phoneNumber.getText().toString();
+                                phone_number1=binding1.phoneNumber.getText().toString();
 
-                            if (!binding1.destination.getText().toString().equals(""))
-                                destination1=binding1.destination.getText().toString();
+                            if (!binding1.address.getText().toString().equals(""))
+                                address1=binding1.address.getText().toString();
 
                             if (new Internet(context).check())
                             {
-                                create(binding1.name.getText().toString(),phone_number1,destination1,alertDialog);
+                                create(binding1.sellerName.getText().toString(),shop_name1,phone_number1,address1,alertDialog);
                             }
                             else
                                 new Internet(context).enable();
@@ -280,18 +290,19 @@ public class Activity8_Buyer extends AppCompatActivity
         alertDialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void create(final String name, final String phone_number, final String destination, final AlertDialog alertDialog)
+    public void create(final String seller_name, final String shop_name, final String phone_number, final String address, final AlertDialog alertDialog)
     {
-        String url = getString(R.string.domain) + "api/buyer/create";
+        String url = getString(R.string.domain) + "api/seller/create";
         progressDialog.show();
 
         JSONObject object = new JSONObject();
         try
         {
             object.put("company_id", new User_Info().company_id());
-            object.put("name", name);
+            object.put("seller_name", seller_name);
+            object.put("shop_name", shop_name);
             object.put("phone_number",phone_number);
-            object.put("destination", destination);
+            object.put("address", address);
             object.put("secret_key", getString(R.string.secret_key));
         }
         catch (JSONException e)
@@ -313,14 +324,14 @@ public class Activity8_Buyer extends AppCompatActivity
                         String id = response.getString("result");
 
                         progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "ایجاد خریدار جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "ایجاد فروشنده جدید با موفقیت انجام شد.", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                         alertDialogBuilder = null;
 
-                        if (models.get(0).getCurrentType() == Activity8_ParentModel.NotFound)
+                        if (models.get(0).getCurrentType() == Activity23_ParentModel.NotFound)
                             models.remove(0);
 
-                        models.add(new Activity8_MainModel(id,name,phone_number,destination,null));
+                        models.add(new Activity23_MainModel(id,seller_name,shop_name,phone_number,address,null));
                         adapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e)
@@ -362,13 +373,13 @@ public class Activity8_Buyer extends AppCompatActivity
 
     public void archive(final AlertDialog alertDialog)
     {
-        String url = getString(R.string.domain) + "api/buyer/archive";
+        String url = getString(R.string.domain) + "api/seller/archive";
         progressDialog.show();
 
         JSONObject object = new JSONObject();
         try
         {
-            object.put("buyer_ids", buyer_ids);
+            object.put("seller_ids", seller_ids);
             object.put("secret_key", getString(R.string.secret_key));
         } catch (JSONException e)
         {
@@ -387,7 +398,7 @@ public class Activity8_Buyer extends AppCompatActivity
                 binding.lnr3.setVisibility(View.GONE);
                 alertDialog.dismiss();
                 alertDialogBuilder = null;
-                getBuyer();
+                getSeller();
             }
         };
 
@@ -424,15 +435,15 @@ public class Activity8_Buyer extends AppCompatActivity
     {
         for (int i=0; i<models.size();i++)
         {
-            if (models.get(i).getCurrentType() == Activity8_ParentModel.Main)
+            if (models.get(i).getCurrentType() == Activity23_ParentModel.Main)
             {
-                Activity8_MainModel model = (Activity8_MainModel) models.get(i);
+                Activity23_MainModel model = (Activity23_MainModel) models.get(i);
                 if (model.isSelected())
-                    buyer_ids.put(model.getId());
+                    seller_ids.put(model.getId());
             }
         }
 
-        if (buyer_ids.length()>0)
+        if (seller_ids.length()>0)
         {
             final DeleteDialog2Binding binding1 = DeleteDialog2Binding.inflate(LayoutInflater.from(context));
             View view = binding1.getRoot();
@@ -496,12 +507,12 @@ public class Activity8_Buyer extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "هیچ آیتمی انتخاب نشده است.", Toast.LENGTH_SHORT).show();
     }
 
-    public void getBuyer()
+    public void getSeller()
     {
-        String url = getString(R.string.domain) + "api/buyer/get-buyers";
+        String url = getString(R.string.domain) + "api/seller/get-sellers";
 
         models.clear();
-        models.add(new Activity8_LoadingModel());
+        models.add(new Activity23_LoadingModel());
         adapter.notifyDataSetChanged();
 
         JSONObject object = new JSONObject();
@@ -534,7 +545,7 @@ public class Activity8_Buyer extends AppCompatActivity
                         {
                             JSONObject object1 = result.getJSONObject(i);
 
-                            models.add(new Activity8_MainModel(object1.getString("id"),object1.getString("name"),object1.getString("phone_number"),object1.getString("destination"),object1.getString("archive")));
+                            models.add(new Activity23_MainModel(object1.getString("id"),object1.getString("seller_name"),object1.getString("shop_name"),object1.getString("phone_number"),object1.getString("address"),object1.getString("archive")));
                         }
 
                         adapter.notifyDataSetChanged();
@@ -542,7 +553,7 @@ public class Activity8_Buyer extends AppCompatActivity
 
                     else if (code.equals("207"))
                     {
-                        models.add(new Activity8_NotFoundModel());
+                        models.add(new Activity23_NotFoundModel());
                         adapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e)
@@ -560,7 +571,7 @@ public class Activity8_Buyer extends AppCompatActivity
             {
 
                 models.clear();
-                models.add(new Activity8_RetryModel());
+                models.add(new Activity23_RetryModel());
                 adapter.notifyDataSetChanged();
 
             }
@@ -585,10 +596,10 @@ public class Activity8_Buyer extends AppCompatActivity
 
     public void searchQuery(String type, String value)
     {
-        String url = getString(R.string.domain) + "api/buyer/search-query";
+        String url = getString(R.string.domain) + "api/seller/search-query";
 
         models.clear();
-        models.add(new Activity8_LoadingModel());
+        models.add(new Activity23_LoadingModel());
         adapter.notifyDataSetChanged();
 
         JSONObject object = new JSONObject();
@@ -625,7 +636,7 @@ public class Activity8_Buyer extends AppCompatActivity
                             {
                                 JSONObject object1 = result.getJSONObject(i);
 
-                                models.add(new Activity8_MainModel(object1.getString("id"), object1.getString("name"), object1.getString("phone_number"), object1.getString("destination"), object1.getString("archive")));
+                                models.add(new Activity23_MainModel(object1.getString("id"), object1.getString("seller_name"),object1.getString("shop_name"), object1.getString("phone_number"), object1.getString("address"), object1.getString("archive")));
                             }
 
                             adapter.notifyDataSetChanged();
@@ -633,7 +644,7 @@ public class Activity8_Buyer extends AppCompatActivity
                         else
                         {
                             models.clear();
-                            models.add(new Activity8_NotFoundModel());
+                            models.add(new Activity23_NotFoundModel());
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -652,7 +663,7 @@ public class Activity8_Buyer extends AppCompatActivity
             {
 
                 models.clear();
-                models.add(new Activity8_RetryModel());
+                models.add(new Activity23_RetryModel());
                 adapter.notifyDataSetChanged();
 
             }
@@ -681,5 +692,4 @@ public class Activity8_Buyer extends AppCompatActivity
         binding.lnr2.setVisibility(View.GONE);
         binding.lnr3.setVisibility(View.VISIBLE);
     }
-
 }

@@ -21,7 +21,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".activity.Activity22_DefaultSetting"></activity>
+        <activity android:name=".activity.Activity23_Seller"></activity>
+        <activity android:name=".activity.Activity22_DefaultSetting" />
         <activity
             android:name=".activity.Activity21_BuyerDetails"
             android:screenOrientation="portrait"
@@ -134,7 +135,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/path_file"></meta-data>
+                android:resource="@xml/path_file" />
         </provider>
     </application>
 
